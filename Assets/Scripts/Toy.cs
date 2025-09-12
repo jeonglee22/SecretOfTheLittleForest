@@ -10,9 +10,6 @@ public class Toy : MonoBehaviour
 
 	public bool IsMove { get; set; }
 
-	public Vector3 startPosition;
-	public Vector3 endPosition;
-
 	private void Start()
 	{
 		do
@@ -21,6 +18,5 @@ public class Toy : MonoBehaviour
 		} while (data.Movement == 0);
 
 		moveType = (MoveType)data.Movement;
-		Debug.Log(moveType);
 	}
 }

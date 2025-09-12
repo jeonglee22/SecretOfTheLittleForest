@@ -19,10 +19,12 @@ public class UIManager : MonoBehaviour
 
     public void OnClickSetPlayerToy()
     {
-        boardManager.ToySettingOnNode(playLogic.ChoosedNode, toy, false);
+        var node = boardManager.GetRandomNodeInPlayer();
+        boardManager.ToySettingOnNode(node, toy, false);
     }
     public void OnClickSetEnemyToy()
     {
-		boardManager.ToySettingOnNode(playLogic.ChoosedNode, toy, true);
+        var node = boardManager.GetRandomNodeInEnemy();
+		boardManager.ToySettingOnNode(node, toy, true);
 	}
 }

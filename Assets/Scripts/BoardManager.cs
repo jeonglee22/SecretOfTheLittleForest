@@ -8,11 +8,34 @@ public class BoardManager : MonoBehaviour
 
 	public static int allNodeCount = 16 * 6;
 
+	public List<Node> playerStartNodes;
+	public List<Node> enemyStartNodes;
+
 	public bool IsChoosed { get; set; }
 
 	public void ReloadBoard()
 	{
 
+	}
+
+	public Node GetRandomNodeInPlayer()
+	{
+		var index = 0;
+		do
+		{
+			index = Random.Range(0, playerStartNodes.Count);
+		} while (allNodes[index].State == NodeState.Player);
+		
+		return playerStartNodes[index];
+	}
+	public Node GetRandomNodeInEnemy()
+	{
+		var index = 0;
+		do
+		{
+			index = Random.Range(0, enemyStartNodes.Count);
+		} while (allNodes[index].State == NodeState.Enemy);
+		return enemyStartNodes[index];
 	}
 
 	public Toy ToySettingOnNode(Node node, Toy toy, bool isEnemy)

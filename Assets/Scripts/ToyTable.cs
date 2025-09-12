@@ -31,11 +31,11 @@ public class ToyTable : DataTable
         var path = string.Format(FormatPath, filename);
         var textAsset = Resources.Load<TextAsset>(path);
         var list = LoadCSV<ToyData>(textAsset.text);
-        foreach (var item in list)
+        foreach (var toy in list)
         {
-            if (!table.ContainsKey(item.UnitID))
+            if (!table.ContainsKey(toy.UnitID))
             {
-                table.Add(item.UnitID, item);
+                table.Add(toy.UnitID, toy);
             }
             else
             {
@@ -55,7 +55,7 @@ public class ToyTable : DataTable
 
     public ToyData GetRandom()
     {
-        var itemList = table.Values.ToList();
-        return itemList[Random.Range(0, itemList.Count)];
+        var toyList = table.Values.ToList();
+        return toyList[Random.Range(0, toyList.Count)];
     }
 }
