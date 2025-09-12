@@ -18,6 +18,7 @@ public enum NodeState
     Player,
     PlayerMove,
     Attack,
+    Choose,
 }
 
 public class LayerId

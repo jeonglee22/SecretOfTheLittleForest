@@ -121,6 +121,7 @@ public class Node : MonoBehaviour
 			NodeState.Player => Color.blue,
 			NodeState.PlayerMove => Color.cyan,
 			NodeState.Attack => Color.yellow,
+			NodeState.Choose => Color.yellow,
 			_ => initColor,
 		};
 		gameObject.GetComponent<MeshRenderer>().material.color = color;

@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
     public PlayLogic playLogic;
     public ToyControl toyControl;
+    public BoardManager boardManager;
 
     public TMP_Dropdown dropdown;
 
@@ -13,12 +14,16 @@ public class UIManager : MonoBehaviour
     public void OnValueChangeMoveType()
     {
         var moveType = (MoveType)dropdown.value;
-        playLogic.MoveType = moveType;
+		playLogic.MoveType = moveType;
         playLogic.ClearNodes();
     }
 
-    public void OnClickSetToy()
+    public void OnClickSetPlayerToy()
     {
-        toyControl.Toy = toy;
+        boardManager.ToySettingOnNode(playLogic.ChoosedNode, toy, false);
     }
+    public void OnClickSetEnemyToy()
+    {
+		boardManager.ToySettingOnNode(playLogic.ChoosedNode, toy, true);
+	}
 }

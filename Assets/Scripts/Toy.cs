@@ -4,6 +4,9 @@ public class Toy : MonoBehaviour
 {
 	private ToyData data;
 	private MoveType moveType;
+	public MoveType MoveType { get { return moveType; } set { moveType = value; } }
+
+	public bool IsEnemy { get; set; }
 
 	public bool IsMove { get; set; }
 

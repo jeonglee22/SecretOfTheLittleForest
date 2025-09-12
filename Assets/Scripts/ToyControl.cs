@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.InputManagerEntry;
 
 public class ToyControl : MonoBehaviour
 {
@@ -12,16 +11,13 @@ public class ToyControl : MonoBehaviour
 	private float corouteTime = 0.001f;
 
 	private bool isMove = false;
+	public bool IsMove {  get { return isMove; } }
 
 	public Toy Toy 
 	{ 
 		get
 		{
 			return toy;
-		}
-		set
-		{
-			toy = ToySettingOnNode(playLogic.ChoosedNode, value);
 		}
 	}
 
@@ -31,7 +27,6 @@ public class ToyControl : MonoBehaviour
 			return;
 
 		isMove = true;
-		Debug.Log(isMove);
 		playLogic.ChoosedNode.Toy = before.Toy;
 		
 		var nextPos = playLogic.ChoosedNode.transform.position;
@@ -54,22 +49,7 @@ public class ToyControl : MonoBehaviour
 			time += Time.deltaTime;
 			pos = Vector3.Lerp(startPos, endPos, movingSpeed * time);
 		}
-		Debug.Log("Finish Move");
 		isMove = false;
 		toyGo.transform.position = endPos;
-	}
-
-	public Toy ToySettingOnNode(Node node, Toy toy)
-	{
-		var nodeScale = node.transform.localScale;
-
-		var childTransform = node.gameObject.transform.GetChild(0);
-		var spawnedToy = Instantiate(toy, childTransform);
-
-		var scale = spawnedToy.transform.localScale;
-		spawnedToy.transform.localScale = new Vector3(scale.x / nodeScale.x, scale.y / nodeScale.y, scale.z / nodeScale.z);
-		playLogic.ChoosedNode.Toy = spawnedToy;
-
-		return spawnedToy;
 	}
 }
