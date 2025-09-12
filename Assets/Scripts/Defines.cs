@@ -8,6 +8,7 @@ public enum MoveType
     Bishop,
     Rook,
     Queen,
+    None,
 }
 
 public enum NodeState

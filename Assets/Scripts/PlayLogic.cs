@@ -13,19 +13,21 @@ public class PlayLogic : MonoBehaviour
 
 	public static int allNodeCount = 16 * 6;
 
-	private MoveType moveType;
+	private MoveType currentMoveType;
 
-	public MoveType MoveType 
-	{
-		get { return moveType; }
-		set 
-		{
-			if (moveType != value)
-			{
-				moveType = value;
-			}
-		}
-	}
+	//private MoveType moveType;
+
+	//public MoveType MoveType 
+	//{
+	//	get { return moveType; }
+	//	set 
+	//	{
+	//		if (moveType != value)
+	//		{
+	//			moveType = value;
+	//		}
+	//	}
+	//}
 
 	private void Awake()
 	{
@@ -80,8 +82,13 @@ public class PlayLogic : MonoBehaviour
 			}
 
 			ClearNodes();
-			ShowMovable(choosedNode.NodeIndex, 0);
-			if(choosedNode.Toy == null)
+
+			if (choosedNode.Toy != null)
+			{
+				currentMoveType = choosedNode.Toy.MoveType;
+				ShowMovable(choosedNode.NodeIndex, 0);
+			}
+			else
 				choosedNode.State = NodeState.Choose;
 
 			boardManager.IsChoosed = true;
@@ -92,6 +99,7 @@ public class PlayLogic : MonoBehaviour
 			boardManager.IsChoosed = false;
 			ClearNodes();
 			choosedNode = null;
+			currentMoveType = MoveType.None;
 		}
 	}
 
@@ -140,7 +148,7 @@ public class PlayLogic : MonoBehaviour
 	{
 		List<int> nextNodes = new List<int>();
 
-		switch (MoveType)
+		switch (currentMoveType)
 		{
 			case MoveType.Pawn:
 				nextNodes = MoveAxis(choosedNode, ref moveCount, isFirst);
@@ -176,11 +184,13 @@ public class PlayLogic : MonoBehaviour
 						ShowMovable(node, moveCount, false);
 				break;
 			case MoveType.Queen:
-				moveType = MoveType.Bishop;
+				currentMoveType = MoveType.Bishop;
 				ShowMovable(choosedNode, moveCount);
-				moveType = MoveType.Rook;
+				currentMoveType = MoveType.Rook;
 				ShowMovable(choosedNode, moveCount);
-				moveType = MoveType.Queen;
+				currentMoveType = MoveType.Queen;
+				break;
+			default:
 				break;
 		}
 	}
@@ -220,7 +230,7 @@ public class PlayLogic : MonoBehaviour
 		}
 		else
 		{
-			if (moveType == MoveType.Knight)
+			if (currentMoveType == MoveType.Knight)
 			{
 				nextNodes.AddRange(axis1);
 				nextNodes.AddRange(axis2);
@@ -275,16 +285,14 @@ public class PlayLogic : MonoBehaviour
 
 	private List<int> MoveAxis(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
-		if (allNodes[nodeIndex].State != NodeState.None && !isFirst && MoveType != MoveType.Knight)
-		{
-			if ((allNodes[nodeIndex].State == NodeState.Enemy && ChoosedNode.State == NodeState.Player) ||
-				(allNodes[nodeIndex].State == NodeState.Player && ChoosedNode.State == NodeState.Enemy))
-				allNodes[nodeIndex].State = NodeState.Attack;
+		if (CheckAttackPos(nodeIndex, isFirst))
 			return new List<int>();
-		}
 
 		if (isDraw && !isFirst)
 			allNodes[nodeIndex].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
+
+		if(ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
+			return new List<int>();
 
 		moveCount++;
 
@@ -293,19 +301,29 @@ public class PlayLogic : MonoBehaviour
 
 	private List<int> MoveCross(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
-		if (allNodes[nodeIndex].State != NodeState.None && !isFirst && MoveType != MoveType.Knight)
-		{
-			if ((allNodes[nodeIndex].State == NodeState.Enemy && ChoosedNode.State == NodeState.Player) ||
-				(allNodes[nodeIndex].State == NodeState.Player && ChoosedNode.State == NodeState.Enemy))
-				allNodes[nodeIndex].State = NodeState.Attack;
+		if (CheckAttackPos(nodeIndex, isFirst))
 			return new List<int>();
-		}
 
 		if (isDraw && !isFirst)
 			allNodes[nodeIndex].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
 
+		if (ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
+			return new List<int>();
+
 		moveCount++;
 
 		return Move(nodeIndex, isFirst, false);
+	}
+
+	private bool CheckAttackPos(int index, bool isFirst)
+	{
+		if (allNodes[index].State != NodeState.None && !isFirst && currentMoveType != MoveType.Knight)
+		{
+			if ((allNodes[index].State == NodeState.Enemy && ChoosedNode.State == NodeState.Player) ||
+				(allNodes[index].State == NodeState.Player && ChoosedNode.State == NodeState.Enemy))
+				allNodes[index].State = NodeState.Attack;
+			return true;
+		}
+		return false;
 	}
 }

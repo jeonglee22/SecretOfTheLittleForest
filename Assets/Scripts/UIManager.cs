@@ -14,7 +14,6 @@ public class UIManager : MonoBehaviour
     public void OnValueChangeMoveType()
     {
         var moveType = (MoveType)dropdown.value;
-		playLogic.MoveType = moveType;
         playLogic.ClearNodes();
     }
 
