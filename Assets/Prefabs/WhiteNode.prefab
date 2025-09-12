@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 242895510973625395}
   - component: {fileID: 7048591799774893792}
   - component: {fileID: 7852899255425995972}
-  - component: {fileID: 7472855552119388601}
+  - component: {fileID: 6353081270482613845}
   m_Layer: 3
   m_Name: WhiteNode
   m_TagString: Untagged
@@ -112,7 +112,7 @@ CapsuleCollider:
   m_Height: 7.9098115
   m_Direction: 1
   m_Center: {x: 0.000000042574747, y: -0.034352064, z: -0.008767077}
---- !u!114 &7472855552119388601
+--- !u!114 &6353081270482613845
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

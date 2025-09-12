@@ -3,7 +3,13 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    private GameObject toy;
+    private Toy toy;
+
+	public Toy Toy
+	{
+		get { return toy; }
+		set { toy = value; }
+	}
 
 	public bool IsCenterNode = false;
 	private int nodeIndexAxis;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2201202130686947681}
   - component: {fileID: 4020793470136252144}
   - component: {fileID: 6426740936413088298}
-  - component: {fileID: 2245749923295411939}
+  - component: {fileID: 238949370567056808}
   m_Layer: 3
   m_Name: BlackNode
   m_TagString: Untagged
@@ -112,7 +112,7 @@ CapsuleCollider:
   m_Height: 7.9098115
   m_Direction: 1
   m_Center: {x: 0.000000042574747, y: -0.034352064, z: -0.008767077}
---- !u!114 &2245749923295411939
+--- !u!114 &238949370567056808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
