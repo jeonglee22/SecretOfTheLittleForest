@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
+	public PlayManager playManager;
+
 	public List<Node> allNodes;
 	public PlayLogic playLogic;
 
@@ -13,19 +15,15 @@ public class BoardManager : MonoBehaviour
 
 	public bool IsChoosed { get; set; }
 
-	public void ReloadBoard()
-	{
-
-	}
-
 	public Node GetRandomNodeInPlayer()
 	{
 		var index = 0;
 		do
 		{
 			index = Random.Range(0, playerStartNodes.Count);
-		} while (allNodes[index].State == NodeState.Player);
-		
+		} while (playerStartNodes[index].State == NodeState.Player);
+
+		playManager.AddPlayers(playerStartNodes[index]);
 		return playerStartNodes[index];
 	}
 	public Node GetRandomNodeInEnemy()
@@ -34,7 +32,9 @@ public class BoardManager : MonoBehaviour
 		do
 		{
 			index = Random.Range(0, enemyStartNodes.Count);
-		} while (allNodes[index].State == NodeState.Enemy);
+		} while (enemyStartNodes[index].State == NodeState.Enemy);
+
+		playManager.AddEnemies(enemyStartNodes[index]);
 		return enemyStartNodes[index];
 	}
 

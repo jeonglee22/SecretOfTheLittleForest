@@ -5,29 +5,28 @@ using UnityEngine;
 public class PlayLogic : MonoBehaviour
 {
 	public BoardManager boardManager;
+	public PlayManager playManager;
 	public ToyControl control;
 
 	private Node choosedNode;
-	public Node ChoosedNode {  get { return choosedNode; } set { choosedNode = value; } }
+	public Node ChoosedNode 
+	{  
+		get { return choosedNode; } 
+		set 
+		{
+			choosedNode = value;
+			if (choosedNode != null && choosedNode.Toy != null)
+				currentMoveType = choosedNode.Toy.MoveType;
+			else
+				currentMoveType = MoveType.None;
+			ClearNodes();
+		} 
+	}
 	private List<Node> allNodes;
 
 	public static int allNodeCount = 16 * 6;
 
 	private MoveType currentMoveType;
-
-	//private MoveType moveType;
-
-	//public MoveType MoveType 
-	//{
-	//	get { return moveType; }
-	//	set 
-	//	{
-	//		if (moveType != value)
-	//		{
-	//			moveType = value;
-	//		}
-	//	}
-	//}
 
 	private void Awake()
 	{
@@ -48,59 +47,6 @@ public class PlayLogic : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.touches.Length == 0)
-			return;
-
-		if (control.IsMove)
-			return;
-
-		var touchPos = Input.GetTouch(0).position;
-		var ray = Camera.main.ScreenPointToRay(touchPos);
-
-		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerId.node))
-		{
-			var go = hit.collider.gameObject;
-			var beforeNode = choosedNode;
-			choosedNode = go.GetComponent<Node>();
-
-			if (beforeNode != null && beforeNode.Toy != null && 
-				boardManager.IsChoosed && 
-				((choosedNode.State == NodeState.PlayerMove && beforeNode.State == NodeState.Player) || 
-				(choosedNode.State == NodeState.EnemyMove && beforeNode.State == NodeState.Enemy) ||
-				(choosedNode.State == NodeState.Attack)))
-			{
-				if (choosedNode.State == NodeState.Attack)
-					Destroy(choosedNode.Toy.gameObject);
-
-				ClearNodes();
-				
-				control.ToyMove(ref beforeNode);
-				choosedNode.State = beforeNode.State;
-				beforeNode.State = NodeState.None;
-				choosedNode = null;
-				return;
-			}
-
-			ClearNodes();
-
-			if (choosedNode.Toy != null)
-			{
-				currentMoveType = choosedNode.Toy.MoveType;
-				ShowMovable(choosedNode.NodeIndex, 0);
-			}
-			else
-				choosedNode.State = NodeState.Choose;
-
-			boardManager.IsChoosed = true;
-			//ShowNeighbor();
-		}
-		else if(Physics.Raycast(ray, out RaycastHit uihit, Mathf.Infinity, ~LayerId.ui))
-		{
-			boardManager.IsChoosed = false;
-			ClearNodes();
-			choosedNode = null;
-			currentMoveType = MoveType.None;
-		}
 	}
 
 	public void ClearNodes()
@@ -116,36 +62,9 @@ public class PlayLogic : MonoBehaviour
 		}
 	}
 
-	private void ShowNeighbor()
+	public void ShowMovable(int choosedNode, int moveCount, bool isFirst = true)
 	{
-		var axis1 = choosedNode.Axis1;
-		var axis2 = choosedNode.Axis2;
-
-		var cross1 = choosedNode.CrossNode1;
-		var cross2 = choosedNode.CrossNode2;
-
-		var centerCross = new List<int>();
-		if (choosedNode.IsCenterNode)
-			centerCross = choosedNode.CenterCrossNode2;
-
-		for (int i = 0; i < axis1.Count; i++) 
-		{
-			if (axis1[i] != Node.outSide)
-				allNodes[axis1[i]].State = NodeState.PlayerMove;
-			if (axis2[i] != Node.outSide)
-				allNodes[axis2[i]].State = NodeState.PlayerMove;
-			if (cross1[i] != Node.outSide)
-				allNodes[cross1[i]].State = NodeState.EnemyMove;
-			if (cross2[i] != Node.outSide)
-				allNodes[cross2[i]].State = NodeState.EnemyMove;
-
-			if(centerCross.Count > 0)
-				allNodes[centerCross[i]].State = NodeState.EnemyMove;
-		}
-	}
-
-	private void ShowMovable(int choosedNode, int moveCount, bool isFirst = true)
-	{
+		Debug.Log("Show");
 		List<int> nextNodes = new List<int>();
 
 		switch (currentMoveType)

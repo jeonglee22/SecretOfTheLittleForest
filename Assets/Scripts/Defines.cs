@@ -1,5 +1,12 @@
 using UnityEngine;
 
+public enum PlayTurn
+{
+    None = -1,
+    Enemy,
+    Player,
+}
+
 public enum MoveType
 {
     Pawn,
@@ -26,6 +33,8 @@ public class LayerId
 {
     public static readonly int node = LayerMask.GetMask("Node");
     public static readonly int ui = LayerMask.GetMask("UI");
+    public static readonly int toy = LayerMask.GetMask("Toy");
+    public static readonly int ground = LayerMask.GetMask("Ground");
 }
 
 public enum Languages
