@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class PlayLogic : MonoBehaviour
@@ -53,7 +54,7 @@ public class PlayLogic : MonoBehaviour
 	{
 		foreach (var node in allNodes)
 		{
-			if( node.Toy == null)
+			if (node.Toy == null)
 				node.State = NodeState.None;
 			else
 			{
@@ -62,9 +63,9 @@ public class PlayLogic : MonoBehaviour
 		}
 	}
 
-	public void ShowMovable(int choosedNode, int moveCount, bool isFirst = true)
+	public List<int> ShowMovable(int choosedNode, int moveCount, bool isFirst = true)
 	{
-		Debug.Log("Show");
+		var movableNodes = new List<int>();
 		List<int> nextNodes = new List<int>();
 
 		switch (currentMoveType)
@@ -76,42 +77,58 @@ public class PlayLogic : MonoBehaviour
 				nextNodes = MoveAxis(choosedNode, ref moveCount, isFirst);
 				nextNodes.AddRange(MoveCross(choosedNode, ref moveCount, isFirst));
 				if (moveCount == 4)
-					return;
+					return movableNodes;
 				foreach (var node in nextNodes)
-					if(node != Node.outSide)
-						ShowMovable(node, moveCount, false);
+					if (node != Node.outSide)
+					{
+						movableNodes.Add(node);
+						movableNodes.AddRange(ShowMovable(node, moveCount, false));
+					}
 				break;
 			case MoveType.Knight when moveCount == 0:
 				nextNodes = MoveCross(choosedNode,ref moveCount, isFirst ,false);
 				foreach (var node in nextNodes)
 					if (node != Node.outSide)
-						ShowMovable(node, moveCount, false);
+						movableNodes.AddRange(ShowMovable(node, moveCount, false));
 				break;
 			case MoveType.Knight when moveCount == 1:
-				MoveAxis(choosedNode,ref moveCount, isFirst, false);
+				nextNodes = MoveAxis(choosedNode,ref moveCount, isFirst, false);
+				foreach (var node in nextNodes)
+					if (node != Node.outSide)
+					{
+						movableNodes.Add(node);
+					}
 				break;
 			case MoveType.Bishop:
 				nextNodes = MoveCross(choosedNode, ref moveCount, isFirst);
 				foreach (var node in nextNodes)
 					if (node != Node.outSide)
-						ShowMovable(node, moveCount, false);
+					{
+						movableNodes.Add(node);
+						movableNodes.AddRange(ShowMovable(node, moveCount, false));
+					}
 				break;
 			case MoveType.Rook:
 				nextNodes = MoveAxis(choosedNode, ref moveCount, isFirst);
 				foreach (var node in nextNodes)
 					if (node != Node.outSide)
-						ShowMovable(node, moveCount, false);
+					{
+						movableNodes.Add(node);
+						movableNodes.AddRange(ShowMovable(node, moveCount, false));
+					}
 				break;
 			case MoveType.Queen:
 				currentMoveType = MoveType.Bishop;
-				ShowMovable(choosedNode, moveCount);
+				movableNodes.AddRange(ShowMovable(choosedNode, moveCount));
 				currentMoveType = MoveType.Rook;
-				ShowMovable(choosedNode, moveCount);
+				movableNodes.AddRange(ShowMovable(choosedNode, moveCount));
 				currentMoveType = MoveType.Queen;
 				break;
 			default:
 				break;
 		}
+
+		return movableNodes;
 	}
 
 	private List<int> Move(int nodeIndex, bool isFirst, bool isAxis)
@@ -138,14 +155,21 @@ public class PlayLogic : MonoBehaviour
 		{
 			nextNodes.AddRange(axis1);
 			nextNodes.AddRange(axis2);
+
+			var resultNodes = new List<int>();
 			if(node.IsCenterNode && !isAxis)
 				nextNodes.AddRange(node.CenterCrossNode2);
 
 			for (int i = 0; i < nextNodes.Count; i++)
 			{
-				if (nextNodes[i] != -1)
+				if (nextNodes[i] != -1 && allNodes[nextNodes[i]].State != choosedNode.State)
+				{
+					resultNodes.Add(nextNodes[i]);
 					allNodes[nextNodes[i]].CommingNode = nodeIndex;
+				}
 			}
+
+			return resultNodes;
 		}
 		else
 		{
@@ -153,6 +177,8 @@ public class PlayLogic : MonoBehaviour
 			{
 				nextNodes.AddRange(axis1);
 				nextNodes.AddRange(axis2);
+
+				var resultNodes = new List<int>();
 				foreach (var i in nextNodes)
 				{
 					if (allNodes[before].Axis1.Contains(i) ||
@@ -172,8 +198,12 @@ public class PlayLogic : MonoBehaviour
 							continue;
 						else
 							allNodes[i].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
+
+						resultNodes.Add(i);
 					}
 				}
+
+				return resultNodes;
 			}
 			else if (axis1.Contains(before))
 			{
@@ -198,13 +228,18 @@ public class PlayLogic : MonoBehaviour
 	{
 		var index = axis[(axis.IndexOf(before) + 1) % 2];
 		if (index != -1)
+		{
+			if (allNodes[index].State == ChoosedNode.State)
+				return new List<int>();
+
 			allNodes[index].CommingNode = currIndex;
+		}
 		return new List<int> { index };
 	}
 
 	private List<int> MoveAxis(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
-		if (CheckAttackPos(nodeIndex, isFirst))
+		if (CheckAlreadyUsedPos(nodeIndex, isFirst))
 			return new List<int>();
 
 		if (isDraw && !isFirst)
@@ -220,7 +255,7 @@ public class PlayLogic : MonoBehaviour
 
 	private List<int> MoveCross(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
-		if (CheckAttackPos(nodeIndex, isFirst))
+		if (CheckAlreadyUsedPos(nodeIndex, isFirst))
 			return new List<int>();
 
 		if (isDraw && !isFirst)
@@ -234,7 +269,7 @@ public class PlayLogic : MonoBehaviour
 		return Move(nodeIndex, isFirst, false);
 	}
 
-	private bool CheckAttackPos(int index, bool isFirst)
+	private bool CheckAlreadyUsedPos(int index, bool isFirst)
 	{
 		if (allNodes[index].State != NodeState.None && !isFirst && currentMoveType != MoveType.Knight)
 		{

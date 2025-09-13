@@ -3,6 +3,7 @@ using UnityEngine;
 public class Toy : MonoBehaviour
 {
 	private ToyData data;
+	public ToyData Data { get { return data; } }
 	private MoveType moveType;
 	public MoveType MoveType { get { return moveType; } }
 

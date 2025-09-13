@@ -34,7 +34,6 @@ public class PlayerTurn : Turn
 			else if (beforeNode != null && beforeNode.State == NodeState.Player &&
 				(touchedNode.State == NodeState.PlayerMove || touchedNode.State == NodeState.Attack))
 			{
-				Debug.Log("Move");
 				playLogic.ChoosedNode = touchedNode;
 				PlayAction();
 			}
@@ -49,13 +48,11 @@ public class PlayerTurn : Turn
 	public override void StartTurn()
 	{
 		base.StartTurn();
-		Debug.Log("Player Start");
-		Debug.Log(moveCount);
 	}
 
 	private void PlayAction()
 	{
-		if (touchedNode.State == NodeState.Attack)
+		if (touchedNode.State == NodeState.Enemy)
 			Destroy(touchedNode.Toy.gameObject);
 
 		playLogic.ClearNodes();
@@ -70,7 +67,6 @@ public class PlayerTurn : Turn
 
 	public override void EndTurn()
 	{
-		Debug.Log("End Player");
 		boardManager.IsChoosed = false;
 		playLogic.ChoosedNode = null;
 
