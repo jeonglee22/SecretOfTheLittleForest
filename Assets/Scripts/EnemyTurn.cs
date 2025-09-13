@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,8 +30,7 @@ public class EnemyTurn : Turn
 			return;
 		}
 
-		if (Input.touchCount == 1)
-			EnemyMove();
+		EnemyMove();
 	}
 
 	public override void StartTurn()
@@ -45,11 +45,20 @@ public class EnemyTurn : Turn
 	{
 		var enemyCase = new List<List<int>>();
 		var attackedNodes = FindAttackedNode();
-		if(attackedNodes.Count != 0)
+		if (attackedNodes.Count != 0 && MoveOptimizeAttackedToy(attackedNodes))
 		{
-			MoveOptimizeToy(attackedNodes);
 			moveCount--;
 			return;
+		}
+		var canAttackNodes = FindCanAttackNode();
+		if (canAttackNodes.Count != 0)
+		{
+			if (MoveOptimizeForAttackingToy(canAttackNodes))
+			{
+				moveCount--;
+				return;
+			}
+
 		}
 
 		moveCount--;
@@ -58,6 +67,7 @@ public class EnemyTurn : Turn
 	public override void EndTurn()
 	{
 		turnTime = 0;
+		playLogic.ChoosedNode = null;
 		base.EndTurn();
 	}
 
@@ -94,7 +104,81 @@ public class EnemyTurn : Turn
 		return result;
 	}
 
-	private void MoveOptimizeToy(List<int> toys)
+	private bool MoveOptimizeForAttackingToy(List<int> toys)
+	{
+		var canMoves = new List<(int, int)>();
+		var attackPlayers = FindAttackPlayerToys();
+
+		foreach (var node in toys)
+		{
+			playLogic.ChoosedNode = boardManager.allNodes[node];
+			var movables = playLogic.ShowMovable(node, 0);
+			foreach (var movePos in movables)
+			{
+				if(attackPlayers.Contains(movePos))
+				{
+					canMoves.Add((movePos, node));
+				}
+			}
+		}
+
+		playLogic.ClearNodes();
+		if (canMoves.Count == 0)
+			return false;
+
+		GetMaxPriceTupleIndex(out int maxCostIndex, canMoves, true);
+
+		playLogic.ChoosedNode = boardManager.allNodes[canMoves[maxCostIndex].Item1];
+		var beforeNode = boardManager.allNodes[canMoves[maxCostIndex].Item2];
+		Destroy(playLogic.ChoosedNode.Toy.gameObject);
+		toyControl.ToyMove(ref beforeNode);
+		playLogic.ClearNodes();
+
+		return true;
+	}
+
+	private List<int> FindAttackPlayerToys()
+	{
+		var result = new List<int>();
+
+		foreach (var player in players)
+		{
+			playLogic.ChoosedNode = player;
+			var nodes = playLogic.ShowMovable(player.NodeIndex, 0);
+			foreach (var node in nodes)
+			{
+				if (boardManager.allNodes[node].State == NodeState.Attack)
+				{
+					result.Add(player.NodeIndex);
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	private List<int> FindCanAttackNode()
+	{
+		var result = new List<int>();
+
+		foreach (var node in enemies)
+		{
+			playLogic.ChoosedNode = node;
+			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
+			foreach (var movable in movables)
+			{
+				if (boardManager.allNodes[movable].State == NodeState.Attack)
+				{
+					result.Add(node.NodeIndex);
+					break;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	private bool MoveOptimizeAttackedToy(List<int> toys)
 	{
 		var canMoves = new List<(int,int)>();
 
@@ -112,20 +196,18 @@ public class EnemyTurn : Turn
 			}
 		}
 
-		var maxCostIndex = -1;
-		var maxCost = 0;
-		for (int i = 0; i < canMoves.Count; i++)
-		{
-			if (boardManager.allNodes[canMoves[i].Item2].Toy.Data.Price > maxCost)
-			{
-				maxCost = boardManager.allNodes[canMoves[i].Item2].Toy.Data.Price;
-				maxCostIndex = i;
-			}
-		}
+		playLogic.ClearNodes();
+		if (canMoves.Count == 0)
+			return false;
+
+		GetMaxPriceTupleIndex(out int maxCostIndex, canMoves, false);
 
 		playLogic.ChoosedNode = boardManager.allNodes[canMoves[maxCostIndex].Item1];
 		var beforeNode = boardManager.allNodes[canMoves[maxCostIndex].Item2];
 		toyControl.ToyMove(ref beforeNode);
+		playLogic.ClearNodes();
+
+		return true;
 	}
 
 	private bool CheckAttacked(int node)
@@ -145,5 +227,25 @@ public class EnemyTurn : Turn
 		}
 
 		return false;
+	}
+
+	private void GetMaxPriceTupleIndex(out int maxCostIndex, List<(int, int)> moveList, bool baseFirst)
+	{
+		maxCostIndex = -1;
+		int maxCost = 0;
+
+		for (int i = 0; i < moveList.Count; i++)
+		{
+			if (!baseFirst && boardManager.allNodes[moveList[i].Item2].Toy.Data.Price > maxCost)
+			{
+				maxCost = boardManager.allNodes[moveList[i].Item2].Toy.Data.Price;
+				maxCostIndex = i;
+			}
+			else if(baseFirst && boardManager.allNodes[moveList[i].Item1].Toy.Data.Price > maxCost)
+			{
+				maxCost = boardManager.allNodes[moveList[i].Item1].Toy.Data.Price;
+				maxCostIndex = i;
+			}
+		}
 	}
 }
