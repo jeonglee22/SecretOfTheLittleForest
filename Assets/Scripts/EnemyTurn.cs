@@ -43,22 +43,30 @@ public class EnemyTurn : Turn
 
 	private void EnemyMove()
 	{
-		var enemyCase = new List<List<int>>();
 		var attackedNodes = FindAttackedNode();
 		if (attackedNodes.Count != 0 && MoveOptimizeAttackedToy(attackedNodes))
 		{
 			moveCount--;
 			return;
 		}
-		var canAttackNodes = FindCanAttackNode();
-		if (canAttackNodes.Count != 0)
-		{
-			if (MoveOptimizeForAttackingToy(canAttackNodes))
-			{
-				moveCount--;
-				return;
-			}
 
+		var canAttackNodes = FindCanAttackNode();
+		if (canAttackNodes.Count != 0 && MoveOptimizeForAttackingToy(canAttackNodes, true))
+		{
+			moveCount--;
+			return;
+		}
+
+		if (FindMoveAndAttackNode())
+		{
+			moveCount--;
+			return;
+		}
+
+		if (canAttackNodes.Count != 0 && MoveOptimizeForAttackingToy(canAttackNodes, false))
+		{
+			moveCount--;
+			return;
 		}
 
 		moveCount--;
@@ -69,6 +77,53 @@ public class EnemyTurn : Turn
 		turnTime = 0;
 		playLogic.ChoosedNode = null;
 		base.EndTurn();
+	}
+
+	private bool FindMoveAndAttackNode()
+	{
+		var movablePair = new List<(int,int)>();
+		var attackPlayers = FindAttackPlayerToys();
+
+		foreach (var node in enemies)
+		{
+			playLogic.ChoosedNode = node;
+			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
+			foreach (var movable in movables)
+			{
+				if (boardManager.allNodes[movable].State == NodeState.Player ||
+					boardManager.allNodes[movable].State == NodeState.Attack)
+					continue;
+
+				boardManager.allNodes[movable].State = NodeState.Enemy;
+				boardManager.allNodes[movable].Toy = node.Toy;
+				playLogic.ChoosedNode = boardManager.allNodes[movable];
+
+				var movableAtmovePos = playLogic.ShowMovable(movable, 0);
+				foreach(var nextPos in  movableAtmovePos)
+				{
+					if (attackPlayers.Contains(nextPos))
+					{
+						movablePair.Add((movable, node.NodeIndex));
+					}
+				}
+
+				boardManager.allNodes[movable].State = NodeState.None;
+				boardManager.allNodes[movable].Toy = null;
+			}
+		}
+
+		playLogic.ClearNodes();
+		if (movablePair.Count == 0)
+			return false;
+
+		GetMaxPriceTupleIndex(out int maxCostIndex, movablePair, false);
+
+		playLogic.ChoosedNode = boardManager.allNodes[movablePair[maxCostIndex].Item1];
+		var beforeNode = boardManager.allNodes[movablePair[maxCostIndex].Item2];
+		toyControl.ToyMove(ref beforeNode);
+		playLogic.ClearNodes();
+
+		return true;
 	}
 
 	public void SetToys()
@@ -104,10 +159,12 @@ public class EnemyTurn : Turn
 		return result;
 	}
 
-	private bool MoveOptimizeForAttackingToy(List<int> toys)
+	private bool MoveOptimizeForAttackingToy(List<int> toys, bool isPlayerAttack)
 	{
 		var canMoves = new List<(int, int)>();
-		var attackPlayers = FindAttackPlayerToys();
+		var playerIndex = players.ConvertAll(x => x.NodeIndex);
+		var attackingPlayers = FindAttackPlayerToys();
+		var attackPlayers = isPlayerAttack ? attackingPlayers : playerIndex.FindAll(x => !attackingPlayers.Contains(x));
 
 		foreach (var node in toys)
 		{
