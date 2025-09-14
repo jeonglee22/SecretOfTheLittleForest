@@ -11,7 +11,7 @@ public class Toy : MonoBehaviour
 
 	public bool IsMove { get; set; }
 
-	private void Start()
+	private void Awake()
 	{
 		do
 		{
@@ -19,5 +19,9 @@ public class Toy : MonoBehaviour
 		} while (data.Movement == 0);
 
 		moveType = (MoveType)data.Movement;
+	}
+
+	private void Start()
+	{ 
 	}
 }

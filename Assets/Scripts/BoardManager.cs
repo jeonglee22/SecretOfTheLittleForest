@@ -4,6 +4,7 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
 	public PlayManager playManager;
+	public GameObjectManager gameObjectManager;
 
 	public List<Node> allNodes;
 	public PlayLogic playLogic;
@@ -50,6 +51,9 @@ public class BoardManager : MonoBehaviour
 
 		var childTransform = node.gameObject.transform.GetChild(0);
 		var spawnedToy = Instantiate(toy, childTransform);
+		var modelCode = spawnedToy.Data.ModelCode;
+		var model = gameObjectManager.Get(modelCode);
+		Instantiate(model, spawnedToy.transform);
 
 		var scale = spawnedToy.transform.localScale;
 		spawnedToy.transform.localScale = new Vector3(scale.x / nodeScale.x, scale.y / nodeScale.y, scale.z / nodeScale.z);

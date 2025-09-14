@@ -1976,6 +1976,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5413dd121eaa56a42ad4a223338b0265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1403122988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1403122990}
+  - component: {fileID: 1403122989}
+  m_Layer: 0
+  m_Name: GameObjectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1403122989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403122988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb18a85c7726eb4aaaf0965ad6461b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toyObjects:
+  - {fileID: 9138365651359509059, guid: 50d36043c7bc90844976fd7953a9b266, type: 3}
+  - {fileID: 7203884622068899265, guid: 091363fc01dff674680e04d799c5e78e, type: 3}
+  - {fileID: 3570202454189240849, guid: f870da3b3b5823f4aa09be71b8671f4e, type: 3}
+  - {fileID: 7397830065617415806, guid: ece9c2e0d8fb07a4f8761accfcf2cdb4, type: 3}
+  - {fileID: 1953697600375795593, guid: fc1290905ccb7c446805d259e03250a0, type: 3}
+  - {fileID: 5742968130972432984, guid: 5e167502c760991459fa0139d813fbe8, type: 3}
+  - {fileID: 3056473944736929021, guid: 8a7d7553fb153e14f8965d550d626d3d, type: 3}
+  - {fileID: 8323152272174801303, guid: c595d0a77a61d894781448361b95a57f, type: 3}
+  - {fileID: 3975595696239065519, guid: 80cd275637c440e45a11abaacb416735, type: 3}
+  - {fileID: 2657479854551843540, guid: 4f44c629d5e4bdc47a66ad27ab1b2061, type: 3}
+  - {fileID: 838855928130449192, guid: af42da420446db24ca5df04c5aae610c, type: 3}
+  - {fileID: 2779727384802704433, guid: 9deee76b94e436b4991af5502bdf0f80, type: 3}
+  - {fileID: 6880605998785457417, guid: 6116ced4d4d28fd40bd6e7403f222579, type: 3}
+  - {fileID: 8502795134753469341, guid: 995b8115f78671741b0a20e28f32e6a7, type: 3}
+  - {fileID: 1472773100045129893, guid: cdf87dfc41e308b458135e3626e8778a, type: 3}
+  - {fileID: 7834690771183939310, guid: 4987724736e0bd9409555a1355e0bc2d, type: 3}
+  - {fileID: 4594397264681489289, guid: 0349f8dd97507474484c68e1d196dadc, type: 3}
+  - {fileID: 1549261951256818051, guid: b405bf0a3ae9d9f4d8e5c87afac04cc9, type: 3}
+  - {fileID: 8504846069051079774, guid: f587bf6f4d69fb34b90e489890d6788d, type: 3}
+  - {fileID: 7647096637858734990, guid: a5fe8a6a39aa315459e95205d0ee258f, type: 3}
+  - {fileID: 329699692761690202, guid: 3f3f44c126315414da6b06f1b6ad954e, type: 3}
+  - {fileID: 4965347305395431682, guid: 3affa035ac85efb4da729e0683cb7b15, type: 3}
+  - {fileID: 1089133428273308377, guid: 2a970d4b35aa63c448eec36861b1d8bc, type: 3}
+  - {fileID: 4832863265565157258, guid: 65f813605a825dd438ea814a55c3b866, type: 3}
+  - {fileID: 8792827570334031494, guid: fd2c5944d49b7b6479e7cd1ac3162e85, type: 3}
+--- !u!4 &1403122990
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403122988}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.4788202, y: 0.059783928, z: -0.31643432}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1405518144 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3690973264400099401, guid: 8658ada7c2fb42d42b14a8bba2e83efc, type: 3}
@@ -3324,6 +3394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playManager: {fileID: 1174098597}
+  gameObjectManager: {fileID: 1403122989}
   allNodes:
   - {fileID: 1460965189}
   - {fileID: 1894554274}
@@ -3712,3 +3783,4 @@ SceneRoots:
   - {fileID: 5248089905234752743}
   - {fileID: 2453581957110236829}
   - {fileID: 1174098596}
+  - {fileID: 1403122990}
