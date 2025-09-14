@@ -75,7 +75,104 @@ public class EnemyTurn : Turn
 			return;
 		}
 
+		FindRemainAndMoveNode();
 		moveCount--;
+	}
+
+	private void FindRemainAndMoveNode()
+	{
+		var movabledefencePair = new PriorityQueue<(int,int), int>();
+		var movableEmptyPair = new List<(int, int)>();
+		var movableAttackedPair = new PriorityQueue<(int, int), int>();
+
+		var playersAttackNodes = FindAllAttackNodes(players);
+
+		foreach (var enemy in enemies)
+		{
+			playLogic.ChoosedNode = enemy;
+			var movables = playLogic.ShowMovable(enemy.NodeIndex, 0);
+			var enemiesAttackNodes = FindAllAttackNodes(enemies, enemy);
+			foreach (var movable in movables)
+			{
+				if (enemiesAttackNodes.ConvertAll(x => x.pos).Contains(movable))
+				{
+					var defenceNodeIndex = enemiesAttackNodes.ConvertAll(x => x.pos).IndexOf(movable);
+					var defenceNode = enemiesAttackNodes[defenceNodeIndex].start;
+
+					movabledefencePair.Enqueue((movable, enemy.NodeIndex), -boardManager.allNodes[defenceNode].Toy.Data.Attack);
+				}
+				else if (playersAttackNodes.ConvertAll(x => x.pos).Contains(movable))
+				{
+					movableAttackedPair.Enqueue((movable, enemy.NodeIndex), boardManager.allNodes[enemy.NodeIndex].Toy.Data.Price);
+				}
+				else
+					movableEmptyPair.Add((movable, enemy.NodeIndex));
+			}
+		}
+
+		(int, int) movePair = new();
+
+		if (movabledefencePair.Count > 0)
+		{
+			var minPriority = movabledefencePair.Priority;
+			var pairs = new List<(int, int)> { movabledefencePair.Dequeue() };
+
+			while(movabledefencePair.TryDequeue(out (int, int) pair, out int priority))
+			{
+				if(minPriority == priority)
+					pairs.Add(pair);
+			}
+			Debug.Log("Defence");
+			Debug.Log(pairs.Count);
+			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
+		}
+		else if (movableEmptyPair.Count > 0)
+		{
+			Debug.Log("Empty");
+			movePair = movableEmptyPair[UnityEngine.Random.Range(0, movableEmptyPair.Count)];
+		}
+		else
+		{
+			var minPriority = movableAttackedPair.Priority;
+			var pairs = new List<(int, int)> { movableAttackedPair.Dequeue() };
+
+			while (movableAttackedPair.TryDequeue(out (int, int) pair, out int priority))
+			{
+				if (minPriority == priority)
+					pairs.Add(pair);
+			}
+			Debug.Log("Sacrifce");
+			Debug.Log(pairs.Count);
+			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
+		}
+
+		playLogic.ChoosedNode = boardManager.allNodes[movePair.Item1];
+		var beforeNode = boardManager.allNodes[movePair.Item2];
+		toyControl.ToyMove(ref beforeNode);
+		playLogic.ClearNodes();
+	}
+
+	private List<(int pos, int start)> FindAllAttackNodes(List<Node> nodes, Node except = null)
+	{
+		var result = new List<(int,int)>();
+
+		foreach (var node in nodes)
+		{
+			if (except != null && node.NodeIndex == except.NodeIndex)
+				continue;
+
+			playLogic.ChoosedNode = node;
+			var moves = playLogic.ShowMovable(node.NodeIndex, 0);
+			foreach (var move in moves)
+			{
+				if (boardManager.allNodes[move].Toy == null)
+				{
+					result.Add((move,node.NodeIndex));
+				}
+			}
+		}
+
+		return result;
 	}
 
 	public override void EndTurn()

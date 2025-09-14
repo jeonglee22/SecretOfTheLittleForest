@@ -7,7 +7,7 @@ public class PlayerTurn : Turn
 
 	protected void Update()
 	{
-		if (toyControl.IsMove || Input.touches.Length == 0 || playManager.PlayTurn != PlayTurn.Player || !playManager.IsTurnStart)
+		if (toyControl.IsMove  || playManager.PlayTurn != PlayTurn.Player || !playManager.IsTurnStart)
 			return;
 
 		if (moveCount == 0)
@@ -15,6 +15,9 @@ public class PlayerTurn : Turn
 			EndTurn();
 			return;
 		}
+
+		if (Input.touches.Length == 0)
+			return;
 
 		var touchPos = Input.GetTouch(0).position;
 		var ray = Camera.main.ScreenPointToRay(touchPos);

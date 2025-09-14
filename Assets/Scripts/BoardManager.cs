@@ -17,6 +17,9 @@ public class BoardManager : MonoBehaviour
 
 	public Node GetRandomNodeInPlayer()
 	{
+		if(playManager.GetAlivePlayerCount() == playerStartNodes.Count)
+			return null;
+
 		var index = 0;
 		do
 		{
@@ -28,6 +31,9 @@ public class BoardManager : MonoBehaviour
 	}
 	public Node GetRandomNodeInEnemy()
 	{
+		if (playManager.GetAliveEnemyCount() == enemyStartNodes.Count)
+			return null;
+
 		var index = 0;
 		do
 		{

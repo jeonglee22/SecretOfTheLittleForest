@@ -27,12 +27,14 @@ public class UIManager : MonoBehaviour
     public void OnClickSetPlayerToy()
     {
         var node = boardManager.GetRandomNodeInPlayer();
-        boardManager.ToySettingOnNode( node, toy, false);
+        if(node != null )
+            boardManager.ToySettingOnNode( node, toy, false);
     }
     public void OnClickSetEnemyToy()
     {
         var node = boardManager.GetRandomNodeInEnemy();
-		boardManager.ToySettingOnNode( node, toy, true);
+        if(node != null)
+		    boardManager.ToySettingOnNode( node, toy, true);
 	}
 
     public void OnClickPlayGame()

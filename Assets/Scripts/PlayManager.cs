@@ -83,4 +83,6 @@ public class PlayManager : MonoBehaviour
 		players.Add(player);
 	}
 
+	public int GetAlivePlayerCount() { return players.Count; }
+	public int GetAliveEnemyCount() { return enemies.Count; }
 }
