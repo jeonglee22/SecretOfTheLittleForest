@@ -10,6 +10,35 @@ public class EnemyTurn : Turn
 	private List<Node> enemies;
 	private List<Node> players;
 
+	private Dictionary<int, Func<bool>> aiFuncs;
+
+	private void Awake()
+	{
+		aiFuncs = new Dictionary<int, Func<bool>>();
+		var aiNames = AINames.AINameList;
+		var aiDatas = DataTableManger.AITable;
+
+		foreach (var name in aiNames)
+		{
+			Func<bool> func = name switch
+			{
+				AINames.runAI => RunAI,
+				AINames.atkSaveAI => AtkSaveAI,
+				AINames.moveSaveAI => MoveSaveAI,
+				AINames.atkAI => AtkAI,
+				AINames.moveAI => MoveAI,
+				AINames.defMove => (() => RemainMove(0)),
+				AINames.randomMove => (() => RemainMove(1)),
+				AINames.hateMove => (() => RemainMove(2)),
+				_ => null,
+			};
+			if (func != null)
+				aiFuncs.Add(aiDatas.Get(name).Value, func);
+			else
+				throw new Exception("Wrong Function Name");
+		}
+	}
+
 	private void Start()
 	{
 		turnTime = 0;
@@ -56,43 +85,76 @@ public class EnemyTurn : Turn
 
 	private void EnemyMove()
 	{
+		for(int i = DataTableManger.AITable.Count - 1; i >= 0; i--)
+		{
+			if (aiFuncs[i]())
+				break;
+		}
+		turnTime = 0f;
+	}
+
+	private bool RunAI()
+	{
 		var attackedNodes = FindAttackedNode();
 		if (attackedNodes.Count != 0 && MoveOptimizeAttackedToy(attackedNodes))
 		{
 			moveCount--;
-			return;
+			return true;
 		}
+		return false;
+	}
 
+	private bool AtkSaveAI()
+	{
 		var canAttackNodes = FindCanAttackNode();
 		if (canAttackNodes.Count != 0 && MoveOptimizeForAttackingToy(canAttackNodes, true))
 		{
 			moveCount--;
-			return;
+			return true;
 		}
-
+		return false;
+	}
+	private bool MoveSaveAI()
+	{
 		if (FindMoveAndAttackNode(true))
 		{
 			moveCount--;
-			return;
+			return true;
 		}
-
+		return false;
+	}
+	private bool AtkAI()
+	{
+		var canAttackNodes = FindCanAttackNode();
 		if (canAttackNodes.Count != 0 && MoveOptimizeForAttackingToy(canAttackNodes, false))
 		{
 			moveCount--;
-			return;
+			return true;
 		}
-
+		return false;
+	}
+	private bool MoveAI()
+	{
 		if (FindMoveAndAttackNode(false))
 		{
 			moveCount--;
-			return;
+			return true;
 		}
+		return false;
+	}
+	private bool RemainMove(int i)
+	{
+		int moveType = FindRemainAndMoveNode();
+		if (moveType == i)
+		{
+			moveCount--;
 
-		FindRemainAndMoveNode();
-		moveCount--;
+			return true;
+		}
+		return false;
 	}
 
-	private void FindRemainAndMoveNode()
+	private int FindRemainAndMoveNode()
 	{
 		var movabledefencePair = new PriorityQueue<(int,int), int>();
 		var movableEmptyPair = new List<(int, int)>();
@@ -124,6 +186,7 @@ public class EnemyTurn : Turn
 		}
 
 		(int, int) movePair = new();
+		int moveInt = -1;
 
 		if (movabledefencePair.Count > 0)
 		{
@@ -136,10 +199,12 @@ public class EnemyTurn : Turn
 					pairs.Add(pair);
 			}
 			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
+			moveInt = 0;
 		}
 		else if (movableEmptyPair.Count > 0)
 		{
 			movePair = movableEmptyPair[UnityEngine.Random.Range(0, movableEmptyPair.Count)];
+			moveInt = 1;
 		}
 		else
 		{
@@ -152,6 +217,7 @@ public class EnemyTurn : Turn
 					pairs.Add(pair);
 			}
 			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
+			moveInt = 2;
 		}
 
 		playLogic.ChoosedNode = boardManager.allNodes[movePair.Item1];
@@ -159,6 +225,8 @@ public class EnemyTurn : Turn
 		
 		toyControl.ToyMove(ref beforeNode);
 		playLogic.ClearNodes();
+
+		return moveInt;
 	}
 
 	private List<(int pos, int start)> FindAllAttackNodes(List<Node> nodes, Node except = null)

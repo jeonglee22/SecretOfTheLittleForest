@@ -15,7 +15,7 @@ public class Turn : MonoBehaviour
 
 	public virtual void StartTurn()
 	{
-		moveCount = 1;
+		moveCount = Mathf.FloorToInt(DataTableManger.SettingTable.Get(Settings.moveCount));
 	}
 
 	public virtual void EndTurn()

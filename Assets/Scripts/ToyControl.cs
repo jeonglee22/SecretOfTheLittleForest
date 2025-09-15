@@ -33,6 +33,7 @@ public class ToyControl : MonoBehaviour
 		var currentPos = before.Toy.gameObject.transform.position;
 
 		nextPos.y = currentPos.y;
+		before.Toy.gameObject.transform.LookAt(nextPos);
 		StartCoroutine(CoMove(currentPos, nextPos));
 		before.Toy = null;
 	}

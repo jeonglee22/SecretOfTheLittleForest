@@ -16,13 +16,37 @@ public static class DataTableManger
         var toyTable = new ToyTable();
         toyTable.Load(DataTableIds.Toy);
         tables.Add(DataTableIds.Toy, toyTable);
-    }
+
+		var aiTable = new AITable();
+        aiTable.Load(DataTableIds.AI);
+        tables.Add(DataTableIds.AI, aiTable);
+
+        var settingTable = new SettingTable();
+        settingTable.Load(DataTableIds.Setting);
+        tables.Add(DataTableIds.Setting, settingTable);
+	}
 
     public static ToyTable ToyTable
     {
         get
         {
             return Get<ToyTable>(DataTableIds.Toy);
+        }
+    }
+
+    public static AITable AITable
+    {
+        get
+        {
+            return Get<AITable>(DataTableIds.AI);
+        }
+    }
+
+    public static SettingTable SettingTable
+    {
+        get
+        {
+            return Get<SettingTable>(DataTableIds.Setting);
         }
     }
 

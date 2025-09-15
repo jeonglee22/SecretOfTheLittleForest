@@ -55,12 +55,33 @@ public static class DataTableIds
 	public static string String => StringTableIds[(int)Variables.Language];
 
 	public static readonly string Toy = "ToyTable";
+    public static readonly string AI = "AITable";
+    public static readonly string Setting = "Settings";
 }
-
 
 public static class Variables
 {
 	public static Languages Language = Languages.Korean;
 }
 
+public static class AINames
+{
+    public static readonly string[] AINameList =
+    {
+        runAI, atkSaveAI, moveSaveAI , atkAI, moveAI, defMove, randomMove, hateMove
+    };
 
+	public const string runAI = "run_ai";
+    public const string atkSaveAI = "atk_save_ai";
+    public const string moveSaveAI = "move_save_ai";
+    public const string atkAI = "atk_ai";
+    public const string moveAI = "move_ai";
+    public const string defMove = "def_move";
+    public const string randomMove = "random_move";
+    public const string hateMove = "hate_move";
+}
+
+public static class Settings
+{
+    public const string moveCount = "Move_count";
+}
