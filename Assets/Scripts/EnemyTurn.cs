@@ -24,6 +24,20 @@ public class EnemyTurn : Turn
 		if (turnTime < turnTimeInterval)
 			return;
 
+		ResetToys();
+		if (enemies.Count == 0)
+		{
+			playManager.IsEndGame = true;
+			playManager.IsEnemyWin = false;
+			return;
+		}
+		else if (players.Count == 0)
+		{
+			playManager.IsEndGame = true;
+			playManager.IsEnemyWin = true;
+			return;
+		}
+
 		if (moveCount == 0)
 		{
 			EndTurn();
@@ -38,7 +52,6 @@ public class EnemyTurn : Turn
 		base.StartTurn();
 		players = new List<Node>();
 		enemies = new List<Node>();
-		SetToys();
 	}
 
 	private void EnemyMove()
@@ -122,13 +135,10 @@ public class EnemyTurn : Turn
 				if(minPriority == priority)
 					pairs.Add(pair);
 			}
-			Debug.Log("Defence");
-			Debug.Log(pairs.Count);
 			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
 		}
 		else if (movableEmptyPair.Count > 0)
 		{
-			Debug.Log("Empty");
 			movePair = movableEmptyPair[UnityEngine.Random.Range(0, movableEmptyPair.Count)];
 		}
 		else
@@ -141,13 +151,12 @@ public class EnemyTurn : Turn
 				if (minPriority == priority)
 					pairs.Add(pair);
 			}
-			Debug.Log("Sacrifce");
-			Debug.Log(pairs.Count);
 			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
 		}
 
 		playLogic.ChoosedNode = boardManager.allNodes[movePair.Item1];
 		var beforeNode = boardManager.allNodes[movePair.Item2];
+		
 		toyControl.ToyMove(ref beforeNode);
 		playLogic.ClearNodes();
 	}
@@ -227,15 +236,18 @@ public class EnemyTurn : Turn
 
 		playLogic.ChoosedNode = boardManager.allNodes[movablePair[maxCostIndex].Item1];
 		var beforeNode = boardManager.allNodes[movablePair[maxCostIndex].Item2];
+		
 		toyControl.ToyMove(ref beforeNode);
 		playLogic.ClearNodes();
 
 		return true;
 	}
 
-	public void SetToys()
+	public void ResetToys()
 	{
 		var allNodes = boardManager.allNodes;
+		enemies = new List<Node>();
+		players = new List<Node>();
 		foreach (var node in allNodes)
 		{
 			if (node.State == NodeState.Enemy)
@@ -295,6 +307,7 @@ public class EnemyTurn : Turn
 		playLogic.ChoosedNode = boardManager.allNodes[canMoves[maxCostIndex].Item1];
 		var beforeNode = boardManager.allNodes[canMoves[maxCostIndex].Item2];
 		Destroy(playLogic.ChoosedNode.Toy.gameObject);
+		
 		toyControl.ToyMove(ref beforeNode);
 		playLogic.ClearNodes();
 
@@ -368,6 +381,7 @@ public class EnemyTurn : Turn
 
 		playLogic.ChoosedNode = boardManager.allNodes[canMoves[maxCostIndex].Item1];
 		var beforeNode = boardManager.allNodes[canMoves[maxCostIndex].Item2];
+
 		toyControl.ToyMove(ref beforeNode);
 		playLogic.ClearNodes();
 

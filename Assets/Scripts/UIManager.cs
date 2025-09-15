@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -10,12 +11,14 @@ public class UIManager : MonoBehaviour
 
     public TMP_Dropdown dropdown;
     public TextMeshProUGUI turnText;
+    public TextMeshProUGUI endText;
 
     public Toy toy;
 
 	private void Start()
 	{
 		turnText.text = string.Empty;
+        endText.text = string.Empty;
 	}
 
 	public void OnValueChangeMoveType()
@@ -46,4 +49,9 @@ public class UIManager : MonoBehaviour
     {
         turnText.text = isEnemy ? "Enemy Turn" : "Player Turn";
     }
+
+	internal void SetEndText(bool isEnemyWin)
+	{
+        endText.text = isEnemyWin ? "Enemy Win" : "Player Win";
+	}
 }

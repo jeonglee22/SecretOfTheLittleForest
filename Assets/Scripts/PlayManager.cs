@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayManager : MonoBehaviour
 {
-	private List<Node> enemies = new List<Node>();
-	private List<Node> players = new List<Node>();
+	private List<Node> startEnemies = new List<Node>();
+	private List<Node> startPlayers = new List<Node>();
 
 	public PlayerTurn playerTurn;
 	public EnemyTurn enemyTurn;
@@ -16,9 +16,17 @@ public class PlayManager : MonoBehaviour
 
 	public bool IsFinishTurn { get; set; } = false;
 	public bool IsTurnStart {  get; private set; }
+	public bool IsEndGame { get; set; } = false;
+	public bool IsEnemyWin { get; set; }
 
 	private void Update()
 	{
+		if (IsEndGame)
+		{
+			EndGame();
+			return;
+		}
+
 		if(playTurn == PlayTurn.Player)
 		{
 			UpdatePlayer();
@@ -27,6 +35,11 @@ public class PlayManager : MonoBehaviour
 		{
 			UpdateEnemy();
 		}
+	}
+
+	private void EndGame()
+	{
+		manager.SetEndText(IsEnemyWin);
 	}
 
 	private void UpdateEnemy()
@@ -75,14 +88,14 @@ public class PlayManager : MonoBehaviour
 
 	public void AddEnemies(Node enemy)
 	{
-		enemies.Add(enemy);
+		startEnemies.Add(enemy);
 	}
 
 	public void AddPlayers(Node player)
 	{
-		players.Add(player);
+		startPlayers.Add(player);
 	}
 
-	public int GetAlivePlayerCount() { return players.Count; }
-	public int GetAliveEnemyCount() { return enemies.Count; }
+	public int GetAlivePlayerCount() { return startPlayers.Count; }
+	public int GetAliveEnemyCount() { return startEnemies.Count; }
 }
