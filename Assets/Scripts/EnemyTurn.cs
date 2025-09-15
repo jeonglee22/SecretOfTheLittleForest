@@ -7,9 +7,6 @@ public class EnemyTurn : Turn
 	private float turnTimeInterval = 2f;
 	private float turnTime;
 
-	private List<Node> enemies;
-	private List<Node> players;
-
 	private Dictionary<int, Func<bool>> aiFuncs;
 
 	private void Awake()
@@ -53,14 +50,14 @@ public class EnemyTurn : Turn
 		if (turnTime < turnTimeInterval)
 			return;
 
-		ResetToys();
-		if (enemies.Count == 0)
+		playManager.ResetToys();
+		if (playManager.CurrentEnemies.Count == 0)
 		{
 			playManager.IsEndGame = true;
 			playManager.IsEnemyWin = false;
 			return;
 		}
-		else if (players.Count == 0)
+		else if (playManager.CurrentPlayers.Count == 0)
 		{
 			playManager.IsEndGame = true;
 			playManager.IsEnemyWin = true;
@@ -79,8 +76,6 @@ public class EnemyTurn : Turn
 	public override void StartTurn()
 	{
 		base.StartTurn();
-		players = new List<Node>();
-		enemies = new List<Node>();
 	}
 
 	private void EnemyMove()
@@ -160,13 +155,13 @@ public class EnemyTurn : Turn
 		var movableEmptyPair = new List<(int, int)>();
 		var movableAttackedPair = new PriorityQueue<(int, int), int>();
 
-		var playersAttackNodes = FindAllAttackNodes(players);
+		var playersAttackNodes = FindAllAttackNodes(playManager.CurrentPlayers);
 
-		foreach (var enemy in enemies)
+		foreach (var enemy in playManager.CurrentEnemies)
 		{
 			playLogic.ChoosedNode = enemy;
 			var movables = playLogic.ShowMovable(enemy.NodeIndex, 0);
-			var enemiesAttackNodes = FindAllAttackNodes(enemies, enemy);
+			var enemiesAttackNodes = FindAllAttackNodes(playManager.CurrentEnemies, enemy);
 			foreach (var movable in movables)
 			{
 				if (enemiesAttackNodes.ConvertAll(x => x.pos).Contains(movable))
@@ -263,11 +258,11 @@ public class EnemyTurn : Turn
 	{
 		var movablePair = new List<(int,int)>();
 		var moveCostPair = new List<(int,int)>();
-		var playerIndex = players.ConvertAll(x => x.NodeIndex);
+		var playerIndex = playManager.CurrentPlayers.ConvertAll(x => x.NodeIndex);
 		var attackingPlayers = FindAttackPlayerToys();
 		var attackPlayers = isPlayerAttack ? attackingPlayers : playerIndex.FindAll(x => !attackingPlayers.Contains(x));
 
-		foreach (var node in enemies)
+		foreach (var node in playManager.CurrentEnemies)
 		{
 			playLogic.ChoosedNode = node;
 			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
@@ -311,25 +306,11 @@ public class EnemyTurn : Turn
 		return true;
 	}
 
-	public void ResetToys()
-	{
-		var allNodes = boardManager.allNodes;
-		enemies = new List<Node>();
-		players = new List<Node>();
-		foreach (var node in allNodes)
-		{
-			if (node.State == NodeState.Enemy)
-				enemies.Add(node);
-			else if (node.State == NodeState.Player)
-				players.Add(node);
-		}
-	}
-
 	private List<int> FindAttackedNode()
 	{
 		var result = new List<int>();
 
-		foreach (var node in players)
+		foreach (var node in playManager.CurrentPlayers)
 		{
 			playLogic.ChoosedNode = node;
 			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
@@ -349,7 +330,7 @@ public class EnemyTurn : Turn
 	private bool MoveOptimizeForAttackingToy(List<int> toys, bool isPlayerAttack)
 	{
 		var canMoves = new List<(int, int)>();
-		var playerIndex = players.ConvertAll(x => x.NodeIndex);
+		var playerIndex = playManager.CurrentPlayers.ConvertAll(x => x.NodeIndex);
 		var attackingPlayers = FindAttackPlayerToys();
 		var attackPlayers = isPlayerAttack ? attackingPlayers : playerIndex.FindAll(x => !attackingPlayers.Contains(x));
 
@@ -386,7 +367,7 @@ public class EnemyTurn : Turn
 	{
 		var result = new List<int>();
 
-		foreach (var player in players)
+		foreach (var player in playManager.CurrentPlayers)
 		{
 			playLogic.ChoosedNode = player;
 			var nodes = playLogic.ShowMovable(player.NodeIndex, 0);
@@ -406,7 +387,7 @@ public class EnemyTurn : Turn
 	{
 		var result = new List<int>();
 
-		foreach (var node in enemies)
+		foreach (var node in playManager.CurrentEnemies)
 		{
 			playLogic.ChoosedNode = node;
 			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
@@ -458,7 +439,7 @@ public class EnemyTurn : Turn
 
 	private bool CheckAttacked(int node)
 	{
-		foreach (var player in players)
+		foreach (var player in playManager.CurrentPlayers)
 		{
 			playLogic.ChoosedNode = player;
 			var movables = playLogic.ShowMovable(player.NodeIndex, 0);

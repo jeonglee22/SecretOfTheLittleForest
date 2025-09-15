@@ -50,8 +50,18 @@ public class UIManager : MonoBehaviour
         turnText.text = isEnemy ? "Enemy Turn" : "Player Turn";
     }
 
-	internal void SetEndText(bool isEnemyWin)
+	public void SetEndText(bool isEnemyWin)
 	{
         endText.text = isEnemyWin ? "Enemy Win" : "Player Win";
+	}
+
+    public void OnValuePlayerChanged(bool b)
+    {
+        playManager.ShowPlayerStats(b);
+    }
+
+	public void OnValueEnemyChanged(bool b)
+	{
+		playManager.ShowEnemyStats(b);
 	}
 }

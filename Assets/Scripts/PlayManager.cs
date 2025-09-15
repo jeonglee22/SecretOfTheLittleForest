@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class PlayManager : MonoBehaviour
 {
-	private List<Node> startEnemies = new List<Node>();
-	private List<Node> startPlayers = new List<Node>();
+	private List<Node> enemies;
+	public List<Node> CurrentEnemies { get => enemies; }
+	private List<Node> players;
+	public List<Node> CurrentPlayers { get => players; }
 
 	public PlayerTurn playerTurn;
 	public EnemyTurn enemyTurn;
 	public UIManager manager;
+	public BoardManager boardManager;
 
 	private PlayTurn playTurn = PlayTurn.None;
 	public PlayTurn PlayTurn { get { return playTurn; } set { playTurn = value; } }
@@ -18,6 +21,12 @@ public class PlayManager : MonoBehaviour
 	public bool IsTurnStart {  get; private set; }
 	public bool IsEndGame { get; set; } = false;
 	public bool IsEnemyWin { get; set; }
+
+	private void Awake()
+	{
+		enemies = new List<Node>();
+		players = new List<Node>();
+	}
 
 	private void Update()
 	{
@@ -88,14 +97,46 @@ public class PlayManager : MonoBehaviour
 
 	public void AddEnemies(Node enemy)
 	{
-		startEnemies.Add(enemy);
+		enemies.Add(enemy);
 	}
 
 	public void AddPlayers(Node player)
 	{
-		startPlayers.Add(player);
+		players.Add(player);
 	}
 
-	public int GetAlivePlayerCount() { return startPlayers.Count; }
-	public int GetAliveEnemyCount() { return startEnemies.Count; }
+	public void ResetToys()
+	{
+		var allNodes = boardManager.allNodes;
+		enemies = new List<Node>();
+		players = new List<Node>();
+		foreach (var node in allNodes)
+		{
+			if (node.State == NodeState.Enemy)
+				enemies.Add(node);
+			else if (node.State == NodeState.Player)
+				players.Add(node);
+		}
+	}
+
+	public int GetAlivePlayerCount() { return players.Count; }
+	public int GetAliveEnemyCount() { return enemies.Count; }
+
+	public void ShowPlayerStats(bool b)
+	{
+		ResetToys();
+		foreach (var node in players)
+		{
+			node.Toy.SetActiveInfoCanvas(b);
+		}
+	}
+
+	public void ShowEnemyStats(bool b)
+	{
+		ResetToys();
+		foreach (var node in enemies)
+		{
+			node.Toy.SetActiveInfoCanvas(b);
+		}
+	}
 }
