@@ -48,7 +48,6 @@ public class ToyControl : MonoBehaviour
 		var pos = Vector3.Lerp(startPos, endPos, movingSpeed * time);
 		var toy = playLogic.ChoosedNode.Toy;
 		toy.gameObject.transform.LookAt(endPos);
-		toy.canvas.rotation = Camera.main.transform.rotation;
 		while (time <= 1 / movingSpeed)
 		{
 			toy.transform.position = pos;
@@ -59,7 +58,6 @@ public class ToyControl : MonoBehaviour
 		if (isBack)
 		{
 			toy.gameObject.transform.LookAt(startPos);
-			toy.canvas.rotation = Camera.main.transform.rotation;
 			time = Time.deltaTime;
 			while (time <= 1 / movingSpeed)
 			{

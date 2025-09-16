@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Node
+  - BillBoard
   layers:
   - Default
   - TransparentFX

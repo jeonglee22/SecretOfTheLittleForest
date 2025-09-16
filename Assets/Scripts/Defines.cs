@@ -92,3 +92,8 @@ public static class Settings
 {
     public const string moveCount = "Move_count";
 }
+
+public static class Tags
+{
+    public static readonly string BillBoard = "BillBoard";
+}

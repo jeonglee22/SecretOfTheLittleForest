@@ -91,4 +91,13 @@ public class Toy : MonoBehaviour
 	{
 		Destroy(gameObject);
 	}
+
+	public void LookCamera()
+	{
+		var rotation = transform.rotation;
+		canvas.LookAt(Camera.main.transform);
+		rotation.x = canvas.rotation.x;
+		rotation.z = canvas.rotation.z;
+		canvas.rotation = rotation;
+	}
 }
