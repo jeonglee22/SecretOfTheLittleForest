@@ -97,3 +97,17 @@ public static class Tags
 {
     public static readonly string BillBoard = "BillBoard";
 }
+
+public enum Windows
+{
+    LobbyMain,
+}
+
+public enum Scenes
+{
+	Lobby,
+	DeckSetting,
+	Game,
+
+    Test,
+}

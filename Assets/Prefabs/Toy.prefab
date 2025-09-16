@@ -165,7 +165,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8097455279855716474
@@ -243,7 +243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4a406d3788ccf4e8456f9327c09d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  billboard: {fileID: 0}
 --- !u!1 &8090509970976485784
 GameObject:
   m_ObjectHideFlags: 0
