@@ -31,11 +31,11 @@ public class Toy : MonoBehaviour
 
 	private void Awake()
 	{
-		do
-		{
-			data = DataTableManger.ToyTable.GetRandom();
-		} while (data.Movement == 0);
+	}
 
+	public void Init()
+	{
+		Instantiate(GameObjectManager.ToyResource.Get(data.ModelCode), transform);
 		moveType = (MoveType)data.Movement;
 		HP = data.HP;
 		Attack = data.Attack;
@@ -43,13 +43,13 @@ public class Toy : MonoBehaviour
 		hearts = new List<Image>();
 		attacks = new List<Image>();
 
-		for(int i = 0; i < HP; i++)
+		for (int i = 0; i < HP; i++)
 		{
 			hearts.Add(Instantiate(heart, healthTransform));
 		}
-		for(int i = 0; i < Attack; i++)
+		for (int i = 0; i < Attack; i++)
 		{
-			attacks.Add(Instantiate(attack,attackTransform));
+			attacks.Add(Instantiate(attack, attackTransform));
 		}
 
 		canvas.rotation = Camera.main.transform.rotation;

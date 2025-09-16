@@ -6,7 +6,7 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
 	public PlayManager playManager;
-	public GameObjectManager gameObjectManager;
+	public UIManager uiManager;
 
 	public List<Node> allNodes;
 	public PlayLogic playLogic;
@@ -32,6 +32,7 @@ public class BoardManager : MonoBehaviour
 		playManager.AddPlayers(playerStartNodes[index]);
 		return playerStartNodes[index];
 	}
+
 	public Node GetRandomNodeInEnemy()
 	{
 		if (playManager.GetAliveEnemyCount() == enemyStartNodes.Count)
@@ -60,8 +61,13 @@ public class BoardManager : MonoBehaviour
 		var result = new List<(Node node, ToyData data)>();
 		for (int i = 0; i < enemyIds.Length; i++)
 		{
+			if (enemyIds[i] == 0)
+				continue;
+			GameObjectManager.ToyResource.Load(DataTableManger.ToyTable.Get(enemyIds[i]).ModelCode);
 			result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
 		}
+
+		uiManager.SetStageStat(stageData.ID.ToString());
 
 		return result;
 	}
@@ -72,9 +78,8 @@ public class BoardManager : MonoBehaviour
 
 		var childTransform = node.gameObject.transform.GetChild(0);
 		var spawnedToy = Instantiate(toy, childTransform);
-		var modelCode = spawnedToy.Data.ModelCode;
-		var model = gameObjectManager.Get(modelCode);
-		Instantiate(model, spawnedToy.transform);
+		spawnedToy.Data = toy.Data;
+		spawnedToy.Init();
 
 		var scale = spawnedToy.transform.localScale;
 		spawnedToy.transform.localScale = new Vector3(scale.x / nodeScale.x, scale.y / nodeScale.y, scale.z / nodeScale.z);

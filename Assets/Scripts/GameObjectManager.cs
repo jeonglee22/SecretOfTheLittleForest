@@ -1,25 +1,39 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
-public class GameObjectManager : MonoBehaviour
+public static class GameObjectManager
 {
-    public List<GameObject> toyObjects;
+	private static readonly Dictionary<string, ObjectResource> resources =
+		new Dictionary<string, ObjectResource>();
 
-    private Dictionary<int, GameObject> toyPairs = new Dictionary<int, GameObject>();
+	static GameObjectManager()
+	{
+		Init();
+	}
 
-    void Start()
-    {
-        foreach (GameObject obj in toyObjects)
-        {
-            toyPairs.Add(int.Parse(obj.name.Substring(3)), obj);
-        }
-    }
+	private static void Init()
+	{
+		var toyResource = new ToyResource();
+		resources.Add(ResourceObjectIds.Toy, toyResource);
+	}
 
-    public GameObject Get(int modelCode)
-    {
-        if (!toyPairs.ContainsKey(modelCode))
-            return null;
+	public static ToyResource ToyResource
+	{
+		get
+		{
+			return Get<ToyResource>(ResourceObjectIds.Toy);
+		}
+	}
 
-        return toyPairs[modelCode];
-    }
+	public static T Get<T>(string id) where T : ObjectResource
+	{
+		if (!resources.ContainsKey(id))
+		{
+			Debug.LogError("테이블 없음");
+			return null;
+		}
+		return resources[id] as T;
+	}
 }

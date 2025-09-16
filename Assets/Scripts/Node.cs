@@ -117,13 +117,15 @@ public class Node : MonoBehaviour
 		{
 			NodeState.None => initColor,
 			NodeState.Enemy => Color.red,
-			NodeState.EnemyMove => new Color(1f,0.5f,0f,1f),
+			NodeState.EnemyMove => new Color(1f, 0.5f, 0f, 1f),
 			NodeState.Player => Color.blue,
 			NodeState.PlayerMove => Color.cyan,
 			NodeState.Attack => Color.yellow,
 			NodeState.Choose => Color.yellow,
+			NodeState.Moved => Color.gray,
 			_ => initColor,
 		};
+
 		gameObject.GetComponent<MeshRenderer>().material.color = color;
 	}
 }

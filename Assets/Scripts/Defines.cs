@@ -27,6 +27,7 @@ public enum NodeState
     PlayerMove,
     Attack,
     Choose,
+    Moved,
 }
 
 public class LayerId
@@ -58,6 +59,11 @@ public static class DataTableIds
     public static readonly string AI = "AITable";
     public static readonly string Setting = "Settings";
     public static readonly string Stage = "StageCombinations";
+}
+
+public static class ResourceObjectIds
+{
+	public static readonly string Toy = "Toys";
 }
 
 public static class Variables

@@ -76,6 +76,9 @@ public class EnemyTurn : Turn
 	public override void StartTurn()
 	{
 		base.StartTurn();
+		playManager.ResetToys();
+		foreach (var enemy in playManager.CurrentEnemies)
+			enemy.Toy.IsMove = false;
 	}
 
 	private void EnemyMove()
@@ -84,6 +87,9 @@ public class EnemyTurn : Turn
 		{
 			if (aiFuncs[i]())
 				break;
+
+			if (i == 0)
+				moveCount = 0;
 		}
 		turnTime = 0f;
 	}
@@ -109,6 +115,7 @@ public class EnemyTurn : Turn
 		}
 		return false;
 	}
+
 	private bool MoveSaveAI()
 	{
 		if (FindMoveAndAttackNode(true))
@@ -118,6 +125,7 @@ public class EnemyTurn : Turn
 		}
 		return false;
 	}
+
 	private bool AtkAI()
 	{
 		var canAttackNodes = FindCanAttackNode();
@@ -159,6 +167,10 @@ public class EnemyTurn : Turn
 
 		foreach (var enemy in playManager.CurrentEnemies)
 		{
+			if (enemy.Toy.IsMove)
+			{
+				continue;
+			}
 			playLogic.ChoosedNode = enemy;
 			var movables = playLogic.ShowMovable(enemy.NodeIndex, 0);
 			var enemiesAttackNodes = FindAllAttackNodes(playManager.CurrentEnemies, enemy);
@@ -188,9 +200,9 @@ public class EnemyTurn : Turn
 			var minPriority = movabledefencePair.Priority;
 			var pairs = new List<(int, int)> { movabledefencePair.Dequeue() };
 
-			while(movabledefencePair.TryDequeue(out (int, int) pair, out int priority))
+			while (movabledefencePair.TryDequeue(out (int, int) pair, out int priority))
 			{
-				if(minPriority == priority)
+				if (minPriority == priority)
 					pairs.Add(pair);
 			}
 			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
@@ -201,7 +213,7 @@ public class EnemyTurn : Turn
 			movePair = movableEmptyPair[UnityEngine.Random.Range(0, movableEmptyPair.Count)];
 			moveInt = 1;
 		}
-		else
+		else if (movableAttackedPair.Count > 0)
 		{
 			var minPriority = movableAttackedPair.Priority;
 			var pairs = new List<(int, int)> { movableAttackedPair.Dequeue() };
@@ -214,6 +226,8 @@ public class EnemyTurn : Turn
 			movePair = pairs[UnityEngine.Random.Range(0, pairs.Count)];
 			moveInt = 2;
 		}
+		else
+			return -1;
 
 		playLogic.ChoosedNode = boardManager.allNodes[movePair.Item1];
 		var beforeNode = boardManager.allNodes[movePair.Item2];
@@ -264,6 +278,9 @@ public class EnemyTurn : Turn
 
 		foreach (var node in playManager.CurrentEnemies)
 		{
+			if (node.Toy.IsMove)
+				continue;
+
 			playLogic.ChoosedNode = node;
 			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
 			foreach (var movable in movables)
@@ -318,6 +335,8 @@ public class EnemyTurn : Turn
 			{
 				if (boardManager.allNodes[movable].State == NodeState.Attack)
 				{
+					if (boardManager.allNodes[movable].Toy.IsMove)
+						continue;
 					result.Add(movable);
 				}
 			}
@@ -390,6 +409,8 @@ public class EnemyTurn : Turn
 
 		foreach (var node in playManager.CurrentEnemies)
 		{
+			if (node.Toy.IsMove)
+				continue;
 			playLogic.ChoosedNode = node;
 			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
 			foreach (var movable in movables)

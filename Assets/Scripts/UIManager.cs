@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -12,13 +11,17 @@ public class UIManager : MonoBehaviour
     public TMP_Dropdown dropdown;
     public TextMeshProUGUI turnText;
     public TextMeshProUGUI endText;
+    public TextMeshProUGUI statText;
 
     public Toy toy;
+
+    private bool isSetEnemy = false;
 
 	private void Start()
 	{
 		turnText.text = string.Empty;
         endText.text = string.Empty;
+        statText.text = string.Empty;
 	}
 
 	public void OnValueChangeMoveType()
@@ -30,22 +33,27 @@ public class UIManager : MonoBehaviour
     public void OnClickSetPlayerToy()
     {
         var node = boardManager.GetRandomNodeInPlayer();
-        if(node != null )
+        do
+        {
+            toy.Data = DataTableManger.ToyTable.GetRandom();
+        } while (toy.Data.Movement == 0);
+		GameObjectManager.ToyResource.Load(toy.Data.ModelCode);
+		if (node != null )
             boardManager.ToySettingOnNode( node, toy, false);
     }
     public void OnClickSetEnemyToy()
     {
-        var node = boardManager.GetRandomNodeInEnemy();
-        if(node != null)
-		    boardManager.ToySettingOnNode( node, toy, true);
+        if (isSetEnemy)
+            return ;
 
-		//var nodeTuples = boardManager.SetEnemyStageData();
-		//foreach (var nodeTuple in nodeTuples)
-		//{
-		//	toy.Data = nodeTuple.data;
-		//	boardManager.ToySettingOnNode(nodeTuple.node, toy, true);
-		//}
-	}
+        isSetEnemy = true;
+        var nodeTuples = boardManager.SetEnemyStageData();
+        foreach (var nodeTuple in nodeTuples)
+        {
+            toy.Data = nodeTuple.data;
+            boardManager.ToySettingOnNode(nodeTuple.node, toy, true);
+        }
+    }
 
     public void OnClickPlayGame()
     {
@@ -71,4 +79,9 @@ public class UIManager : MonoBehaviour
 	{
 		playManager.ShowEnemyStats(b);
 	}
+
+    public void SetStageStat(string s)
+    {
+        statText.text = s;
+    }
 }

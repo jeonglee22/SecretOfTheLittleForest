@@ -197,8 +197,8 @@ public class PlayLogic : MonoBehaviour
 						else if (allNodes[i].State == NodeState.Enemy || allNodes[i].State == NodeState.Player)
 							continue;
 						else
-							allNodes[i].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
-
+							SetMoveStateAtEmpty(i);
+							
 						resultNodes.Add(i);
 					}
 				}
@@ -243,9 +243,9 @@ public class PlayLogic : MonoBehaviour
 			return new List<int>();
 
 		if (isDraw && !isFirst)
-			allNodes[nodeIndex].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
+			SetMoveStateAtEmpty(nodeIndex);
 
-		if(ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
+		if (ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
 			return new List<int>();
 
 		moveCount++;
@@ -259,7 +259,7 @@ public class PlayLogic : MonoBehaviour
 			return new List<int>();
 
 		if (isDraw && !isFirst)
-			allNodes[nodeIndex].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
+			SetMoveStateAtEmpty(nodeIndex);
 
 		if (ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
 			return new List<int>();
@@ -279,5 +279,17 @@ public class PlayLogic : MonoBehaviour
 			return true;
 		}
 		return false;
+	}
+
+	private void SetMoveStateAtEmpty(int index)
+	{
+		if (ChoosedNode.Toy.IsMove)
+		{
+			allNodes[index].State = NodeState.Moved;
+		}
+		else
+		{
+			allNodes[index].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
+		}
 	}
 }
