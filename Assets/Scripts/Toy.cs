@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Toy : MonoBehaviour
 {
 	private ToyData data;
-	public ToyData Data { get { return data; } }
+	public ToyData Data { get { return data; } set { data = value; } }
 	private MoveType moveType;
 	public MoveType MoveType { get { return moveType; } }
 
@@ -20,8 +20,10 @@ public class Toy : MonoBehaviour
 	public Image heart;
 	public Image attack;
 
-	private int HP { get; set; }
-	private int Attack { get; set; }
+	private Color damagedColor = new Color(0.5f, 0.5f, 0.5f);
+
+	public int HP { get; private set; }
+	public int Attack { get;private set; }
 
 	public bool IsEnemy { get; set; }
 
@@ -68,5 +70,25 @@ public class Toy : MonoBehaviour
 		{
 			attacks[i].gameObject.SetActive(active);
 		}
+	}
+
+	public bool GetDamageAndAlive(int damage)
+	{
+		for (int i = HP-1; i >= Mathf.Max(HP - damage,0); i--)
+			hearts[i].gameObject.GetComponent<Image>().color = damagedColor;
+		
+		HP -= damage;
+
+		if (HP <= 0)
+		{
+			Die();
+			return false;
+		}
+		return true;
+	}
+
+	public void Die()
+	{
+		Destroy(gameObject);
 	}
 }

@@ -355,9 +355,10 @@ public class EnemyTurn : Turn
 
 		playLogic.ChoosedNode = boardManager.allNodes[canMoves[maxCostIndex].Item1];
 		var beforeNode = boardManager.allNodes[canMoves[maxCostIndex].Item2];
-		Destroy(playLogic.ChoosedNode.Toy.gameObject);
+		var isAlive = false;
+		isAlive = playLogic.ChoosedNode.Toy.GetDamageAndAlive(beforeNode.Toy.Attack);
 		
-		toyControl.ToyMove(ref beforeNode);
+		toyControl.ToyMove(ref beforeNode, isAlive);
 		playLogic.ClearNodes();
 
 		return true;

@@ -38,6 +38,13 @@ public class UIManager : MonoBehaviour
         var node = boardManager.GetRandomNodeInEnemy();
         if(node != null)
 		    boardManager.ToySettingOnNode( node, toy, true);
+
+		//var nodeTuples = boardManager.SetEnemyStageData();
+		//foreach (var nodeTuple in nodeTuples)
+		//{
+		//	toy.Data = nodeTuple.data;
+		//	boardManager.ToySettingOnNode(nodeTuple.node, toy, true);
+		//}
 	}
 
     public void OnClickPlayGame()

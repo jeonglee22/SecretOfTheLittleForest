@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -24,7 +26,7 @@ public class BoardManager : MonoBehaviour
 		var index = 0;
 		do
 		{
-			index = Random.Range(0, playerStartNodes.Count);
+			index = UnityEngine.Random.Range(0, playerStartNodes.Count);
 		} while (playerStartNodes[index].State == NodeState.Player);
 
 		playManager.AddPlayers(playerStartNodes[index]);
@@ -38,11 +40,30 @@ public class BoardManager : MonoBehaviour
 		var index = 0;
 		do
 		{
-			index = Random.Range(0, enemyStartNodes.Count);
+			index = UnityEngine.Random.Range(0, enemyStartNodes.Count);
 		} while (enemyStartNodes[index].State == NodeState.Enemy);
 
 		playManager.AddEnemies(enemyStartNodes[index]);
 		return enemyStartNodes[index];
+	}
+
+	public List<(Node node, ToyData data)> SetEnemyStageData()
+	{
+		var stageData = new StageData();
+		do
+		{
+			stageData = DataTableManger.StageTable.GetRandom();
+		} while (stageData.Stage != 1);
+
+		var enemyIds = stageData.Pos;
+
+		var result = new List<(Node node, ToyData data)>();
+		for (int i = 0; i < enemyIds.Length; i++)
+		{
+			result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
+		}
+
+		return result;
 	}
 
 	public Toy ToySettingOnNode(Node node, Toy toy, bool isEnemy)

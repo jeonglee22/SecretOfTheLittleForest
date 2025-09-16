@@ -1,4 +1,4 @@
-조합ID,스테이지,Boss_pos,Pos0,Pos1,Pos2,Pos3,Pos4,Pos5,Pos6,Pos7,Pos8,Pos9,Pos10,Pos11,Pos12,Pos13,Pos14,Pos15
+CombID,Stage,BossPos,Pos0,Pos1,Pos2,Pos3,Pos4,Pos5,Pos6,Pos7,Pos8,Pos9,Pos10,Pos11,Pos12,Pos13,Pos14,Pos15
 1,1,3,0,0,6,22,22,6,0,0,0,0,19,1,1,19,0,0
 2,1,4,0,0,12,22,22,12,0,0,0,0,5,19,19,5,0,0
 3,1,12,0,0,0,0,0,0,0,0,2,2,2,19,22,2,2,2

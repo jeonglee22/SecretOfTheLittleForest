@@ -7,7 +7,6 @@ public class GameObjectManager : MonoBehaviour
 
     private Dictionary<int, GameObject> toyPairs = new Dictionary<int, GameObject>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         foreach (GameObject obj in toyObjects)

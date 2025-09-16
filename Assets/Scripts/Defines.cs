@@ -57,6 +57,7 @@ public static class DataTableIds
 	public static readonly string Toy = "ToyTable";
     public static readonly string AI = "AITable";
     public static readonly string Setting = "Settings";
+    public static readonly string Stage = "StageCombinations";
 }
 
 public static class Variables

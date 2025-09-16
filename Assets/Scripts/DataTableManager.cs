@@ -24,6 +24,10 @@ public static class DataTableManger
         var settingTable = new SettingTable();
         settingTable.Load(DataTableIds.Setting);
         tables.Add(DataTableIds.Setting, settingTable);
+
+        var stageTable = new StageTable();
+		stageTable.Load(DataTableIds.Stage);
+        tables.Add(DataTableIds.Stage, stageTable);
 	}
 
     public static ToyTable ToyTable
@@ -47,6 +51,14 @@ public static class DataTableManger
         get
         {
             return Get<SettingTable>(DataTableIds.Setting);
+        }
+    }
+
+    public static StageTable StageTable
+    {
+        get
+        {
+            return Get<StageTable>(DataTableIds.Stage);
         }
     }
 

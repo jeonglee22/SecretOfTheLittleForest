@@ -55,15 +55,19 @@ public class PlayerTurn : Turn
 
 	private void PlayAction()
 	{
+		var isAlive = false;
 		if (touchedNode.State == NodeState.Enemy)
-			Destroy(touchedNode.Toy.gameObject);
+			isAlive = touchedNode.Toy.GetDamageAndAlive(beforeNode.Toy.Attack);
 
 		playLogic.ClearNodes();
 
-		toyControl.ToyMove(ref beforeNode);
-		touchedNode.State = beforeNode.State;
-		beforeNode.State = NodeState.None;
-		touchedNode = null;
+		toyControl.ToyMove(ref beforeNode, isAlive);
+		if(!isAlive)
+		{
+			touchedNode.State = beforeNode.State;
+			beforeNode.State = NodeState.None;
+			touchedNode = null;
+		}
 
 		moveCount--;
 	}
