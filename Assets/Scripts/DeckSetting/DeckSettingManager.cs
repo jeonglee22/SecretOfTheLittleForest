@@ -2,19 +2,21 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DeckSettingManager : MonoBehaviour
+public class DeckSettingManager : MonoBehaviour, IPointerEnterHandler
 {
 	public ScrollRect unitRect;
 	private RectTransform unitContent;
-	public ScrollRect chooseRect;
 
 	private Deck unitDeck;
-	private Deck choosedDeck;
 	private StatShowManager statShowManager;
+	private ChoosingUnitManager choosingUnitManager;
 
 	public Toy toy;
+
+	private GameObject centerToy;
 
 	public TextMeshProUGUI countText;
 
@@ -30,6 +32,7 @@ public class DeckSettingManager : MonoBehaviour
 	private void Awake()
 	{
 		statShowManager = GetComponent<StatShowManager>();
+		choosingUnitManager = GetComponent<ChoosingUnitManager>();
 	}
 
 	private void OnEnable()
@@ -48,6 +51,16 @@ public class DeckSettingManager : MonoBehaviour
 	private void Start()
 	{
 		unitContent = unitRect.content;
+
+		SetDeckInfos();
+
+		SetFirstImageOnView();
+	}
+
+	private void SetDeckInfos()
+	{
+		for(int i = 0; i < unitContent.childCount; i++)
+			Destroy(unitContent.GetChild(i).gameObject);
 
 		var emptyGo = new GameObject();
 		var emptyImage = emptyGo.AddComponent<Image>();
@@ -90,8 +103,6 @@ public class DeckSettingManager : MonoBehaviour
 		Instantiate(emptyGo, unitContent);
 		Instantiate(emptyGo, unitContent);
 		Destroy(emptyGo);
-
-		SetFirstImageOnView();
 	}
 
 	private void Update()
@@ -116,6 +127,13 @@ public class DeckSettingManager : MonoBehaviour
 
 			StartCoroutine(CoMove(count, minIndex));
 
+			//var go = new GameObject();
+			//var toy = go.AddComponent<Toy>();
+			//toy.Data = unitDeck.Toys[minIndex].data;
+			//toy.SetData();
+			//var image = go.AddComponent<Image>();
+			//image.sprite = toy.Toy2D;
+			//centerToy = go;
 		}
 	}
 
@@ -123,7 +141,7 @@ public class DeckSettingManager : MonoBehaviour
 	{
 		var content = unitRect.content;
 		var gridgroup = content.GetComponent<GridLayoutGroup>();
-		var cellsize = content.parent.GetComponent<RectTransform>().rect.height;
+		var cellsize = (unitRect.gameObject.GetComponent<RectTransform>().rect.width - 40f) / 5f;
 		cellSize = new Vector2(cellsize, cellsize);
 		gridgroup.cellSize = cellSize;
 
@@ -161,5 +179,38 @@ public class DeckSettingManager : MonoBehaviour
 		}
 		unitRect.horizontalNormalizedPosition = pos;
 		isValueChange = false;
+	}
+
+	public void ReduceChoosedToy(GameObject go)
+	{
+		var toys = unitDeck.Toys;
+		var data = go.GetComponent<Toy>().Data;
+		var datas = toys.ConvertAll(x => x.data);
+		if (datas.Contains(data))
+		{
+			var index = datas.IndexOf(data);
+			var count = toys[index].count - 1;
+			if(count == 0)
+			{
+				toys.RemoveAt(index);
+			}
+			else
+				toys[index] = (count, data);
+		}
+		SetDeckInfos();
+
+		if(unitDeck.Toys.Count == 0)
+		{
+			statShowManager.RemoveGridImage();
+			centerToy = null;
+		}
+	}
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		if (centerToy != null && eventData.pointerEnter == centerToy)
+		{
+			choosingUnitManager.AddToyOnChoosedDeck(centerToy);
+		}
 	}
 }

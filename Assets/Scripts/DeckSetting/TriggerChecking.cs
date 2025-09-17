@@ -23,8 +23,8 @@ public class TriggerChecking : MonoBehaviour
 		{
 			var toy = go.GetComponent<Toy>();
 
-			statShowManager.SetToyText(toy.Data);
 			statShowManager.SetGridImage(toy.Toy2D);
+			statShowManager.SetToyText(toy.Data);
 		}
 	}
 }

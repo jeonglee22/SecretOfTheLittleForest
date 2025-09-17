@@ -29,4 +29,19 @@ public class Deck
 			toys.Add((toyData.DefUnit, toyData));
 		}
 	}
+
+	public void AddDeckData(ToyData data)
+	{
+		var datas = toys.ConvertAll(x => x.data);
+		if(datas.Contains(data))
+		{
+			var index = datas.IndexOf(data);
+			var count = toys[index].count + 1;
+			toys[index] = (count, data);
+		}
+		else
+		{
+			toys.Add((1, data));
+		}
+	}
 }

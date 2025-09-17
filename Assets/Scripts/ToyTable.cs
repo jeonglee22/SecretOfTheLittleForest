@@ -19,6 +19,17 @@ public class ToyData
 
     //public Image Image { get; set; }
 
+    public static bool operator==(ToyData data1, ToyData data2)
+    {
+        if(data1 == null || data2 == null) return false;
+
+        if(data1.UnitID == data2.UnitID) return true;
+
+        return false;
+    }
+
+    public static bool operator!=(ToyData data1, ToyData data2) { return !(data1 == data2); }
+
     public override string ToString()
     {
         return $"{UnitID} / {Movement} / {ModelCode} / {Name} / {HP} / {Attack} / {Price} / {Rating} / {DefUnit}";

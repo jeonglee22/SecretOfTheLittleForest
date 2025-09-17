@@ -1,0 +1,100 @@
+using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ChoosingUnitManager : MonoBehaviour
+{
+	public ScrollRect chooseRect;
+	private RectTransform chooseContent;
+
+	public TextMeshProUGUI costText;
+	public TextMeshProUGUI countText;
+	public TextMeshProUGUI coinText;
+
+	public Image coin;
+
+	private Deck chooseDeck;
+
+	private DeckSettingManager deckSettingManager;
+
+	private void Awake()
+	{
+		chooseDeck = new Deck();
+		deckSettingManager = GetComponent<DeckSettingManager>();
+	}
+
+	private void Start()
+	{
+		chooseContent = chooseRect.content;
+	}
+
+	public void AddToyOnChoosedDeck(GameObject go)
+	{
+		var newGo = Instantiate(go, chooseContent);
+		var toy = newGo.GetComponent<Toy>();
+		toy.Data = go.GetComponent<Toy>().Data;
+		toy.SetData();
+
+		chooseDeck.AddDeckData(newGo.GetComponent<Toy>().Data);
+
+		Destroy(newGo);
+
+		ReloadDeckImages();
+		deckSettingManager.ReduceChoosedToy(go);
+	}
+
+	private bool ReloadDeckImages()
+	{
+		ClearField();
+
+		if (chooseDeck.Toys.Count == 0)
+			return false;
+
+		foreach (var toy in chooseDeck.Toys)
+		{
+			var count = toy.count;
+			var data = toy.data;
+
+			var empty = new GameObject();
+			var go = Instantiate(empty, chooseContent);
+			Destroy(empty);
+
+			var goToy = go.AddComponent<Toy>();
+			var goImage = go.AddComponent<Image>();
+			goToy.Data = data;
+			goToy.SetData();
+			goImage.sprite = goToy.Toy2D;
+			if(count > 1)
+			{
+				var text = Instantiate(countText, go.transform);
+				text.alignment = TextAlignmentOptions.BottomRight;
+				text.text = $"x{count}";
+				text.color = Color.black;
+				text.fontStyle = FontStyles.Bold;
+				text.enableAutoSizing = true;
+				text.rectTransform.anchorMax = new Vector2(1, 0.5f);
+				text.rectTransform.anchorMin = new Vector2(0.5f, 0);
+			}
+
+			var coinImage = Instantiate(coin, go.transform);
+			var image = coinImage.GetComponent<Image>();
+			image.sprite = Resources.Load<Sprite>("Icons/coin");
+			image.color = Color.yellow;
+			image.rectTransform.sizeDelta = Vector2.zero;
+			coinImage.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+			coinImage.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 1f);
+
+			var coinTextGo = Instantiate(coinText, coinImage.transform);
+			coinTextGo.text = data.Price.ToString();
+		}
+
+		return true;
+	}
+
+	private void ClearField()
+	{
+		for(int i = 0; i < chooseContent.childCount; i++)
+			Destroy(chooseContent.GetChild(i).gameObject);
+	}
+}

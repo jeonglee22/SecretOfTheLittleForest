@@ -17,8 +17,8 @@ public class SaveLoadManager
 
     public static readonly string[] SaveFileName =
     {
-        "SaveAuto.json",
-        "Save1.json",
+        "UserTotalDeck.json",
+        "StageDeck.json",
         "Save2.json",
         "Save3.json",
     };
