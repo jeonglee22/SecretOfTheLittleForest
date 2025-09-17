@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+//[Serializable]
 public class Toy : MonoBehaviour
 {
-	private ToyData data;
+	 private ToyData data;
 	public ToyData Data { get { return data; } set { data = value; } }
 	private MoveType moveType;
 	public MoveType MoveType { get { return moveType; } }
@@ -28,6 +30,8 @@ public class Toy : MonoBehaviour
 	public bool IsEnemy { get; set; }
 
 	public bool IsMove { get; set; }
+	public Sprite Toy2D { get; private set; }
+	private string path = "Images/Toy{0}";
 
 	private void Awake()
 	{
@@ -36,9 +40,7 @@ public class Toy : MonoBehaviour
 	public void Init()
 	{
 		Instantiate(GameObjectManager.ToyResource.Get(data.ModelCode), transform);
-		moveType = (MoveType)data.Movement;
-		HP = data.HP;
-		Attack = data.Attack;
+		SetData();
 
 		hearts = new List<Image>();
 		attacks = new List<Image>();
@@ -54,6 +56,14 @@ public class Toy : MonoBehaviour
 
 		canvas.rotation = Camera.main.transform.rotation;
 		SetActiveInfoCanvas(false);
+	}
+
+	public void SetData()
+	{
+		Toy2D = Resources.Load<Sprite>(string.Format(path, data.ModelCode));
+		moveType = (MoveType)data.Movement;
+		HP = data.HP;
+		Attack = data.Attack;
 	}
 
 	private void Start()

@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
+//[Serializable]
 public class ToyData
 {
     public int UnitID { get; set; }
@@ -14,6 +17,8 @@ public class ToyData
     public char Rating { get; set; }
     public int DefUnit { get; set; }
 
+    //public Image Image { get; set; }
+
     public override string ToString()
     {
         return $"{UnitID} / {Movement} / {ModelCode} / {Name} / {HP} / {Attack} / {Price} / {Rating} / {DefUnit}";
@@ -23,6 +28,8 @@ public class ToyData
 public class ToyTable : DataTable
 {
     private readonly Dictionary<int, ToyData> table = new Dictionary<int, ToyData>();
+    public int Count { get { return table.Count; } }
+    public List<ToyData> Table { get { return table.Values.ToList(); } }
 
     public override void Load(string filename)
     {
@@ -35,6 +42,7 @@ public class ToyTable : DataTable
         {
             if (!table.ContainsKey(toy.UnitID))
             {
+                //toy.Image = Resources.Load<Image>(string.Format("Images/Toy{0}", toy.ModelCode));
                 table.Add(toy.UnitID, toy);
             }
             else
@@ -56,6 +64,6 @@ public class ToyTable : DataTable
     public ToyData GetRandom()
     {
         var toyList = table.Values.ToList();
-        return toyList[Random.Range(0, toyList.Count)];
+        return toyList[UnityEngine.Random.Range(0, toyList.Count)];
     }
 }
