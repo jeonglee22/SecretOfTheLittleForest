@@ -3039,7 +3039,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -5247,11 +5247,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
       propertyPath: m_MovementType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
       propertyPath: m_HorizontalScrollbar
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 944631968}
+    - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnValueChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DeckSettingManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 194551997372168266, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1138413129707196640, guid: 15a181c60dc56524c977bccc5c48f9e4, type: 3}
       propertyPath: m_Pivot.x

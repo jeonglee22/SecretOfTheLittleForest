@@ -36,7 +36,7 @@ public class StatShowManager : MonoBehaviour
         var go = new GameObject();
         var image = go.AddComponent<Image>();
         image.sprite = sprite;
-        currentShown = Instantiate(image, imageShowGrid.transform).gameObject;
+        currentShown = Instantiate(go, imageShowGrid.transform).gameObject;
         Destroy(go);
     }
 }
