@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Node
   - BillBoard
+  - Trigger
   layers:
   - Default
   - TransparentFX

@@ -12,11 +12,11 @@ public class DeckSettingManager : MonoBehaviour
 	private Deck unitDeck;
 	private Deck choosedDeck;
 
-	public GameObject shownGrid;
-
 	public Toy toy;
 
 	public TextMeshProUGUI countText;
+
+	private Vector2 cellSize = new Vector2(110, 110);
 
 	private void Awake()
 	{
@@ -38,14 +38,27 @@ public class DeckSettingManager : MonoBehaviour
 	private void Start()
 	{
 		unitContent = unitRect.content;
+		var emptyGo = new GameObject();
+		var emptyImage = emptyGo.AddComponent<Image>();
+		emptyImage.rectTransform.sizeDelta = cellSize;
+		emptyImage.color = new Color(0, 0, 0, 0);
+		Instantiate(emptyGo, unitContent);
+		Instantiate(emptyGo, unitContent);
 		foreach (var toyData in unitDeck.Toys)
 		{
 			toy.Data = toyData.data;
 			toy.SetData();
 			var go = new GameObject();
+			var toyComp = go.AddComponent<Toy>();
 			var image = go.AddComponent<Image>();
+			var collider = go.AddComponent<BoxCollider2D>();
 			image.sprite = toy.Toy2D;
+			collider.size = cellSize;
+			collider.isTrigger = true;
+
 			var obj = Instantiate(go, unitContent);
+			obj.GetComponent<Toy>().Data = toyData.data;
+			obj.GetComponent<Toy>().SetData();
 
 			if (toyData.count != 1)
 			{
@@ -59,5 +72,13 @@ public class DeckSettingManager : MonoBehaviour
 
 			Destroy(go);
 		}
+		Instantiate(emptyGo, unitContent);
+		Instantiate(emptyGo, unitContent);
+		Destroy(emptyGo);
+	}
+
+	public void OnValueChange(Vector2 vec)
+	{
+
 	}
 }

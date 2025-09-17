@@ -96,6 +96,7 @@ public static class Settings
 public static class Tags
 {
     public static readonly string BillBoard = "BillBoard";
+    public static readonly string Trigger = "Trigger";
 }
 
 public enum Windows
