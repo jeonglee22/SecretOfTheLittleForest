@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using TMPro;
+using UnityEditor;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
@@ -34,21 +35,24 @@ public class ImageToolManager : MonoBehaviour
 	public TMP_InputField projectionSize;
 	private float cameraProjectionSize;
 
-	public TMP_InputField imageWidth;
-	public TMP_InputField imageHeight;
-	private Vector2 imageSize;
-
 	public Transform origin;
 
 	public Camera renderCamera;
-	public RectTransform imageRect;
+	public RenderTexture renderTexture;
 
 	private GameObject obj;
 
-	private string path = "./Images";
+	private bool isSaveFrame = false;
+
+	private string path = "./Assets/Images";
 
 	private void Awake()
 	{
+	}
+
+	private void Start()
+	{
+		objectName.text = String.Empty;
 	}
 
 	private void Init()
@@ -71,10 +75,6 @@ public class ImageToolManager : MonoBehaviour
 		
 		cameraProjectionSize = renderCamera.orthographicSize;
 		projectionSize.text = cameraProjectionSize.ToString();
-
-		imageSize = imageRect.rect.size;
-		imageWidth.text = imageRect.rect.width.ToString();
-		imageHeight.text = imageRect.rect.height.ToString();
 	}
 
 	private void Update()
@@ -86,17 +86,15 @@ public class ImageToolManager : MonoBehaviour
 			obj.transform.localScale = objectScale;
 
 			renderCamera.orthographicSize = cameraProjectionSize;
-
-			imageRect.sizeDelta = imageSize;
 		}
 	}
 
 	public void OnClickOpenObj()
 	{
 		OnClickClear();
-
 		GameObjectManager.ToyResource.Load(id);
 		var obj = GameObjectManager.ToyResource.Get(id);
+		objectName.text = obj.name;
 		this.obj = Instantiate(obj, origin);
 		this.obj.transform.localScale = obj.transform.localScale;
 		Init();
@@ -112,20 +110,33 @@ public class ImageToolManager : MonoBehaviour
 
 	public void OnClickSave()
 	{
-		//renderCamera.Render();
+		isSaveFrame = true;
+	}
 
-		//Texture2D texture = new Texture2D(Mathf.FloorToInt(imageSize.x), Mathf.FloorToInt(imageSize.y));
-		//texture.ReadPixels(imageRect.rect, 0, 0);
-		//texture.Apply();
-		//var png = texture.EncodeToPNG();
+	public void OnRenderSave()
+	{
+		RenderTexture.active = renderTexture;
+		Texture2D texture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGB24, false);
+		texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
 
-		//if (!Directory.Exists(path))
-		//{
-		//	Directory.CreateDirectory(path);
-		//}
-		//var sb = new StringBuilder();
-		//sb = sb.Append(path).Append("/Toy").Append(id).Append(".png");
-		//Debug.Log(sb.ToString());
+		texture.Apply();
+		var png = texture.EncodeToPNG();
+		Destroy(texture);
+
+		if (!Directory.Exists(path))
+		{
+			Directory.CreateDirectory(path);
+		}
+		var sb = new StringBuilder();
+		sb = sb.Append(path).Append("/Toy").Append(id).Append(".png");
+
+		using (Stream s = new FileStream(sb.ToString(), FileMode.Create))
+		{
+			s.Write(png);
+			s.Close();
+		}
+
+		isSaveFrame = false;
 	}
 
 	public void OnChangeID(string s) => id = int.Parse(s);
@@ -143,7 +154,4 @@ public class ImageToolManager : MonoBehaviour
 	public void OnChangeZScale(string s) => objectScale.z = float.Parse(s);
 
 	public void OnChangeSize(string s) => cameraProjectionSize = float.Parse(s);
-
-	public void OnChangeImageWidth(string s) => imageSize.x = float.Parse(s);
-	public void OnChangeImageHeight(string s) => imageSize.y = float.Parse(s);
 }
