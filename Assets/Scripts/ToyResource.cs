@@ -8,6 +8,15 @@ public class ToyResource : ObjectResource
 	private Dictionary<int, GameObject> toys = new Dictionary<int, GameObject>();
 	public int Count { get { return toys.Count; } }
 
+	public ToyResource()
+	{
+		var toyData = DataTableManger.ToyTable.Table;
+		foreach( var toy in toyData)
+		{
+			Load(toy.ModelCode);
+		}
+	}
+
 	public override bool Load(int id)
 	{
 		if (toys.ContainsKey(id))

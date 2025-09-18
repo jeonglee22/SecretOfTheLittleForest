@@ -1343,10 +1343,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitRect: {fileID: 1686873824}
   countText: {fileID: 1699107268}
-  toy: {fileID: 2228535548387802945, guid: 05ca00f88fc646342a274ac4087f939a, type: 3}
+  toy2D: {fileID: 8911632440958698095, guid: eaae861cc6b267d4c84a37c72a9c7021, type: 3}
+  toy: {fileID: 281236498140167495, guid: 05ca00f88fc646342a274ac4087f939a, type: 3}
   icon: {fileID: 4859622897323205332, guid: b05bc6836d1d0d6418e886f97ab2a033, type: 3}
   outline: {fileID: 4859622897323205332, guid: 493cbc9c51a1b4a47b69a10e8753732c, type: 3}
   valueText: {fileID: 1400936098536867475, guid: 5fd7fc7c7fa598c4eb8a85f902f7b797, type: 3}
+  playerStartNodes:
+  - {fileID: 1768550607}
+  - {fileID: 2027532713}
+  - {fileID: 1722427800}
+  - {fileID: 1839201957}
+  - {fileID: 1110777008}
+  - {fileID: 2014394425}
+  - {fileID: 1911836115}
+  - {fileID: 1819133287}
+  - {fileID: 2141010459}
+  - {fileID: 1758799053}
+  - {fileID: 831731930}
+  - {fileID: 1767057173}
+  - {fileID: 2052454982}
+  - {fileID: 1637610278}
+  - {fileID: 1298904721}
+  - {fileID: 1954924722}
   cameraManager: {fileID: 481323217}
 --- !u!1001 &498721605
 PrefabInstance:
@@ -3856,6 +3874,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2922390885291005456, guid: 941589ff74bff604fb523dd88e88470e, type: 3}
+      propertyPath: m_VerticalScrollbar
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3002393115395775528, guid: 941589ff74bff604fb523dd88e88470e, type: 3}
       propertyPath: m_Name
       value: ScrollViewVertical
@@ -3961,6 +3983,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7208401308143344456, guid: 941589ff74bff604fb523dd88e88470e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7208401308143344456, guid: 941589ff74bff604fb523dd88e88470e, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
@@ -4012,16 +4038,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 0
+    m_Right: 40
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 200, y: 200}
+  m_CellSize: {x: 160, y: 160}
   m_Spacing: {x: 0, y: 20}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_Constraint: 1
+  m_ConstraintCount: 1
 --- !u!114 &1686873823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4034,7 +4060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
+  m_HorizontalFit: 2
   m_VerticalFit: 2
 --- !u!114 &1686873824 stripped
 MonoBehaviour:
@@ -5965,7 +5991,7 @@ GameObject:
   - component: {fileID: 8033447157172070750}
   m_Layer: 0
   m_Name: BoardManager
-  m_TagString: Untagged
+  m_TagString: BoardManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

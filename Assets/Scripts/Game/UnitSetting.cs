@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEngine.InputManagerEntry;
 
 public class UnitSetting : MonoBehaviour
 {
@@ -17,10 +19,13 @@ public class UnitSetting : MonoBehaviour
 	private Sprite attackSprite;
 	private string attackPath = "Icons/battle";
 
-	public Toy toy;
+	public GameObject toy2D;
+	public GameObject toy;
 	public Image icon;
 	public Image outline;
 	public TextMeshProUGUI valueText;
+
+	public List<Node> playerStartNodes;
 
 	public CameraManager cameraManager;
 
@@ -54,26 +59,32 @@ public class UnitSetting : MonoBehaviour
 		for (int i = 0; i < unitContent.childCount; i++)
 			Destroy(unitContent.GetChild(i).gameObject);
 
+		var toyComp = toy2D.GetComponent<Toy>();
 		foreach (var toyData in unitDeck.Toys)
 		{
-			toy.Data = toyData.data;
-			toy.SetData();
-			var go = new GameObject();
-			var toyComp = go.AddComponent<Toy>();
-			var image = go.AddComponent<Image>();
-			image.sprite = outline.sprite;
-			image.type = Image.Type.Sliced;
-			image.fillCenter = true;
+			toyComp.Data = toyData.data;
+			toyComp.SetData();
 
-			var obj = Instantiate(go, unitContent);
-			obj.GetComponent<Toy>().Data = toyData.data;
-			obj.GetComponent<Toy>().SetData();
+			var obj = Instantiate(toy2D, unitContent);
+			var objToy = obj.GetComponent<Toy>();
+			objToy.Data = toyComp.Data;
+			objToy.SetData();
 
 			var imageGO = new GameObject();
 			var img = imageGO.AddComponent<Image>();
-			img.sprite = toy.Toy2D;
+			img.sprite = toyComp.Toy2D;
+			var drag = imageGO.AddComponent<DragObject>();
+			drag.playerStartNodes = playerStartNodes;
+			drag.spawnObj = toy;
 
-			Instantiate(imageGO, obj.transform);
+			var oj = Instantiate(imageGO, obj.transform);
+			oj.GetComponent<DragObject>().dragSucessFunc =
+				(toyData) =>
+				{
+					ReduceCount(toyData);
+					UnitSettingOnBoard();
+				};
+
 			Destroy(imageGO);
 
 			if (toyData.count != 1)
@@ -90,8 +101,6 @@ public class UnitSetting : MonoBehaviour
 
 			SetHeartImage(obj);
 			SetAttackImage(obj);
-
-			Destroy(go);
 		}
 	}
 
@@ -106,7 +115,7 @@ public class UnitSetting : MonoBehaviour
 		heartIcon.GetComponent<RectTransform>().anchorMax = new Vector2(0.3f, 1f);
 
 		var text = Instantiate(valueText, heartIcon.transform);
-		text.text = go.GetComponent<Toy>().HP.ToString();
+		text.text = go.GetComponent<Toy>().Data.HP.ToString();
 	}
 
 	private void SetAttackImage(GameObject go)
@@ -120,6 +129,25 @@ public class UnitSetting : MonoBehaviour
 		attackIcon.GetComponent<RectTransform>().anchorMax = new Vector2(0.3f, 0.3f);
 
 		var text = Instantiate(valueText, attackIcon.transform);
-		text.text = go.GetComponent<Toy>().Attack.ToString();
+		text.text = go.GetComponent<Toy>().Data.Attack.ToString();
+	}
+
+	private void ReduceCount(ToyData data)
+	{
+		var toys = unitDeck.Toys;
+		var datas = toys.ConvertAll(x => x.data);
+		if (datas.Contains(data))
+		{
+			var pair = toys[datas.IndexOf(data)];
+			pair.count = pair.count - 1;
+			if (pair.count > 0)
+			{
+				unitDeck.Toys[datas.IndexOf(data)] = pair;
+			}
+			else
+			{
+				unitDeck.Toys.RemoveAt(datas.IndexOf(data));
+			}
+		}
 	}
 }

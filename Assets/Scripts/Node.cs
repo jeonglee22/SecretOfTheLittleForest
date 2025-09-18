@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Node : MonoBehaviour
+public class Node : MonoBehaviour, IDropHandler
 {
     private Toy toy;
 
@@ -127,5 +128,18 @@ public class Node : MonoBehaviour
 		};
 
 		gameObject.GetComponent<MeshRenderer>().material.color = color;
+	}
+
+	public void OnDrop(PointerEventData eventData)
+	{
+		Debug.Log("Drop");
+		if (State != NodeState.Choose)
+			return;
+		Debug.Log("Drop");
+		var obj = eventData.pointerDrag;
+		var toy = obj.GetComponent<Toy>();
+
+		var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
+		boardManager.ToySettingOnNode(this, toy, false);
 	}
 }

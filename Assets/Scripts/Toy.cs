@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //[Serializable]
@@ -32,10 +33,6 @@ public class Toy : MonoBehaviour
 	public bool IsMove { get; set; }
 	public Sprite Toy2D { get; private set; }
 	private string path = "Images/Toy{0}";
-
-	private void Awake()
-	{
-	}
 
 	public void Init()
 	{
