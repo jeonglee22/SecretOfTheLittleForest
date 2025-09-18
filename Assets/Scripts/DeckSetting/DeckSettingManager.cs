@@ -1,9 +1,7 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 {
@@ -26,9 +24,6 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 	private bool isValueChange;
 	private float currentValue;
 	private float clampTimeInterval = 0.5f;
-	private float speed = 0.5f;
-	private float offset = 0.01f;
-	private bool isEnter = false;
 
 	private void Awake()
 	{
