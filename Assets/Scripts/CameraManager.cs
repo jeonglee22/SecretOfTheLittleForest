@@ -16,6 +16,7 @@ public class CameraManager : MonoBehaviour
 	//public float rotationXSpeed = 60f;
 
 	public float zoomSpeed = 100f;
+	public float moveSpeed = 0.2f;
 
 	private float cameraMaxDistance = 33f;
 	private float cameraMinDistance = 15f;
@@ -26,17 +27,22 @@ public class CameraManager : MonoBehaviour
 	private Vector3 CameraDeckSettingInitPos;
 	private Vector3 CameraDeckSettingGamePos;
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	private Vector2 startTouch1;
+	private Vector2 startTouch2;
+	private bool isStartDoubleTouch = false;
+	
+	private Vector3 initOffset = new Vector3(-13, 20, -5);
+	private Vector3 gameOffset = new Vector3(10, 33, 0);
+
 	void Start()
     {
-		cameraDistance = transform.position.magnitude;
 		isDrag = false;
-		CameraDeckSettingGamePos = chessboard.transform.position + new Vector3(10,33,0);
-		CameraDeckSettingInitPos = chessboard.transform.position + new Vector3(-10,18,-10);
+		CameraDeckSettingGamePos = chessboard.transform.position + gameOffset;
+		CameraDeckSettingInitPos = chessboard.transform.position + initOffset;
 		Camera.main.transform.position = CameraDeckSettingInitPos;
-    }
+		cameraDistance = transform.position.y - chessboard.transform.position.y;
+	}
 
-    // Update is called once per frame
     void Update()
     {
         var touches = Input.touches;
@@ -89,6 +95,17 @@ public class CameraManager : MonoBehaviour
 
 		if(Input.touchCount == 2)
 		{
+
+			if (!isStartDoubleTouch)
+			{
+				isStartDoubleTouch = true;
+
+				startTouch1 = Input.GetTouch(0).position;
+				startTouch2 = Input.GetTouch(1).position;
+			}
+
+			var startDistance = Vector2.Distance(startTouch1, startTouch2);
+			
 			var touch1 = Input.GetTouch(0);
 			var touch2 = Input.GetTouch(1);
 
@@ -99,12 +116,30 @@ public class CameraManager : MonoBehaviour
 			float beforeDistance = Vector2.Distance(touch1beforePos, touch2beforePos);
 
 			float delta = (currentDistance - beforeDistance) / Screen.dpi;
-			delta *= Time.deltaTime * zoomSpeed;
+			float startDelta = (currentDistance - startDistance) / Screen.dpi;
+	
+			if(Mathf.Abs(startDelta) < 0.2f)
+			{
+				Vector2 beforeCenter = (touch1beforePos + touch2beforePos) / 2f;
+				Vector2 currentCenter = (touch1.position + touch2.position) / 2f;
 
-			cameraDistance -= delta;
-			cameraDistance = Mathf.Clamp(cameraDistance, cameraMinDistance, cameraMaxDistance);
+				var dir = (currentCenter - beforeCenter);
+				//var dir3D = new Vector3(-Mathf.Clamp(dir.y, -1f,1f), 0, -Mathf.Clamp(-dir.x, -1f, 1f));
 
-			transform.position = cameraDistance * -transform.forward;
+				transform.Translate(new Vector3(-dir.x, -dir.y, 0) * Time.deltaTime * moveSpeed);
+			}
+			else
+			{
+				cameraDistance = Mathf.Clamp(cameraDistance - delta * zoomSpeed * Time.deltaTime, cameraMinDistance, cameraMaxDistance);
+				var vec = transform.position;
+
+				vec.y = chessboard.transform.position.y + cameraDistance;
+				transform.position = vec;
+			}
+		}
+		else
+		{
+			isStartDoubleTouch = false;
 		}
 	}
 
