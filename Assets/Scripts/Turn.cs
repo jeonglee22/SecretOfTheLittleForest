@@ -4,8 +4,6 @@ public class Turn : MonoBehaviour
 {
 	protected int moveCount = 1;
 
-	private int maxTurns = 40;
-
 	public PlayManager playManager;
 	public BoardManager boardManager;
 	public PlayLogic playLogic;

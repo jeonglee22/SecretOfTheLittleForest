@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     public TMP_Dropdown dropdown;
     public TextMeshProUGUI turnText;
     public TextMeshProUGUI endText;
-    public TextMeshProUGUI statText;
+    //public TextMeshProUGUI statText;
 
     public Toy toy;
 
@@ -21,7 +21,7 @@ public class UIManager : MonoBehaviour
 	{
 		turnText.text = string.Empty;
         endText.text = string.Empty;
-        statText.text = string.Empty;
+        //statText.text = string.Empty;
 	}
 
 	public void OnValueChangeMoveType()
@@ -80,8 +80,8 @@ public class UIManager : MonoBehaviour
 		playManager.ShowEnemyStats(b);
 	}
 
-    public void SetStageStat(string s)
-    {
-        statText.text = s;
-    }
+    //public void SetStageStat(string s)
+    //{
+    //    statText.text = s;
+    //}
 }

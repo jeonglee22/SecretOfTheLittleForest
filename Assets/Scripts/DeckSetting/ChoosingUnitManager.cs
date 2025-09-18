@@ -29,6 +29,12 @@ public class ChoosingUnitManager : MonoBehaviour
 		chooseContent = chooseRect.content;
 	}
 
+	private void OnDisable()
+	{
+		SaveLoadManager.Data.Deck = chooseDeck;
+		SaveLoadManager.Save(1);
+	}
+
 	public void AddToyOnChoosedDeck(GameObject go)
 	{
 		var newGo = Instantiate(go, chooseContent);

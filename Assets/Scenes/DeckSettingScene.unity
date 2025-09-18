@@ -1836,6 +1836,7 @@ GameObject:
   - component: {fileID: 944631968}
   - component: {fileID: 944631969}
   - component: {fileID: 944631970}
+  - component: {fileID: 944631971}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1975,6 +1976,18 @@ MonoBehaviour:
   countText: {fileID: 2049562655}
   coinText: {fileID: 1400936098536867475, guid: 5fd7fc7c7fa598c4eb8a85f902f7b797, type: 3}
   coin: {fileID: 4859622897323205332, guid: b05bc6836d1d0d6418e886f97ab2a033, type: 3}
+--- !u!114 &944631971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944631963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252911dab54004d4fae876909a7e15d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &961902104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2320,6 +2333,34 @@ PrefabInstance:
     - target: {fileID: 6444210167037268740, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 944631971}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickReset
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DeckSceneButtonManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3444,6 +3485,34 @@ PrefabInstance:
     - target: {fileID: 6444210167037268740, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 944631971}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickStart
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DeckSceneButtonManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6067,6 +6136,34 @@ PrefabInstance:
     - target: {fileID: 6444210167037268740, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 944631971}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DeckSceneButtonManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

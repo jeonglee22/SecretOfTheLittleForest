@@ -1,11 +1,11 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
-public class DeckSettingManager : MonoBehaviour, IPointerEnterHandler
+public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 {
 	public ScrollRect unitRect;
 	private RectTransform unitContent;
@@ -28,6 +28,7 @@ public class DeckSettingManager : MonoBehaviour, IPointerEnterHandler
 	private float clampTimeInterval = 0.5f;
 	private float speed = 0.5f;
 	private float offset = 0.01f;
+	private bool isEnter = false;
 
 	private void Awake()
 	{
@@ -57,7 +58,7 @@ public class DeckSettingManager : MonoBehaviour, IPointerEnterHandler
 		SetFirstImageOnView();
 	}
 
-	private void SetDeckInfos()
+	public void SetDeckInfos()
 	{
 		for(int i = 0; i < unitContent.childCount; i++)
 			Destroy(unitContent.GetChild(i).gameObject);
@@ -125,15 +126,8 @@ public class DeckSettingManager : MonoBehaviour, IPointerEnterHandler
 				}
 			}
 
-			StartCoroutine(CoMove(count, minIndex));
-
-			//var go = new GameObject();
-			//var toy = go.AddComponent<Toy>();
-			//toy.Data = unitDeck.Toys[minIndex].data;
-			//toy.SetData();
-			//var image = go.AddComponent<Image>();
-			//image.sprite = toy.Toy2D;
-			//centerToy = go;
+			unitRect.horizontalNormalizedPosition = 1f / (count - 1) * (float)minIndex;
+			isValueChange = false;
 		}
 	}
 
@@ -165,22 +159,6 @@ public class DeckSettingManager : MonoBehaviour, IPointerEnterHandler
 		isValueChange = true;
 		currentValue = vec.x;
 	}
-
-	private IEnumerator CoMove(int count, int index)
-	{
-		float ratio = 0f;
-		float pos = 1f / (count - 1) * (float)index;
-		while (Mathf.Abs(pos - unitRect.horizontalNormalizedPosition) > offset)
-		{
-			var movePos = Mathf.Lerp(currentValue, pos, ratio);
-			yield return new WaitForSeconds(0.001f);
-			unitRect.horizontalNormalizedPosition = movePos;
-			ratio += Time.deltaTime * speed;
-		}
-		unitRect.horizontalNormalizedPosition = pos;
-		isValueChange = false;
-	}
-
 	public void ReduceChoosedToy(GameObject go)
 	{
 		var toys = unitDeck.Toys;
@@ -206,11 +184,15 @@ public class DeckSettingManager : MonoBehaviour, IPointerEnterHandler
 		}
 	}
 
-	public void OnPointerEnter(PointerEventData eventData)
+	public void OnPointerClick(PointerEventData eventData)
 	{
 		if (centerToy != null && eventData.pointerEnter == centerToy)
 		{
 			choosingUnitManager.AddToyOnChoosedDeck(centerToy);
+		}
+		else if (eventData.pointerEnter != null && eventData.pointerEnter.GetComponent<Toy>() != null)
+		{
+			choosingUnitManager.AddToyOnChoosedDeck(eventData.pointerEnter);
 		}
 	}
 }

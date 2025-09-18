@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Text;
 using TMPro;
-using UnityEditor;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class ImageToolManager : MonoBehaviour

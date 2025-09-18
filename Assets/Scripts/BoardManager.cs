@@ -67,7 +67,7 @@ public class BoardManager : MonoBehaviour
 			result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
 		}
 
-		uiManager.SetStageStat(stageData.ID.ToString());
+		//uiManager.SetStageStat(stageData.ID.ToString());
 
 		return result;
 	}

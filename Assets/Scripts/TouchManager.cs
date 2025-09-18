@@ -8,7 +8,6 @@ public class TouchManager : MonoBehaviour
 	private Vector2 fingerTouchStartPosition;
 	private float fingerTouchStartTime;
 
-	private float sweepDistance = 1f;
 	private float tapTimeLimit = 0.1f;
 	private float holdTimeLimit = 0.1f;
 
