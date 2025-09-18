@@ -26,10 +26,4 @@ public class CanvasManager : MonoBehaviour
         currentWindow = windowId;
         canvases[(int)currentWindow].SetActive(true);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

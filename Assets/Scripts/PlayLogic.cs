@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayLogic : MonoBehaviour
@@ -255,7 +256,7 @@ public class PlayLogic : MonoBehaviour
 
 	private List<int> MoveAxis(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
-		if (CheckAlreadyUsedPos(nodeIndex, isFirst))
+		if (CheckAlreadyUsedPos(nodeIndex, isFirst, true))
 			return new List<int>();
 
 		if (isDraw && !isFirst)
@@ -274,7 +275,7 @@ public class PlayLogic : MonoBehaviour
 
 	private List<int> MoveCross(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
-		if (CheckAlreadyUsedPos(nodeIndex, isFirst))
+		if (CheckAlreadyUsedPos(nodeIndex, isFirst, false))
 			return new List<int>();
 
 		if (currentMoveType == MoveType.Pawn && !isFirst)
@@ -291,15 +292,30 @@ public class PlayLogic : MonoBehaviour
 		return Move(nodeIndex, isFirst, false);
 	}
 
-	private bool CheckAlreadyUsedPos(int index, bool isFirst)
+	private bool CheckAlreadyUsedPos(int index, bool isFirst, bool isAxis)
 	{
-		if (allNodes[index].State != NodeState.None && !isFirst && currentMoveType != MoveType.Knight)
+		if(currentMoveType == MoveType.Pawn && !isFirst && allNodes[index].State != NodeState.None)
+		{
+			if (isAxis) 
+			{
+				return true;
+			}
+			else
+			{
+				if ((allNodes[index].State == NodeState.Enemy && ChoosedNode.State == NodeState.Player) ||
+				(allNodes[index].State == NodeState.Player && ChoosedNode.State == NodeState.Enemy))
+					allNodes[index].State = NodeState.Attack;
+				return true;
+			}
+		}
+		else if (allNodes[index].State != NodeState.None && !isFirst && currentMoveType != MoveType.Knight)
 		{
 			if ((allNodes[index].State == NodeState.Enemy && ChoosedNode.State == NodeState.Player) ||
 				(allNodes[index].State == NodeState.Player && ChoosedNode.State == NodeState.Enemy))
 				allNodes[index].State = NodeState.Attack;
 			return true;
 		}
+
 		return false;
 	}
 

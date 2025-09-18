@@ -21,7 +21,7 @@ public class ToyControl : MonoBehaviour
 		}
 	}
 
-	public void ToyMove(ref Node before, bool isBack = false)
+	public void ToyMove(ref Node before, bool isBack = false, bool isInfMove = false)
 	{
 		if (isMove)
 			return;
@@ -29,7 +29,8 @@ public class ToyControl : MonoBehaviour
 		isMove = true;
 		var originToy = playLogic.ChoosedNode.Toy;
 		playLogic.ChoosedNode.Toy = before.Toy;
-		before.Toy.IsMove = true;
+		if(!isInfMove)
+			before.Toy.IsMove = true;
 		
 		var nextPos = playLogic.ChoosedNode.transform.position;
 		var currentPos = before.Toy.gameObject.transform.position;

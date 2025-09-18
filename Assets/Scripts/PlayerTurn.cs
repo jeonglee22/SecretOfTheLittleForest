@@ -7,6 +7,7 @@ public class PlayerTurn : Turn
 	public GameCanvasManager canvasManager;
 
 	private int count = 0;
+	internal bool DevelopMode;
 
 	protected void Update()
 	{
@@ -70,13 +71,16 @@ public class PlayerTurn : Turn
 
 		playLogic.ClearNodes();
 
-		toyControl.ToyMove(ref beforeNode, isAlive);
+		toyControl.ToyMove(ref beforeNode, isAlive, DevelopMode);
 		if(!isAlive)
 		{
 			touchedNode.State = beforeNode.State;
 			beforeNode.State = NodeState.None;
 			touchedNode = null;
 		}
+
+		if (DevelopMode)
+			return;
 
 		moveCount--;
 		canvasManager.SetTurnImageColor(moveCount);
