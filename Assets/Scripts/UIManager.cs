@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
 		turnText.text = string.Empty;
         endText.text = string.Empty;
         //statText.text = string.Empty;
+
+        OnClickSetEnemyToy();
 	}
 
 	public void OnValueChangeMoveType()
@@ -55,11 +57,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnClickPlayGame()
-    {
-		playManager.StartGame();
-    }
-
     public void SetTurnText(bool isEnemy)
     {
         turnText.text = isEnemy ? "Enemy Turn" : "Player Turn";
@@ -68,16 +65,6 @@ public class UIManager : MonoBehaviour
 	public void SetEndText(bool isEnemyWin)
 	{
         endText.text = isEnemyWin ? "Enemy Win" : "Player Win";
-	}
-
-    public void OnValuePlayerChanged(bool b)
-    {
-        playManager.ShowPlayerStats(b);
-    }
-
-	public void OnValueEnemyChanged(bool b)
-	{
-		playManager.ShowEnemyStats(b);
 	}
 
     //public void SetStageStat(string s)

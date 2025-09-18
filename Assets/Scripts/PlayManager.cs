@@ -13,6 +13,7 @@ public class PlayManager : MonoBehaviour
 	public EnemyTurn enemyTurn;
 	public UIManager manager;
 	public BoardManager boardManager;
+	public GameCanvasManager gameCanvasManager;
 
 	private PlayTurn playTurn = PlayTurn.None;
 	public PlayTurn PlayTurn { get { return playTurn; } set { playTurn = value; } }
@@ -22,15 +23,22 @@ public class PlayManager : MonoBehaviour
 	public bool IsEndGame { get; set; } = false;
 	public bool IsEnemyWin { get; set; }
 
+	private int totalTurn;
+
 	private void Awake()
 	{
 		enemies = new List<Node>();
 		players = new List<Node>();
 	}
 
+	private void Start()
+	{
+		totalTurn = (int) DataTableManger.SettingTable.Get(Settings.battleTurnCount);
+	}
+
 	private void Update()
 	{
-		if (IsEndGame)
+		if (IsEndGame || totalTurn == 0)
 		{
 			EndGame();
 			return;
@@ -93,6 +101,9 @@ public class PlayManager : MonoBehaviour
 	{
 		IsTurnStart = false;
 		IsFinishTurn = false;
+		if(isPlayerTurn)
+			totalTurn--;
+		gameCanvasManager.SetTurnText(totalTurn);
 	}
 
 	public void AddEnemies(Node enemy)

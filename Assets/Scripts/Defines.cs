@@ -91,6 +91,8 @@ public static class AINames
 public static class Settings
 {
     public const string moveCount = "Move_count";
+    public const string unitCount = "Unit_count";
+    public const string battleTurnCount = "Battle_Turn";
 }
 
 public static class Tags
@@ -112,4 +114,11 @@ public enum Scenes
 	Game,
 
     Test,
+}
+
+public enum GameWindow
+{
+    MainGame,
+    DeckSetting,
+
 }

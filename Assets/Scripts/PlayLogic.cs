@@ -70,7 +70,23 @@ public class PlayLogic : MonoBehaviour
 
 		switch (currentMoveType)
 		{
-			case MoveType.Pawn:
+			case MoveType.Pawn when moveCount == 0:
+				nextNodes = MoveAxis(choosedNode, ref moveCount, isFirst);
+				foreach (var node in nextNodes)
+					if (node != Node.outSide)
+					{
+						movableNodes.AddRange(nextNodes);
+						ShowMovable(node, moveCount, false);
+					}
+				moveCount = 0;
+				nextNodes = MoveCross(choosedNode, ref moveCount, isFirst);
+				foreach (var node in nextNodes)
+					if (node != Node.outSide)
+					{
+						MoveCross(node,ref moveCount, false);
+					}
+				break;
+			case MoveType.Pawn when moveCount == 1:
 				nextNodes = MoveAxis(choosedNode, ref moveCount, isFirst);
 				break;
 			case MoveType.King:
@@ -245,10 +261,13 @@ public class PlayLogic : MonoBehaviour
 		if (isDraw && !isFirst)
 			SetMoveStateAtEmpty(nodeIndex);
 
-		if (ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
+		moveCount++;
+
+		if (currentMoveType == MoveType.Pawn && !isFirst)
 			return new List<int>();
 
-		moveCount++;
+		if (ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
+			return new List<int>();
 
 		return Move(nodeIndex, isFirst, true);
 	}
@@ -258,13 +277,16 @@ public class PlayLogic : MonoBehaviour
 		if (CheckAlreadyUsedPos(nodeIndex, isFirst))
 			return new List<int>();
 
+		if (currentMoveType == MoveType.Pawn && !isFirst)
+			return new List<int>();
+
 		if (isDraw && !isFirst)
 			SetMoveStateAtEmpty(nodeIndex);
 
+		moveCount++;
+
 		if (ChoosedNode.Toy.MoveType == MoveType.King && !isFirst)
 			return new List<int>();
-
-		moveCount++;
 
 		return Move(nodeIndex, isFirst, false);
 	}

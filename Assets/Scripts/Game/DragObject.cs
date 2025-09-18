@@ -13,12 +13,20 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		int count = 0;
 		foreach (var node in playerStartNodes)
 		{
 			if (node.State != NodeState.Player)
 				node.State = NodeState.Choose;
+			else
+				count++;
 		}
 
+		if (count == DataTableManger.SettingTable.Get(Settings.unitCount))
+		{
+			ResetDrag();
+			return;
+		}
 		var newobj = new GameObject();
 		var image = newobj.AddComponent<Image>();
 		var toy = newobj.AddComponent<Toy>();
@@ -53,6 +61,9 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		if (drag == null)
+			return;
+
 		var endPos = eventData.position;
 		var ray = Camera.main.ScreenPointToRay(endPos);
 
@@ -78,7 +89,6 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 			if (dragSucessFunc != null)
 			{
 				dragSucessFunc(toy.Data);
-				Debug.Log("Not null");
 			}
 		}
 
@@ -87,7 +97,8 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
 	private void ResetDrag()
 	{
-		Destroy(drag);
+		if (drag != null)
+			Destroy(drag);
 		drag = null;
 
 		foreach (var node in playerStartNodes)

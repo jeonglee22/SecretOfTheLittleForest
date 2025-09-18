@@ -3,6 +3,7 @@ using UnityEngine;
 public class Turn : MonoBehaviour
 {
 	protected int moveCount = 1;
+	public int MoveCount { get { return moveCount; } }
 
 	public PlayManager playManager;
 	public BoardManager boardManager;

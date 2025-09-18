@@ -8,6 +8,7 @@ public class EnemyTurn : Turn
 	private float turnTime;
 
 	private Dictionary<int, Func<bool>> aiFuncs;
+	public GameCanvasManager canvasManager;
 
 	private void Awake()
 	{
@@ -77,8 +78,6 @@ public class EnemyTurn : Turn
 	{
 		base.StartTurn();
 		playManager.ResetToys();
-		foreach (var enemy in playManager.CurrentEnemies)
-			enemy.Toy.IsMove = false;
 	}
 
 	private void EnemyMove()
@@ -265,6 +264,10 @@ public class EnemyTurn : Turn
 	{
 		turnTime = 0;
 		playLogic.ChoosedNode = null;
+		foreach (var enemy in playManager.CurrentEnemies)
+			enemy.Toy.IsMove = false;
+
+		canvasManager.ResetTurnImage();
 		base.EndTurn();
 	}
 

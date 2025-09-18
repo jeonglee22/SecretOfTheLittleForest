@@ -4,6 +4,7 @@ public class PlayerTurn : Turn
 {
 	private Node touchedNode;
 	private Node beforeNode;
+	public GameCanvasManager canvasManager;
 
 	private int count = 0;
 
@@ -78,6 +79,7 @@ public class PlayerTurn : Turn
 		}
 
 		moveCount--;
+		canvasManager.SetTurnImageColor(moveCount);
 		count++;
 	}
 

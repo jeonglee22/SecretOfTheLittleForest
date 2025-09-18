@@ -28,6 +28,9 @@ public class UnitSetting : MonoBehaviour
 	public List<Node> playerStartNodes;
 
 	public CameraManager cameraManager;
+	public ReadyCanvasManager readyCanvasManager;
+
+	private int count = 0;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -149,5 +152,7 @@ public class UnitSetting : MonoBehaviour
 				unitDeck.Toys.RemoveAt(datas.IndexOf(data));
 			}
 		}
+
+		readyCanvasManager.SetUnitCountText(++count);
 	}
 }
