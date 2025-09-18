@@ -12,72 +12,80 @@ public class CameraManager : MonoBehaviour
 	private float cameraDistance;
 	private Vector3 origin = Vector3.zero;
 
-	public float rotationYSpeed = 120f;
-	public float rotationXSpeed = 60f;
+	//public float rotationYSpeed = 120f;
+	//public float rotationXSpeed = 60f;
 
 	public float zoomSpeed = 100f;
 
 	private float cameraMaxDistance = 33f;
-	private float cameraMinDistance = 20f;
+	private float cameraMinDistance = 15f;
 	private bool isDrag;
+
+	public GameObject chessboard;
+
+	private Vector3 CameraDeckSettingInitPos;
+	private Vector3 CameraDeckSettingGamePos;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
 		cameraDistance = transform.position.magnitude;
 		isDrag = false;
+		CameraDeckSettingGamePos = chessboard.transform.position + new Vector3(10,33,0);
+		CameraDeckSettingInitPos = chessboard.transform.position + new Vector3(-10,18,-10);
+		Camera.main.transform.position = CameraDeckSettingInitPos;
     }
 
     // Update is called once per frame
     void Update()
     {
         var touches = Input.touches;
-        foreach (Touch touch in touches)
-        {
-			switch (touch.phase)
-			{
-				case TouchPhase.Began:
-					if (fingerId == -1)
-					{
-						fingerId = touch.fingerId;
-						fingerTouchStartPosition = touch.position;
-						fingerTouchStartTime = Time.time;
-					}
-					break;
-				case TouchPhase.Moved:
-					if(touch.fingerId == fingerId && touches.Length == 1)
-					{
-						//Debug.Log((touch.position - fingerTouchStartPosition).magnitude / Screen.dpi);
-						if (((touch.position - fingerTouchStartPosition).magnitude / Screen.dpi < dragDistance))
-						{
-							if(!isDrag)
-								return;
-						}
+  //      foreach (Touch touch in touches)
+  //      {
+		//	switch (touch.phase)
+		//	{
+		//		case TouchPhase.Began:
+		//			if (fingerId == -1)
+		//			{
+		//				fingerId = touch.fingerId;
+		//				fingerTouchStartPosition = touch.position;
+		//				fingerTouchStartTime = Time.time;
+		//			}
+		//			break;
+		//		case TouchPhase.Moved:
+		//			if(touch.fingerId == fingerId && touches.Length == 1)
+		//			{
+		//				//Debug.Log((touch.position - fingerTouchStartPosition).magnitude / Screen.dpi);
+		//				if (((touch.position - fingerTouchStartPosition).magnitude / Screen.dpi < dragDistance))
+		//				{
+		//					if(!isDrag)
+		//						return;
+		//				}
 
-						var direction = touch.deltaPosition;
+		//				var direction = touch.deltaPosition;
 
-						isDrag = true;
-						direction.Normalize();
+		//				isDrag = true;
+		//				direction.Normalize();
 
-						var rotation = transform.localRotation.eulerAngles;
-						rotation.x = Mathf.Clamp(rotation.x + direction.y * rotationYSpeed * Time.deltaTime, 30, 90);
-						transform.localRotation = Quaternion.Euler(rotation);
+		//				var rotation = transform.localRotation.eulerAngles;
+		//				rotation.x = Mathf.Clamp(rotation.x + direction.y * rotationYSpeed * Time.deltaTime, 30, 90);
+		//				transform.localRotation = Quaternion.Euler(rotation);
 
-						transform.Rotate(Vector3.up, direction.x * rotationXSpeed * Time.deltaTime, Space.World);
+		//				transform.Rotate(Vector3.up, direction.x * rotationXSpeed * Time.deltaTime, Space.World);
 
-						transform.position = cameraDistance * -transform.forward;
-					}
-					break;
-				case TouchPhase.Stationary:
+		//				transform.position = cameraDistance * -transform.forward;
+		//			}
+		//			break;
+		//		case TouchPhase.Stationary:
 
-					break;
-				case TouchPhase.Ended:
-				case TouchPhase.Canceled:
-					isDrag = false;
-					fingerId = -1;
-					break;
-			}
-		}
+		//			break;
+		//		case TouchPhase.Ended:
+		//		case TouchPhase.Canceled:
+		//			isDrag = false;
+		//			fingerId = -1;
+		//			break;
+		//	}
+		//}
 
 		if(Input.touchCount == 2)
 		{
@@ -98,5 +106,10 @@ public class CameraManager : MonoBehaviour
 
 			transform.position = cameraDistance * -transform.forward;
 		}
+	}
+
+	public void SetCameraToSettingPos()
+	{
+		Camera.main.transform.position = CameraDeckSettingInitPos;
 	}
 }

@@ -22,6 +22,8 @@ public class UnitSetting : MonoBehaviour
 	public Image outline;
 	public TextMeshProUGUI valueText;
 
+	public CameraManager cameraManager;
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
@@ -31,6 +33,8 @@ public class UnitSetting : MonoBehaviour
 		attackSprite = Resources.Load<Sprite>(attackPath);
 
 		UnitSettingOnBoard();
+
+		cameraManager.SetCameraToSettingPos();
 	}
 
 	private void OnEnable()
