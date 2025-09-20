@@ -165,20 +165,14 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 		currentValue = vec.x;
 	}
 
-	public void AddChoossedToy(GameObject go)
+	public void AddChoossedToy(ToyData data)
 	{
-		var toys = unitDeck.Toys;
-		var data = go.GetComponent<Toy>().Data;
 		unitDeck.AddDeckData(data);
-
 		SetDeckInfos();
 	}
 
-	public void ReduceChoosedToy(GameObject go)
+	public void ReduceChoosedToy(ToyData data)
 	{
-		var toys = unitDeck.Toys;
-		var data = go.GetComponent<Toy>().Data;
-		Debug.Log(toys.Count);
 		unitDeck.RemoveDeckData(data);
 		SetDeckInfos();
 

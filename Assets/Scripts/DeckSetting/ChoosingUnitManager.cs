@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,7 +50,7 @@ public class ChoosingUnitManager : MonoBehaviour
 		Destroy(newGo);
 
 		ReloadDeckImages();
-		deckSettingManager.ReduceChoosedToy(go);
+		deckSettingManager.ReduceChoosedToy(toy.Data);
 
 		deckSceneUIManager.SetCostText(chooseDeck.GetDeckTotalCost());
 		deckSceneUIManager.SetCountText(chooseDeck.GetDeckTotalCount());
@@ -109,7 +110,7 @@ public class ChoosingUnitManager : MonoBehaviour
 			Destroy(chooseContent.GetChild(i).gameObject);
 	}
 
-	internal void RemoveToyInChoosedDeck(GameObject pointerEnter)
+	public void RemoveToyInChoosedDeck(GameObject pointerEnter)
 	{
 		if (pointerEnter != null && pointerEnter.GetComponent<Toy>() != null)
 		{
@@ -120,10 +121,24 @@ public class ChoosingUnitManager : MonoBehaviour
 			chooseDeck.RemoveDeckData(toy.Data);
 
 			ReloadDeckImages();
-			deckSettingManager.AddChoossedToy(pointerEnter.gameObject);
+			deckSettingManager.AddChoossedToy(toy.Data);
 
 			deckSceneUIManager.SetCostText(chooseDeck.GetDeckTotalCost());
 			deckSceneUIManager.SetCountText(chooseDeck.GetDeckTotalCount());
 		}
+	}
+
+	public void RemoveAllToysInDeck()
+	{
+		while(chooseDeck.Toys.Count > 0)
+		{
+			var first = chooseDeck.Toys[0].data;
+			chooseDeck.RemoveDeckData(first);
+			deckSettingManager.AddChoossedToy(first);
+		}
+
+		ReloadDeckImages();
+		deckSceneUIManager.SetCostText(chooseDeck.GetDeckTotalCost());
+		deckSceneUIManager.SetCountText(chooseDeck.GetDeckTotalCount());
 	}
 }

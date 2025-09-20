@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,14 +9,21 @@ public class DeckSceneUIManager : MonoBehaviour
 	public ChoosingUnitManager settingManager;
 	public TextMeshProUGUI costText;
 	public TextMeshProUGUI countText;
+	public TextMeshProUGUI descriptionText;
 
 	private int costMax;
 	private bool isNotCorrectCost = false;
 	private bool isNotCorrectCount = false;
 
+	public GameObject popupPanel;
+
+	private Action acceptFunc;
+
 	public void OnClickBack()
 	{
-		SceneManager.LoadScene((int)Scenes.Lobby);
+		descriptionText.text = "로비로 돌아가시겠습니까?";
+		acceptFunc = () => SceneManager.LoadScene((int)Scenes.Lobby);
+		popupPanel.SetActive(true);
 	}
 
 	private void Start()
@@ -22,6 +31,7 @@ public class DeckSceneUIManager : MonoBehaviour
 		SetCostLevel(0);
 		SetCostText(0);
 		SetCountText(0);
+		popupPanel.SetActive(false);
 	}
 
 	public void OnClickStart()
@@ -30,12 +40,16 @@ public class DeckSceneUIManager : MonoBehaviour
 		{
 			return;
 		}
-		SceneManager.LoadScene((int)Scenes.Game);
+		descriptionText.text = "게임을 시작하시겠습니까?";
+		acceptFunc = () => SceneManager.LoadScene((int)Scenes.Game);
+		popupPanel.SetActive(true);
 	}
 
 	public void OnClickReset()
 	{
-		SceneManager.LoadScene((int)Scenes.DeckSetting);
+		descriptionText.text = "선택한 목록을\n비우시겠습니까?";
+		acceptFunc = () => settingManager.RemoveAllToysInDeck();
+		popupPanel.SetActive(true);
 	}
 
 	public void SetCostText(int cost)
@@ -70,5 +84,16 @@ public class DeckSceneUIManager : MonoBehaviour
 		else
 			countText.color = Color.white;
 		isNotCorrectCount = count > limitCount;
+	}
+
+	public void OnClickAccpet()
+	{
+		acceptFunc();
+		popupPanel.SetActive(false);
+	}
+
+	public void OnClickReject()
+	{
+		popupPanel.SetActive(false);
 	}
 }
