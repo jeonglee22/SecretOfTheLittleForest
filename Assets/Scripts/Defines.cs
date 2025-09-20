@@ -93,6 +93,11 @@ public static class Settings
     public const string moveCount = "Move_count";
     public const string unitCount = "Unit_count";
     public const string battleTurnCount = "Battle_Turn";
+    public const string costLimit0 = "Cost_lim";
+    public const string costLimit1 = "Cost_lim_1";
+    public const string costLimit2 = "Cost_lim_2";
+    public const string costLimit3 = "Cost_lim_3";
+    public const string unitLimit = "Unit_lim";
 }
 
 public static class Tags

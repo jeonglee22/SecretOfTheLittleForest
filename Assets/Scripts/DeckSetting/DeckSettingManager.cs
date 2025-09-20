@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,6 +25,7 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 	private bool isValueChange;
 	private float currentValue;
 	private float clampTimeInterval = 0.5f;
+	private bool isClicking = false;
 
 	private void Awake()
 	{
@@ -111,6 +113,14 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 			float minDis = float.MaxValue;
 
 			var count = unitDeck.Toys.Count;
+
+			if (count == 1)
+			{
+				unitRect.horizontalNormalizedPosition = 0;
+				isValueChange = false;
+				return;
+			}
+
 			for (int i = 0; i < count; i++)
 			{
 				var interval = 1f / (count - 1) * (float)i;
@@ -154,22 +164,22 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 		isValueChange = true;
 		currentValue = vec.x;
 	}
+
+	public void AddChoossedToy(GameObject go)
+	{
+		var toys = unitDeck.Toys;
+		var data = go.GetComponent<Toy>().Data;
+		unitDeck.AddDeckData(data);
+
+		SetDeckInfos();
+	}
+
 	public void ReduceChoosedToy(GameObject go)
 	{
 		var toys = unitDeck.Toys;
 		var data = go.GetComponent<Toy>().Data;
-		var datas = toys.ConvertAll(x => x.data);
-		if (datas.Contains(data))
-		{
-			var index = datas.IndexOf(data);
-			var count = toys[index].count - 1;
-			if(count == 0)
-			{
-				toys.RemoveAt(index);
-			}
-			else
-				toys[index] = (count, data);
-		}
+		Debug.Log(toys.Count);
+		unitDeck.RemoveDeckData(data);
 		SetDeckInfos();
 
 		if(unitDeck.Toys.Count == 0)
@@ -185,9 +195,15 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 		{
 			choosingUnitManager.AddToyOnChoosedDeck(centerToy);
 		}
-		else if (eventData.pointerEnter != null && eventData.pointerEnter.GetComponent<Toy>() != null)
+		else if (eventData.pointerEnter != null && eventData.pointerEnter.GetComponent<Toy>() != null &&
+			Input.GetTouch(0).position.x < Screen.width * 0.5f)
 		{
 			choosingUnitManager.AddToyOnChoosedDeck(eventData.pointerEnter);
+		}
+		else if (eventData.pointerEnter != null && eventData.pointerEnter.GetComponent<Toy>() != null &&
+			Input.GetTouch(0).position.x > Screen.width * 0.5f)
+		{
+			choosingUnitManager.RemoveToyInChoosedDeck(eventData.pointerEnter);
 		}
 	}
 }

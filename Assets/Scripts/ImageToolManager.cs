@@ -40,7 +40,7 @@ public class ImageToolManager : MonoBehaviour
 
 	private GameObject obj;
 
-	private bool isSaveFrame = false;
+	//private bool isSaveFrame = false;
 
 	private string path = "./Assets/Images";
 
@@ -108,7 +108,7 @@ public class ImageToolManager : MonoBehaviour
 
 	public void OnClickSave()
 	{
-		isSaveFrame = true;
+		//isSaveFrame = true;
 	}
 
 	public void OnRenderSave()
@@ -134,7 +134,7 @@ public class ImageToolManager : MonoBehaviour
 			s.Close();
 		}
 
-		isSaveFrame = false;
+		//isSaveFrame = false;
 	}
 
 	public void OnChangeID(string s) => id = int.Parse(s);

@@ -1972,9 +1972,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chooseRect: {fileID: 1722578695}
-  costText: {fileID: 961902106}
-  countText: {fileID: 2049562655}
   coinText: {fileID: 1400936098536867475, guid: 5fd7fc7c7fa598c4eb8a85f902f7b797, type: 3}
+  countText: {fileID: 7837262409032767002, guid: a815e36951293204fa7371a4cda0e9f7, type: 3}
   coin: {fileID: 4859622897323205332, guid: b05bc6836d1d0d6418e886f97ab2a033, type: 3}
 --- !u!114 &944631971
 MonoBehaviour:
@@ -1988,6 +1987,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252911dab54004d4fae876909a7e15d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settingManager: {fileID: 944631970}
+  costText: {fileID: 961902106}
+  countText: {fileID: 2049562655}
 --- !u!1001 &961902104
 PrefabInstance:
   m_ObjectHideFlags: 0

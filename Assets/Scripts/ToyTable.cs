@@ -21,7 +21,7 @@ public class ToyData
 
     public static bool operator==(ToyData data1, ToyData data2)
     {
-        if(data1 == null || data2 == null) return false;
+        if(ReferenceEquals(data1, null) || ReferenceEquals(data2, null)) return false;
 
         if(data1.UnitID == data2.UnitID) return true;
 
@@ -34,6 +34,35 @@ public class ToyData
     {
         return $"{UnitID} / {Movement} / {ModelCode} / {Name} / {HP} / {Attack} / {Price} / {Rating} / {DefUnit}";
     }
+
+	public override bool Equals(object obj)
+	{
+		return obj is ToyData data &&
+			   UnitID == data.UnitID &&
+			   Movement == data.Movement &&
+			   ModelCode == data.ModelCode &&
+			   Name == data.Name &&
+			   HP == data.HP &&
+			   Attack == data.Attack &&
+			   Price == data.Price &&
+			   Rating == data.Rating &&
+			   DefUnit == data.DefUnit;
+	}
+
+	public override int GetHashCode()
+	{
+		HashCode hash = new HashCode();
+		hash.Add(UnitID);
+		hash.Add(Movement);
+		hash.Add(ModelCode);
+		hash.Add(Name);
+		hash.Add(HP);
+		hash.Add(Attack);
+		hash.Add(Price);
+		hash.Add(Rating);
+		hash.Add(DefUnit);
+		return hash.ToHashCode();
+	}
 }
 
 public class ToyTable : DataTable

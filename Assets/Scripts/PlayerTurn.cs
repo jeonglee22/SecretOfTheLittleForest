@@ -11,16 +11,7 @@ public class PlayerTurn : Turn
 
 	protected void Update()
 	{
-		if (toyControl.IsMove  || playManager.PlayTurn != PlayTurn.Player || !playManager.IsTurnStart)
-			return;
-
-		if (moveCount == 0 || count == playManager.CurrentPlayers.Count)
-		{
-			EndTurn();
-			return;
-		}
-
-		if (Input.touches.Length == 0)
+		if (Input.touches.Length == 0 || toyControl.IsMove  || playManager.PlayTurn != PlayTurn.Player || !playManager.IsTurnStart)
 			return;
 
 		var touchPos = Input.GetTouch(0).position;
@@ -39,7 +30,7 @@ public class PlayerTurn : Turn
 				playLogic.ChoosedNode = touchedNode;
 				playLogic.ShowMovable(touchedNode.NodeIndex, 0);
 			}
-			else if (beforeNode != null && beforeNode.State == NodeState.Player &&
+			else if (moveCount != 0 && beforeNode != null && beforeNode.State == NodeState.Player &&
 				(touchedNode.State == NodeState.PlayerMove || touchedNode.State == NodeState.Attack))
 			{
 				playLogic.ChoosedNode = touchedNode;

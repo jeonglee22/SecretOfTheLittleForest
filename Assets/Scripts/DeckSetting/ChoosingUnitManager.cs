@@ -6,22 +6,24 @@ using UnityEngine.UI;
 public class ChoosingUnitManager : MonoBehaviour
 {
 	public ScrollRect chooseRect;
+	public int UnitCount { get { return chooseRect.content.childCount; } }
 	private RectTransform chooseContent;
 
-	public TextMeshProUGUI costText;
-	public TextMeshProUGUI countText;
 	public TextMeshProUGUI coinText;
+	public TextMeshProUGUI countText;
 
 	public Image coin;
 
 	private Deck chooseDeck;
 
 	private DeckSettingManager deckSettingManager;
+	private DeckSceneUIManager deckSceneUIManager;
 
 	private void Awake()
 	{
 		chooseDeck = new Deck();
 		deckSettingManager = GetComponent<DeckSettingManager>();
+		deckSceneUIManager = GetComponent<DeckSceneUIManager>();
 	}
 
 	private void Start()
@@ -48,6 +50,9 @@ public class ChoosingUnitManager : MonoBehaviour
 
 		ReloadDeckImages();
 		deckSettingManager.ReduceChoosedToy(go);
+
+		deckSceneUIManager.SetCostText(chooseDeck.GetDeckTotalCost());
+		deckSceneUIManager.SetCountText(chooseDeck.GetDeckTotalCount());
 	}
 
 	private bool ReloadDeckImages()
@@ -102,5 +107,23 @@ public class ChoosingUnitManager : MonoBehaviour
 	{
 		for(int i = 0; i < chooseContent.childCount; i++)
 			Destroy(chooseContent.GetChild(i).gameObject);
+	}
+
+	internal void RemoveToyInChoosedDeck(GameObject pointerEnter)
+	{
+		if (pointerEnter != null && pointerEnter.GetComponent<Toy>() != null)
+		{
+			var toy = pointerEnter.GetComponent<Toy>();
+			toy.Data = pointerEnter.GetComponent<Toy>().Data;
+			toy.SetData();
+
+			chooseDeck.RemoveDeckData(toy.Data);
+
+			ReloadDeckImages();
+			deckSettingManager.AddChoossedToy(pointerEnter.gameObject);
+
+			deckSceneUIManager.SetCostText(chooseDeck.GetDeckTotalCost());
+			deckSceneUIManager.SetCountText(chooseDeck.GetDeckTotalCount());
+		}
 	}
 }

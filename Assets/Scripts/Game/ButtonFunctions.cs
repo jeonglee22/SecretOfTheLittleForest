@@ -3,7 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
-	private Vector3 initCameraPos = new Vector3(-180f, 55f,130f);
+	private Vector3 initCameraPos = new Vector3(-180f, 55f, 130f);
+	private Vector3 gameCameraPos = new Vector3(-167f, 66f, 130f);
 	public PlayManager playManager;
 	public CanvasManager canvasManager;
 	public PlayerTurn playerTurn;
@@ -12,7 +13,8 @@ public class ButtonFunctions : MonoBehaviour
     {
 		playManager.StartGame();
 		canvasManager.Open(GameWindow.MainGame);
-    }
+		SetCameraToGamePos();
+	}
 
 	public void OnClickBackDeck()
 	{
@@ -33,4 +35,9 @@ public class ButtonFunctions : MonoBehaviour
     {
 		Camera.main.transform.position = initCameraPos;
     }
+
+	public void SetCameraToGamePos()
+	{
+		Camera.main.transform.position = gameCameraPos;
+	}
 }

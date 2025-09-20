@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-	private int fingerId = -1;
+	//private int fingerId = -1;
 
 	private Vector2 fingerTouchStartPosition;
 	private float fingerTouchStartTime;
 
-	private float dragDistance = 0.2f;
+	//private float dragDistance = 0.2f;
 
 	private float cameraDistance;
 	private Vector3 origin = Vector3.zero;
@@ -20,7 +20,7 @@ public class CameraManager : MonoBehaviour
 
 	private float cameraMaxDistance = 33f;
 	private float cameraMinDistance = 15f;
-	private bool isDrag;
+	//private bool isDrag;
 
 	public GameObject chessboard;
 
@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour
 
 	void Start()
     {
-		isDrag = false;
+		//isDrag = false;
 		CameraDeckSettingGamePos = chessboard.transform.position + gameOffset;
 		CameraDeckSettingInitPos = chessboard.transform.position + initOffset;
 		Camera.main.transform.position = CameraDeckSettingInitPos;

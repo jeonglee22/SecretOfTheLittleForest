@@ -31,12 +31,12 @@ public class SettingTable : DataTable
 		}
 	}
 
-	public float Get(string id)
+	public float Get(string name)
 	{
-		if (!table.ContainsKey(id))
+		if (!table.ContainsKey(name))
 		{
 			return float.NegativeInfinity;
 		}
-		return table[id];
+		return table[name];
 	}
 }

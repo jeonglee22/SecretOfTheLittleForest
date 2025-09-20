@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StatShowManager : MonoBehaviour, IPointerEnterHandler
+public class StatShowManager : MonoBehaviour, IPointerClickHandler
 {
     public TextMeshProUGUI shield;
     public TextMeshProUGUI coin;
@@ -22,10 +22,7 @@ public class StatShowManager : MonoBehaviour, IPointerEnterHandler
 
 	private void Start()
 	{
-		shield.text = string.Empty;
-		coin.text = string.Empty;
-		heart.text = string.Empty;
-		attack.text = string.Empty;
+        InitTexts();
 	}
 
 	public void SetToyText(ToyData data)
@@ -59,13 +56,23 @@ public class StatShowManager : MonoBehaviour, IPointerEnterHandler
     public void RemoveGridImage()
     {
         if(currentShown != null) Destroy(currentShown);
-    }
+        currentShown = null;
+        InitTexts();
+	}
 
-	public void OnPointerEnter(PointerEventData eventData)
+	public void OnPointerClick(PointerEventData eventData)
 	{
-		if(eventData.pointerEnter == currentShown)
+		if(eventData.pointerClick == currentShown)
         {
             choosingUnitManager.AddToyOnChoosedDeck(currentShown);
         }
+	}
+
+    private void InitTexts()
+    {
+		shield.text = string.Empty;
+		coin.text = string.Empty;
+		heart.text = string.Empty;
+		attack.text = string.Empty;
 	}
 }

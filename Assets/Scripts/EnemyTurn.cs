@@ -85,7 +85,10 @@ public class EnemyTurn : Turn
 		for(int i = DataTableManger.AITable.Count - 1; i >= 0; i--)
 		{
 			if (aiFuncs[i]())
+			{
+				Debug.Log(i);
 				break;
+			}
 
 			if (i == 0)
 				moveCount = 0;
