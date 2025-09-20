@@ -28,6 +28,7 @@ public enum NodeState
     Attack,
     Choose,
     Moved,
+    ReadyMove,
 }
 
 public class LayerId

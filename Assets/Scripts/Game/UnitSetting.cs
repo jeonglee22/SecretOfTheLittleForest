@@ -54,10 +54,6 @@ public class UnitSetting : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-        if(Input.touchCount == 0)
-		{
-
-		}
     }
 
 	private void UnitSettingOnBoard()
@@ -75,6 +71,7 @@ public class UnitSetting : MonoBehaviour
 			var objToy = obj.GetComponent<Toy>();
 			objToy.Data = toyComp.Data;
 			objToy.SetData();
+			objToy.IsEnemy = false;
 
 			var imageGO = new GameObject();
 			var img = imageGO.AddComponent<Image>();

@@ -4877,6 +4877,7 @@ GameObject:
   - component: {fileID: 1166843661}
   - component: {fileID: 1166843662}
   - component: {fileID: 1166843663}
+  - component: {fileID: 1166843664}
   m_Layer: 5
   m_Name: ReadyCanvas
   m_TagString: Untagged
@@ -4958,6 +4959,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitCountText: {fileID: 1699107268}
+--- !u!114 &1166843664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166843659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4319899be471b5144a940bb40d0a978d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playLogic: {fileID: 8033447157172070749}
+  toy: {fileID: 281236498140167495, guid: 05ca00f88fc646342a274ac4087f939a, type: 3}
+  boardManager: {fileID: 3386968198759226174}
 --- !u!1 &1174098595
 GameObject:
   m_ObjectHideFlags: 0

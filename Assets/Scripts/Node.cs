@@ -124,6 +124,7 @@ public class Node : MonoBehaviour, IDropHandler
 			NodeState.Attack => Color.yellow,
 			NodeState.Choose => Color.yellow,
 			NodeState.Moved => Color.gray,
+			NodeState.ReadyMove => Color.green,
 			_ => initColor,
 		};
 

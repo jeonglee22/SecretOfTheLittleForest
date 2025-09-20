@@ -10,6 +10,13 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 	public List<Node> playerStartNodes;
 	public GameObject spawnObj;
 	public Action<ToyData> dragSucessFunc;
+	public bool IsDrag { get; private set; } = false;
+	public bool IsFinishDrag { get; private set; } = false;
+	public Node FinishNode { get; private set; }
+
+	private void Update()
+	{
+	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
@@ -34,12 +41,14 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 		toy.SetData();
 		image.sprite = toy.Toy2D;
 
-		drag = Instantiate(newobj, transform.root);
+		drag = Instantiate(newobj, transform.root.GetComponentInChildren<Canvas>().rootCanvas.transform);
 		drag.GetComponent<Toy>().Data = toy.Data;
 		drag.GetComponent<Toy>().SetData();
 
 		SetDragPosition(eventData);
 		Destroy(newobj);
+		IsDrag = true;
+		IsFinishDrag = false;
 	}
 
 	private void SetDragPosition(PointerEventData eventData)
@@ -61,9 +70,10 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		IsDrag = false;
 		if (drag == null)
 			return;
-
+		
 		var endPos = eventData.position;
 		var ray = Camera.main.ScreenPointToRay(endPos);
 
@@ -74,6 +84,8 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 			if (droppedNode.State != NodeState.Choose)
 			{
 				ResetDrag();
+				FinishNode = null;
+				IsFinishDrag = true;
 				return;
 			}
 
@@ -90,8 +102,14 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 			{
 				dragSucessFunc(toy.Data);
 			}
+			FinishNode = droppedNode;
+		}
+		else if(Physics.Raycast(ray, out RaycastHit hit2, Mathf.Infinity, LayerId.ui))
+		{
+
 		}
 
+		IsFinishDrag = true;
 		ResetDrag();
 	}
 
