@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
 
 public class SetObjectControl : MonoBehaviour
 {
     public PlayLogic playLogic;
+	public UnitSetting unitSetting;
 	public GameObject toy;
+	public RectTransform scrollRect;
     private List<Node> playerStartNodes;
     public BoardManager boardManager;
     private Node beforeNode;
@@ -17,8 +17,10 @@ public class SetObjectControl : MonoBehaviour
 	private float touchingTime;
 	private float holdingTime = 0.5f;
 	private bool isMoving;
+	public bool IsMoving { get { return isMoving; } }
 
 	private GameObject dragObject;
+	public GameObject DragObject { get { return dragObject; } }
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -32,30 +34,8 @@ public class SetObjectControl : MonoBehaviour
         if (Input.touchCount == 0)
             return;
 
-        var touch = Input.GetTouch(0);
-		if (dragObject != null && dragObject.GetComponent<DragObject>().IsDrag)
-		{
-			dragObject.GetComponent<Image>().enabled = false;
-		}
-		else if (dragObject != null && dragObject.GetComponent<DragObject>().IsFinishDrag)
-		{
-			var node = dragObject.GetComponent<DragObject>().FinishNode;
-			if (node == null)
-			{
-				beforeNode.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
-				playLogic.ClearNodes();
-				beforeNode = null;
-			}
-			else
-			{
-				node.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
-				Destroy(beforeNode.GetComponentInChildren<Toy>(true).gameObject);
-			}
-			Destroy(dragObject.transform.parent.gameObject);
-			dragObject = null;
-			isMoving = false;
-			touchStartTime = Time.time;
-		}
+		var touch = Input.GetTouch(0);
+		DragMoving(touch);
 
 		if (touch.phase == TouchPhase.Stationary && beforeNode != null && !isMoving)
 		{
@@ -84,16 +64,53 @@ public class SetObjectControl : MonoBehaviour
 		}
 	}
 
+	private void DragMoving(Touch touch)
+	{
+		if (dragObject != null && dragObject.GetComponent<DragObject>().IsDrag)
+		{
+			dragObject.GetComponent<Image>().enabled = false;
+		}
+		else if (dragObject != null && dragObject.GetComponent<DragObject>().IsFinishDrag)
+		{
+			var node = dragObject.GetComponent<DragObject>().FinishNode;
+			if (node == null)
+			{
+				if(RectTransformUtility.RectangleContainsScreenPoint(scrollRect, touch.position, null))
+				{
+					unitSetting.AddData(beforeNode.Toy.Data);
+					var beforeToy = beforeNode.GetComponentInChildren<Toy>(true);
+					beforeNode.Toy = null;
+					Destroy(beforeToy.gameObject);
+				}
+				else
+				{
+					beforeNode.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
+				}
+				playLogic.ClearNodes();
+				beforeNode = null;
+			}
+			else
+			{
+				node.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
+				Destroy(beforeNode.GetComponentInChildren<Toy>(true).gameObject);
+			}
+			Destroy(dragObject.transform.parent.gameObject);
+			dragObject = null;
+			isMoving = false;
+			touchStartTime = Time.time;
+		}
+	}
+
 	private void ChangePos(UnityEngine.Touch touch)
 	{
 		var touchRay = Camera.main.ScreenPointToRay(touch.position);
-
+		var rectSize = scrollRect.rect.size;
 		if (Physics.Raycast(touchRay, out var hitInfo, float.MaxValue, LayerId.node))
 		{
 			var go = hitInfo.collider.gameObject;
 			var node = go.GetComponent<Node>();
 
-			if (node.State == NodeState.Player)
+			if (node.State == NodeState.Player || node.NodeIndex == beforeNode.NodeIndex)
 			{
 				return;
 			}
@@ -101,16 +118,27 @@ public class SetObjectControl : MonoBehaviour
 			var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
 
 			var beforeToy = beforeNode.GetComponentInChildren<Toy>(true);
+			beforeNode.Toy = null;
+			beforeNode = null;
 			boardManager.ToySettingOnNode(node, toy.GetComponent<Toy>(), false);
-			node.State = NodeState.Player;
-			node.gameObject.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
 
 			Destroy(dragObject.transform.parent.gameObject);
 			Destroy(beforeToy.gameObject);
-			beforeNode.Toy = null;
-			beforeNode = null;
 			playLogic.ClearNodes();
 			isMoving = false;
+		}
+		else if(RectTransformUtility.RectangleContainsScreenPoint(scrollRect, touch.position, null))
+		{
+			unitSetting.AddData(beforeNode.Toy.Data);
+
+			var beforeToy = beforeNode.GetComponentInChildren<Toy>(true);
+			beforeNode.Toy = null;
+			beforeNode = null;
+			Destroy(dragObject.transform.parent.gameObject);
+			Destroy(beforeToy.gameObject);
+			playLogic.ClearNodes();
+			isMoving = false;
+			touchStartTime = Time.time;
 		}
 	}
 

@@ -4972,7 +4972,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playLogic: {fileID: 8033447157172070749}
+  unitSetting: {fileID: 495656392}
   toy: {fileID: 281236498140167495, guid: 05ca00f88fc646342a274ac4087f939a, type: 3}
+  scrollRect: {fileID: 1686873820}
   boardManager: {fileID: 3386968198759226174}
 --- !u!1 &1174098595
 GameObject:

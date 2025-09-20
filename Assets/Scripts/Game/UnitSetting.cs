@@ -72,6 +72,7 @@ public class UnitSetting : MonoBehaviour
 			objToy.Data = toyComp.Data;
 			objToy.SetData();
 			objToy.IsEnemy = false;
+			obj.GetComponent<Image>().raycastTarget = false;
 
 			var imageGO = new GameObject();
 			var img = imageGO.AddComponent<Image>();
@@ -137,22 +138,14 @@ public class UnitSetting : MonoBehaviour
 
 	private void ReduceCount(ToyData data)
 	{
-		var toys = unitDeck.Toys;
-		var datas = toys.ConvertAll(x => x.data);
-		if (datas.Contains(data))
-		{
-			var pair = toys[datas.IndexOf(data)];
-			pair.count = pair.count - 1;
-			if (pair.count > 0)
-			{
-				unitDeck.Toys[datas.IndexOf(data)] = pair;
-			}
-			else
-			{
-				unitDeck.Toys.RemoveAt(datas.IndexOf(data));
-			}
-		}
-
+		unitDeck.RemoveDeckData(data);
 		readyCanvasManager.SetUnitCountText(++count);
+	}
+
+	public void AddData(ToyData data)
+	{
+		unitDeck.AddDeckData(data);
+		readyCanvasManager.SetUnitCountText(--count);
+		UnitSettingOnBoard();
 	}
 }

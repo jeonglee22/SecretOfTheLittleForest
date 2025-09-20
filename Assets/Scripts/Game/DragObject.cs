@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
 	private GameObject drag;
+	private SetObjectControl objectControl;
 	public List<Node> playerStartNodes;
 	public GameObject spawnObj;
 	public Action<ToyData> dragSucessFunc;
@@ -14,12 +15,19 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 	public bool IsFinishDrag { get; private set; } = false;
 	public Node FinishNode { get; private set; }
 
+	private void Start()
+	{
+		objectControl = transform.root.GetComponentInChildren<SetObjectControl>();
+	}
+
 	private void Update()
 	{
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		if (objectControl.IsMoving && eventData.pointerDrag != objectControl.DragObject)
+			return;
 		int count = 0;
 		foreach (var node in playerStartNodes)
 		{
