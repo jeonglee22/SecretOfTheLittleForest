@@ -81,6 +81,13 @@ public class UnitSetting : MonoBehaviour
 			drag.playerStartNodes = playerStartNodes;
 			drag.spawnObj = toy;
 
+			var toggle = imageGO.AddComponent<Toggle>();
+			toggle.group = unitContent.gameObject.GetComponent<ToggleGroup>();
+			var colorBlock = toggle.colors;
+			colorBlock.selectedColor = new Color(142 / 255f, 95 / 255f, 95 / 255f, 1f);
+			colorBlock.pressedColor = Color.white;
+			toggle.colors = colorBlock;
+
 			var oj = Instantiate(imageGO, obj.transform);
 			oj.GetComponent<DragObject>().dragSucessFunc =
 				(toyData) =>

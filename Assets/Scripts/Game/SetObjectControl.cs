@@ -12,23 +12,25 @@ public class SetObjectControl : MonoBehaviour
     private List<Node> playerStartNodes;
     public BoardManager boardManager;
     private Node beforeNode;
+	private ToggleGroup imageToggles;
 
 	private float touchStartTime;
 	private float touchingTime;
 	private float holdingTime = 0.5f;
 	private bool isMoving;
+	private bool isAddingFromDeck;
+
 	public bool IsMoving { get { return isMoving; } }
 
 	private GameObject dragObject;
 	public GameObject DragObject { get { return dragObject; } }
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
         playerStartNodes = boardManager.playerStartNodes;
-    }
+		imageToggles = scrollRect.gameObject.GetComponent<ScrollRect>().content.gameObject.GetComponent<ToggleGroup>();
+	}
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.touchCount == 0)
@@ -57,12 +59,28 @@ public class SetObjectControl : MonoBehaviour
 				ChangePos(touch);
 				return;
 			}
-
+			Debug.Log("Touch");
 			isMoving = false;
 			touchStartTime = Time.time;
 			TouchBegin(touch);
 		}
+
+		//if (!isMoving)
+		//	ActiveMovingAtToggleOn();
 	}
+
+	//private void ActiveMovingAtToggleOn()
+	//{
+	//	var toggleElements = imageToggles.ActiveToggles();
+	//	foreach (var element in toggleElements)
+	//	{
+	//		if (!element.isOn)
+	//			continue;
+
+	//		isMoving = true;
+	//		isAddingFromDeck = true;
+	//	}
+	//}
 
 	private void DragMoving(Touch touch)
 	{
@@ -122,7 +140,8 @@ public class SetObjectControl : MonoBehaviour
 			beforeNode = null;
 			boardManager.ToySettingOnNode(node, toy.GetComponent<Toy>(), false);
 
-			Destroy(dragObject.transform.parent.gameObject);
+			if(dragObject != null)
+				Destroy(dragObject.transform.parent.gameObject);
 			Destroy(beforeToy.gameObject);
 			playLogic.ClearNodes();
 			isMoving = false;
@@ -134,7 +153,9 @@ public class SetObjectControl : MonoBehaviour
 			var beforeToy = beforeNode.GetComponentInChildren<Toy>(true);
 			beforeNode.Toy = null;
 			beforeNode = null;
-			Destroy(dragObject.transform.parent.gameObject);
+
+			if (dragObject != null)
+				Destroy(dragObject.transform.parent.gameObject);
 			Destroy(beforeToy.gameObject);
 			playLogic.ClearNodes();
 			isMoving = false;
