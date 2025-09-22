@@ -116,15 +116,15 @@ public class BoardManager : MonoBehaviour
 			} while (stageData.Stage != 1);
 			result.AddRange(stageData.Pos.ToList());
 		}
-		//else
-		//{
-		//	var stageData = new BossStageData();
-		//	do
-		//	{
-		//		stageData = DataTableManger.BossStageTable.GetRandom();
-		//	} while (stageData.Stage != 1);
-		//	result = stageData.Pos.ToList();
-		//}
+		else
+		{
+			var stageData = new StageData();
+			do
+			{
+				stageData = DataTableManger.StageTable.GetRandom();
+			} while (stageData.Stage > 0);
+			result = stageData.Pos.ToList();
+		}
 
 		return result;
 	}

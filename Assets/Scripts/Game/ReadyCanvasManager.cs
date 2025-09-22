@@ -23,5 +23,9 @@ public class ReadyCanvasManager : MonoBehaviour
         {
             unitCountText.color = Color.red;
         }
+        else
+        {
+			unitCountText.color = Color.white;
+		}
     }
 }

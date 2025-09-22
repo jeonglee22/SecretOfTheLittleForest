@@ -8822,14 +8822,6 @@ MonoBehaviour:
   - {fileID: 1704601314}
   - {fileID: 1334995404}
   - {fileID: 1971025571}
-  - {fileID: 1563086624}
-  - {fileID: 1522744324}
-  - {fileID: 1890841094}
-  - {fileID: 1606137902}
-  - {fileID: 918105012}
-  - {fileID: 1129542051}
-  - {fileID: 1474113267}
-  - {fileID: 1423136909}
 --- !u!1001 &5248089905234752743
 PrefabInstance:
   m_ObjectHideFlags: 0

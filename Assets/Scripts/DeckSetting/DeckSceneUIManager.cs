@@ -41,7 +41,7 @@ public class DeckSceneUIManager : MonoBehaviour
 			return;
 		}
 		descriptionText.text = "게임을 시작하시겠습니까?";
-		acceptFunc = () => SceneManager.LoadScene((int)Scenes.Game);
+		acceptFunc = () => SceneManager.LoadScene((int)Scenes.StageChoosing);
 		popupPanel.SetActive(true);
 	}
 
@@ -95,5 +95,10 @@ public class DeckSceneUIManager : MonoBehaviour
 	public void OnClickReject()
 	{
 		popupPanel.SetActive(false);
+	}
+
+	public void OnClickDebug()
+	{
+		SceneManager.LoadScene((int)Scenes.StageChoosing);
 	}
 }

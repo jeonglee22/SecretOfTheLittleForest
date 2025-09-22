@@ -11,12 +11,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DeckSettingScene.unity
     guid: 2d3b12424770a19408ff110fda94fe83
-  - enabled: 0
-    path: Assets/Scenes/TestScene.unity
-    guid: 9a3cf1a25b4ee0a478296321edfbca31
+  - enabled: 1
+    path: Assets/Scenes/StageChoosingScene.unity
+    guid: b6a4dc3a48bb21f4a8cbca31f1e8cc44
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: 91e23f70ff93b4a47af46b25cd684bc8
+  - enabled: 0
+    path: Assets/Scenes/TestScene.unity
+    guid: 9a3cf1a25b4ee0a478296321edfbca31
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

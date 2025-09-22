@@ -141,6 +141,7 @@ public enum Scenes
 {
 	Lobby,
 	DeckSetting,
+    StageChoosing,
 	Game,
 
     Test,

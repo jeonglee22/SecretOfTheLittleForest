@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -135,12 +136,15 @@ public class SetObjectControl : MonoBehaviour
 			var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
 
 			var beforeToy = beforeNode.GetComponentInChildren<Toy>(true);
+
 			beforeNode.Toy = null;
 			beforeNode = null;
-			boardManager.ToySettingOnNode(node, toy.GetComponent<Toy>(), false);
+			toy.GetComponent<Toy>().Data = beforeToy.Data;
+			var newToy = boardManager.ToySettingOnNode(node, toy.GetComponent<Toy>(), false);
 
 			if(dragObject != null)
 				Destroy(dragObject.transform.parent.gameObject);
+			dragObject = null;
 			Destroy(beforeToy.gameObject);
 			playLogic.ClearNodes();
 			isMoving = false;
@@ -155,6 +159,7 @@ public class SetObjectControl : MonoBehaviour
 
 			if (dragObject != null)
 				Destroy(dragObject.transform.parent.gameObject);
+			dragObject = null;
 			Destroy(beforeToy.gameObject);
 			playLogic.ClearNodes();
 			isMoving = false;
