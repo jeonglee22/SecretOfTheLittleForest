@@ -32,6 +32,10 @@ public static class DataTableManger
   //      var bossstageTable = new BossStageTable();
 		//bossstageTable.Load(DataTableIds.BossStage);
   //      tables.Add(DataTableIds.BossStage, bossstageTable);
+
+        var rewardTable = new RewardTable();
+        rewardTable.Load(DataTableIds.Reward);
+		tables.Add(DataTableIds.Reward, rewardTable);
 	}
 
     public static ToyTable ToyTable
@@ -66,15 +70,15 @@ public static class DataTableManger
         }
     }
 
-  //  public static BossStageTable BossStageTable
-  //  {
-  //      get
-  //      {
-		//	return Get<BossStageTable>(DataTableIds.BossStage);
-		//}
-  //  }
+	public static RewardTable RewardTable
+	{
+		get
+		{
+			return Get<RewardTable>(DataTableIds.Reward);
+		}
+	}
 
-    public static T Get<T>(string id) where T : DataTable
+	public static T Get<T>(string id) where T : DataTable
     {
         if (!tables.ContainsKey(id))
         {

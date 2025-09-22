@@ -76,6 +76,7 @@ public static class DataTableIds
     public static readonly string Setting = "Settings";
     public static readonly string Stage = "StageCombinations";
     public static readonly string BossStage = "BossStageCombinations";
+    public static readonly string Reward = "Reward";
 }
 
 public static class ResourceObjectIds
@@ -86,6 +87,8 @@ public static class ResourceObjectIds
 public static class Variables
 {
 	public static Languages Language = Languages.Korean;
+
+    public static readonly string SpritePath = "Images/Toy{0}";
 }
 
 public static class AINames
@@ -123,6 +126,9 @@ public static class Settings
     public const string emptyRoom = "Empty_spon";
     public const string normalBattle = "Battle_spon";
     public const string goldLimit = "Gold_lim";
+    public const string battleGold = "Battle_gold";
+    public const string bossGold = "Boss_gold";
+    public const string eliteGold = "Elite_gold";
 }
 
 public static class Tags

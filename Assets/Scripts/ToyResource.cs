@@ -53,7 +53,7 @@ public class ToyResource : ObjectResource
 	{
 		if (!toys.ContainsKey(id))
 		{
-			return null;
+			Load(id.ToString());
 		}
 		return toys[id];
 	}
