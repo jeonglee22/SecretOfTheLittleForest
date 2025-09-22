@@ -59,6 +59,7 @@ public class PlayManager : MonoBehaviour
 	public bool IsTurnStart {  get; private set; }
 	public bool IsEndGame { get; set; } = false;
 	public bool IsEnemyWin { get; set; }
+	public bool IsTurnShown { get; set; }
 
 	private int totalTurn;
 
@@ -71,7 +72,9 @@ public class PlayManager : MonoBehaviour
 
 	private void Start()
 	{
-		totalTurn = (int) DataTableManger.SettingTable.Get(Settings.battleTurnCount);
+		//totalTurn = (int) DataTableManger.SettingTable.Get(Settings.battleTurnCount);
+		totalTurn = 4;
+		gameCanvasManager.SetTurnText(totalTurn);
 	}
 
 	private void Update()
@@ -81,6 +84,9 @@ public class PlayManager : MonoBehaviour
 			EndGame();
 			return;
 		}
+
+		if (IsTurnShown)
+			return;
 
 		if(playTurn == PlayTurn.Player)
 		{
@@ -98,7 +104,33 @@ public class PlayManager : MonoBehaviour
 
 	private void EndGame()
 	{
-		manager.SetEndText(IsEnemyWin);
+		if(totalTurn == 0)
+		{
+			var playLogic = boardManager.gameObject.GetComponent<PlayLogic>();
+			playLogic.ClearNodes();
+			ResetToys();
+			int playerCost = GetRemainToyCost(players);
+			int enemyCost = GetRemainToyCost(enemies);
+			int enemy2Cost = GetRemainToyCost(eliteEnemies);
+			if (playerCost > enemyCost + enemy2Cost)
+				manager.SetEndText(false);
+			else if (playerCost < enemyCost + enemy2Cost)
+				manager.SetEndText(true);
+			else
+				manager.SetEndText(false);
+		}
+		else
+			manager.SetEndText(IsEnemyWin);
+	}
+
+	private int GetRemainToyCost(List<Node> toys)
+	{
+		int totalCost = 0;
+		foreach (Node node in toys)
+		{
+			totalCost += node.Toy.Data.Price;
+		}
+		return totalCost;
 	}
 
 	private void UpdateEnemy()
@@ -111,17 +143,17 @@ public class PlayManager : MonoBehaviour
 
 		if (IsFinishTurn)
 		{
-			EndEachTurn(false);
+			EndEachTurn(PlayTurn.Enemy);
 			if(boardManager.BattleType == BattleType.Elite)
 			{
 				playTurn = PlayTurn.EliteEnemy;
-				manager.SetTurnText(playTurn);
 			}
 			else
 			{
 				playTurn = PlayTurn.Player;
-				manager.SetTurnText(playTurn);
 			}
+			if(totalTurn != 0)
+				manager.SetTurnText(playTurn);
 		}
 	}
 	private void UpdateEliteEnemy()
@@ -134,9 +166,10 @@ public class PlayManager : MonoBehaviour
 
 		if (IsFinishTurn)
 		{
-			EndEachTurn(false);
+			EndEachTurn(PlayTurn.EliteEnemy);
 			playTurn = PlayTurn.Player;
-			manager.SetTurnText(playTurn);
+			if (totalTurn != 0)
+				manager.SetTurnText(playTurn);
 		}
 	}
 
@@ -150,9 +183,10 @@ public class PlayManager : MonoBehaviour
 
 		if (IsFinishTurn)
 		{
-			EndEachTurn(true);
+			EndEachTurn(PlayTurn.Player);
 			playTurn = PlayTurn.Enemy;
-			manager.SetTurnText(playTurn);
+			if (totalTurn != 0)
+				manager.SetTurnText(playTurn);
 		}
 	}
 
@@ -162,11 +196,12 @@ public class PlayManager : MonoBehaviour
 		manager.SetTurnText(playTurn);
 	}
 
-	public void EndEachTurn(bool isPlayerTurn)
+	public void EndEachTurn(PlayTurn turn)
 	{
 		IsTurnStart = false;
 		IsFinishTurn = false;
-		if(isPlayerTurn)
+		if ((boardManager.BattleType != BattleType.Elite && turn == PlayTurn.Enemy ) ||
+			(boardManager.BattleType == BattleType.Elite && turn == PlayTurn.EliteEnemy))
 			totalTurn--;
 		gameCanvasManager.SetTurnText(totalTurn);
 	}

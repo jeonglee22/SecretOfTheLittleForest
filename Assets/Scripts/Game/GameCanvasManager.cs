@@ -24,6 +24,8 @@ public class GameCanvasManager : MonoBehaviour
 
 	public void OnClickTurnEnd()
     {
+		if (playManager.PlayTurn != PlayTurn.Player)
+			return;
 		playerturn.EndTurn();
 		ResetTurnImage();
 	}

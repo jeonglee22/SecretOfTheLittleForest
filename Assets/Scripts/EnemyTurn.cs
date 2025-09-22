@@ -510,6 +510,7 @@ public class EnemyTurn : Turn
 		var beforeNode = boardManager.allNodes[canMoves[maxCostIndex].Item2];
 
 		toyControl.ToyMove(ref beforeNode);
+		Debug.Log(playLogic.ChoosedNode, beforeNode);
 		playLogic.ClearNodes();
 
 		return true;
