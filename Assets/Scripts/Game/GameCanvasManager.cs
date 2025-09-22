@@ -15,7 +15,8 @@ public class GameCanvasManager : MonoBehaviour
 
 	private void Start()
 	{
-		SetTurnText((int)DataTableManger.SettingTable.Get(Settings.battleTurnCount));
+		//SetTurnText((int)DataTableManger.SettingTable.Get(Settings.battleTurnCount));
+		SetTurnText(4);
 		turnText.outlineColor = Color.black;
 		turnText.outlineWidth = 0.2f;
 		currentCount = (int) DataTableManger.SettingTable.Get(Settings.moveCount);

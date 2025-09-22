@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class ChoosingSceneManager : MonoBehaviour
 {
@@ -11,7 +10,7 @@ public class ChoosingSceneManager : MonoBehaviour
     private float shopProb;
     private float randomProb;
     private float bossProb;
-    private int bossCount;
+    //private int bossCount;
 
     public List<GameObject> buttons;
 
@@ -37,8 +36,8 @@ public class ChoosingSceneManager : MonoBehaviour
         uIManager.SetImage(2, Resources.Load<Sprite>("Icons/boss"));
 
         uIManager.SetText(0, "일반 전투");
-        uIManager.SetText(0, "엘리트 전투");
-        uIManager.SetText(0, "보스 전투");
+        uIManager.SetText(1, "엘리트 전투");
+        uIManager.SetText(2, "보스 전투");
 
         for( int i = 0; i < buttons.Count; i++)
         {
@@ -47,7 +46,7 @@ public class ChoosingSceneManager : MonoBehaviour
             buttons[i].GetComponent<TouchManager>().longPressFunc = HoldingFunc;
         }
 
-        bossCount = 0;
+        //bossCount = 0;
     }
 
     // Update is called once per frame

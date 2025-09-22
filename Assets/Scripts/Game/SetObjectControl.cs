@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SetObjectControl : MonoBehaviour
@@ -14,6 +13,8 @@ public class SetObjectControl : MonoBehaviour
     public BoardManager boardManager;
     private Node beforeNode;
 	private ToggleGroup imageToggles;
+
+	private PointerEventData eventData;
 
 	private float touchStartTime;
 	private float touchingTime;
@@ -64,31 +65,46 @@ public class SetObjectControl : MonoBehaviour
 			touchStartTime = Time.time;
 			TouchBegin(touch);
 		}
-
-		//if (!isMoving)
-		//	ActiveMovingAtToggleOn();
+		else if ((touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) && eventData != null)
+		{
+			if(CheckSameNode(touch))
+			{
+				return;
+			}
+			eventData.position = Input.mousePosition;
+			eventData.pointerId = -1;
+			ExecuteEvents.Execute(dragObject, eventData, ExecuteEvents.endDragHandler);
+			DragMoving(touch);
+		}
 	}
 
-	//private void ActiveMovingAtToggleOn()
-	//{
-	//	var toggleElements = imageToggles.ActiveToggles();
-	//	foreach (var element in toggleElements)
-	//	{
-	//		if (!element.isOn)
-	//			continue;
+	private bool CheckSameNode(Touch touch)
+	{
+		if (beforeNode == null)
+			return false;
 
-	//		isMoving = true;
-	//		isAddingFromDeck = true;
-	//	}
-	//}
+		var ray = Camera.main.ScreenPointToRay(touch.position);
+		if (Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerId.node))
+		{
+			var hitNode = hitInfo.collider.gameObject.GetComponent<Node>();
+
+			if (hitNode.NodeIndex == beforeNode.NodeIndex)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	private void DragMoving(Touch touch)
 	{
-		if (dragObject != null && dragObject.GetComponent<DragObject>().IsDrag)
+		if(dragObject != null && dragObject.GetComponent<DragObject>().IsDrag)
 		{
-			dragObject.GetComponent<Image>().enabled = false;
+			eventData.position = Input.mousePosition;
+			ExecuteEvents.Execute(dragObject, eventData, ExecuteEvents.dragHandler);
 		}
-		else if (dragObject != null && dragObject.GetComponent<DragObject>().IsFinishDrag)
+		if (dragObject != null && dragObject.GetComponent<DragObject>().IsFinishDrag)
 		{
 			var node = dragObject.GetComponent<DragObject>().FinishNode;
 			if (node == null)
@@ -128,7 +144,7 @@ public class SetObjectControl : MonoBehaviour
 			var go = hitInfo.collider.gameObject;
 			var node = go.GetComponent<Node>();
 
-			if (node.State == NodeState.Player || node.NodeIndex == beforeNode.NodeIndex)
+			if (node.State == NodeState.Player)
 			{
 				return;
 			}
@@ -186,10 +202,21 @@ public class SetObjectControl : MonoBehaviour
 		drag.playerStartNodes = playerStartNodes;
 		drag.spawnObj = this.toy;
 		drag.dragSucessFunc = (data) => Destroy(beforeNode.Toy.gameObject);
+		drag.objectControl = this;
 		var image = child.AddComponent<Image>();
 		image.sprite = beforeNode.Toy.Toy2D;
 
 		dragObject = Instantiate(child, baseGo.transform);
+		eventData = new PointerEventData(EventSystem.current)
+		{
+			pointerEnter = dragObject,
+			pointerDrag = dragObject,
+			position = Input.mousePosition,
+			pointerId = -1,
+		};
+		dragObject.GetComponent<DragObject>().drag = dragObject;
+		ExecuteEvents.Execute(dragObject, eventData, ExecuteEvents.beginDragHandler);
+		
 		Destroy(child);
 	}
 
@@ -204,7 +231,7 @@ public class SetObjectControl : MonoBehaviour
         }
     }
 
-    private void TouchBegin(UnityEngine.Touch touch)
+    private void TouchBegin(Touch touch)
     {
 		var touchRay = Camera.main.ScreenPointToRay(touch.position);
 

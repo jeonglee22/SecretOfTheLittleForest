@@ -492,10 +492,12 @@ public class EnemyTurn : Turn
 			var movables = playLogic.ShowMovable(node, 0);
 			foreach (var movePos in movables)
 			{
-				if(CheckAttacked(movePos) || boardManager.allNodes[movePos].State == NodeState.Player)
+				if(boardManager.allNodes[movePos].State == NodeState.Player || CheckAttacked(movePos))
 				{
 					continue;
 				}
+
+				Debug.Log(boardManager.allNodes[movePos].State);
 				canMoves.Add((movePos,node));
 			}
 		}

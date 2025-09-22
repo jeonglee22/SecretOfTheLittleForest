@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-	private GameObject drag;
-	private SetObjectControl objectControl;
+	public GameObject drag;
+	public SetObjectControl objectControl;
 	public List<Node> playerStartNodes;
 	public GameObject spawnObj;
 	public Action<ToyData> dragSucessFunc;
@@ -49,11 +49,17 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 		toy.SetData();
 		image.sprite = toy.Toy2D;
 
-		drag = Instantiate(newobj, transform.root.GetComponentInChildren<Canvas>().rootCanvas.transform);
-		drag.GetComponent<Toy>().Data = toy.Data;
-		drag.GetComponent<Toy>().SetData();
+		var dragObj = Instantiate(newobj, transform.root.GetComponentInChildren<Canvas>().rootCanvas.transform);
+		dragObj.GetComponent<Toy>().Data = toy.Data;
+		dragObj.GetComponent<Toy>().SetData();
+		if (eventData.pointerId == -1)
+			Destroy(dragObj);
+		else
+		{
+			drag = dragObj;
+			SetDragPosition(eventData);
+		}
 
-		SetDragPosition(eventData);
 		Destroy(newobj);
 		IsDrag = true;
 		IsFinishDrag = false;
@@ -99,7 +105,12 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
 			var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
 
-			var toy = drag.GetComponent<Toy>();
+			Toy toy;
+			if (eventData.pointerId == -1)
+			{
+				toy = drag.transform.parent.GetComponent<Toy>();
+			}else
+				toy = drag.GetComponent<Toy>();
 			var toy3D = spawnObj.GetComponent<Toy>();
 			toy3D.Data = toy.Data;
 

@@ -25,7 +25,7 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 	private bool isValueChange;
 	private float currentValue;
 	private float clampTimeInterval = 0.5f;
-	private bool isClicking = false;
+	//private bool isClicking = false;
 
 	private void Awake()
 	{

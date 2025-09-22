@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     public Toy toy;
 
     private bool isSetEnemy = false;
+    private float speed = 500f;
 
 	private void Start()
 	{
@@ -88,8 +89,8 @@ public class UIManager : MonoBehaviour
         playManager.IsTurnShown = true;
         while(true)
         {
-            turnText.fontSize += 5f;
-            yield return new WaitForSeconds(0.001f);
+            turnText.fontSize += speed * Time.deltaTime;
+            yield return null;
 
             if (turnText.fontSize >= Screen.height * 0.15f)
                 break;

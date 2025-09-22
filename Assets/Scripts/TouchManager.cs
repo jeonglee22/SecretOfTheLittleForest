@@ -1,11 +1,10 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	private int fingerId = -1;
+	//private int fingerId = -1;
 
 	private Vector2 fingerTouchStartPosition;
 	private float fingerTouchStartTime;
