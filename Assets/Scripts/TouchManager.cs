@@ -1,63 +1,54 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.EnhancedTouch;
 
-public class TouchManager : MonoBehaviour
+public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 	private int fingerId = -1;
 
 	private Vector2 fingerTouchStartPosition;
 	private float fingerTouchStartTime;
 
-	private float tapTimeLimit = 0.1f;
-	private float holdTimeLimit = 0.1f;
+	private float tapTimeLimit = 0.2f;
 
 	public static float FingersDelta { get; private set; }
-	public static bool IsTap { get; private set; }
-	public static bool IsLongPress { get; private set; }
+	public static bool IsTap { get; private set; } = false;
+	public static bool IsLongPress { get; private set; } = false;
 
 	private float deltaOffset = 5f;
 
+	public Action tapFunc;
+	public Action longPressFunc;
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
-    {
-        
-    }
+	{
+
+	}
 
 	// Update is called once per frame
 	void Update()
 	{
 		var touches = Input.touches;
-		float timeDiff = -1f;
-		float disDiff = -1;
-		foreach (Touch touch in touches)
+		foreach (UnityEngine.Touch touch in touches)
 		{
 			switch (touch.phase)
 			{
 				case TouchPhase.Began:
-					if (fingerId == -1)
-					{
-						fingerId = touch.fingerId;
-						fingerTouchStartPosition = touch.position;
-						fingerTouchStartTime = Time.time;
-					}
 					break;
 				case TouchPhase.Moved:
-					if (touch.fingerId == fingerId && touches.Length == 1)
-					{
-					}
 					break;
 				case TouchPhase.Stationary:
 
 					break;
 				case TouchPhase.Ended:
 				case TouchPhase.Canceled:
-					timeDiff = Time.time - fingerTouchStartTime;
-					disDiff = Vector2.Distance(touch.position, fingerTouchStartPosition);
 					break;
 			}
 		}
 
-		if(Input.touchCount == 2)
+		if (Input.touchCount == 2)
 		{
 			var touch1 = Input.GetTouch(0);
 			var touch2 = Input.GetTouch(1);
@@ -73,10 +64,25 @@ public class TouchManager : MonoBehaviour
 		}
 	}
 
+	private void DoFunction()
+	{
+		if (Input.touchCount == 1 && IsTap && tapFunc != null)
+		{
+			tapFunc();
+		}
+		else if (Input.touchCount == 1 && IsLongPress && longPressFunc != null)
+		{
+			longPressFunc();
+		}
+
+		IsTap = false;
+		IsLongPress = false;
+	}
+
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		fingerTouchStartTime = Time.time;
 		fingerTouchStartPosition = eventData.position;
+		fingerTouchStartTime = Time.time;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
@@ -84,17 +90,16 @@ public class TouchManager : MonoBehaviour
 		var timeDiff = Time.time - fingerTouchStartTime;
 		var disDiff = Vector2.Distance(eventData.position, fingerTouchStartPosition);
 
-		if (timeDiff <= tapTimeLimit)
-			IsTap = true;
-		else if (timeDiff <= holdTimeLimit)
+		if (Input.touchCount == 1)
 		{
-			IsLongPress = true;
-			IsTap = false;
-
+			if (timeDiff <= tapTimeLimit)
+				IsTap = true;
+			else
+			{
+				IsLongPress = true;
+				IsTap = false;
+			}
 		}
-	}
-
-	public void OnPointerMove(PointerEventData eventData)
-	{
+		DoFunction();
 	}
 }

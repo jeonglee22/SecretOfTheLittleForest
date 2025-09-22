@@ -13,6 +13,7 @@ public class SaveDataV1 : SaveData
 {
 	public string PlayerName { get; set; } = "TEST";
 	public Deck Deck { get; set; } = new Deck();
+	public BattleType BattleType { get; set; } = BattleType.Normal;
 
 	public SaveDataV1()
 	{

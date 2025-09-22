@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour
         {
             toy.Data = DataTableManger.ToyTable.GetRandom();
         } while (toy.Data.Movement == 0);
-		GameObjectManager.ToyResource.Load(toy.Data.ModelCode);
+		GameObjectManager.ToyResource.Load(toy.Data.ModelCode.ToString());
 		if (node != null )
             boardManager.ToySettingOnNode( node, toy, false);
     }
@@ -50,16 +50,22 @@ public class UIManager : MonoBehaviour
 
         isSetEnemy = true;
         var nodeTuples = boardManager.SetEnemyStageData();
-        foreach (var nodeTuple in nodeTuples)
+        for(int i = 0; i < nodeTuples.Count; i++)
         {
-            toy.Data = nodeTuple.data;
-            boardManager.ToySettingOnNode(nodeTuple.node, toy, true);
+            toy.Data = nodeTuples[i].data;
+            boardManager.ToySettingOnNode(nodeTuples[i].node, toy, true, i);
         }
     }
 
-    public void SetTurnText(bool isEnemy)
+    public void SetTurnText(PlayTurn turn)
     {
-        turnText.text = isEnemy ? "Enemy Turn" : "Player Turn";
+        turnText.text = turn switch
+        {
+            PlayTurn.Enemy => "Enemy1 Turn",
+            PlayTurn.Player => "Player Turn",
+            PlayTurn.EliteEnemy => "Enemy2 Turn",
+            _ => "",
+        };
     }
 
 	public void SetEndText(bool isEnemyWin)

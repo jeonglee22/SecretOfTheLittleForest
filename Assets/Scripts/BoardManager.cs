@@ -15,8 +15,21 @@ public class BoardManager : MonoBehaviour
 
 	public List<Node> playerStartNodes;
 	public List<Node> enemyStartNodes;
+	public List<Node> eliteStartNodes;
+	public List<Node> bossStartNodes;
+
+	private int eliteEnemy2GroupFirst;
+
+	private BattleType battleType;
+	public BattleType BattleType { get { return battleType; } }
 
 	public bool IsChoosed { get; set; }
+
+	private void OnEnable()
+	{
+		SaveLoadManager.Load((int)JsonFileNum.StageInfo);
+		battleType = SaveLoadManager.Data.BattleType;
+	}
 
 	public Node GetRandomNodeInPlayer()
 	{
@@ -50,21 +63,23 @@ public class BoardManager : MonoBehaviour
 
 	public List<(Node node, ToyData data)> SetEnemyStageData()
 	{
-		var stageData = new StageData();
-		do
-		{
-			stageData = DataTableManger.StageTable.GetRandom();
-		} while (stageData.Stage != 1);
+		var enemyIds = GetStageDataIds();
 
-		var enemyIds = stageData.Pos;
-
+		eliteEnemy2GroupFirst = 0;
 		var result = new List<(Node node, ToyData data)>();
-		for (int i = 0; i < enemyIds.Length; i++)
+		for (int i = 0; i < enemyIds.Count; i++)
 		{
 			if (enemyIds[i] == 0)
 				continue;
-			GameObjectManager.ToyResource.Load(DataTableManger.ToyTable.Get(enemyIds[i]).ModelCode);
-			result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
+			if(battleType == BattleType.Elite && i < 16)
+				eliteEnemy2GroupFirst++;
+			GameObjectManager.ToyResource.Load(DataTableManger.ToyTable.Get(enemyIds[i]).ModelCode.ToString());
+			if (battleType == BattleType.Normal)
+				result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
+			else if(battleType == BattleType.Elite)
+				result.Add((eliteStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
+			else if(battleType == BattleType.Boss)
+				result.Add((bossStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
 		}
 
 		//uiManager.SetStageStat(stageData.ID.ToString());
@@ -72,7 +87,49 @@ public class BoardManager : MonoBehaviour
 		return result;
 	}
 
-	public Toy ToySettingOnNode(Node node, Toy toy, bool isEnemy)
+	private List<int> GetStageDataIds()
+	{
+		var result = new List<int>();
+
+		if (battleType == BattleType.Normal)
+		{
+			var stageData = new StageData();
+			do
+			{
+				stageData = DataTableManger.StageTable.GetRandom();
+			} while (stageData.Stage != 1);
+			result = stageData.Pos.ToList();
+		}
+		else if (battleType == BattleType.Elite)
+		{
+			var stageData = new StageData();
+			do
+			{
+				stageData = DataTableManger.StageTable.GetRandom();
+			} while (stageData.Stage != 1);
+			result = stageData.Pos.ToList();
+
+			stageData = new StageData();
+			do
+			{
+				stageData = DataTableManger.StageTable.GetRandom();
+			} while (stageData.Stage != 1);
+			result.AddRange(stageData.Pos.ToList());
+		}
+		//else
+		//{
+		//	var stageData = new BossStageData();
+		//	do
+		//	{
+		//		stageData = DataTableManger.BossStageTable.GetRandom();
+		//	} while (stageData.Stage != 1);
+		//	result = stageData.Pos.ToList();
+		//}
+
+		return result;
+	}
+
+	public Toy ToySettingOnNode(Node node, Toy toy, bool isEnemy, int anotherGroup = -1)
 	{
 		var nodeScale = node.transform.localScale;
 
@@ -84,8 +141,12 @@ public class BoardManager : MonoBehaviour
 		var scale = spawnedToy.transform.localScale;
 		spawnedToy.transform.localScale = new Vector3(scale.x / nodeScale.x, scale.y / nodeScale.y, scale.z / nodeScale.z);
 		node.Toy = spawnedToy;
-		node.State = isEnemy ? NodeState.Enemy : NodeState.Player;
 		node.Toy.IsEnemy = isEnemy ? true : false;
+		if(battleType == BattleType.Elite)
+			node.Toy.IsElite = eliteEnemy2GroupFirst <= anotherGroup ? true : false;
+		else
+			node.Toy.IsElite = false;
+		node.State = isEnemy ? NodeState.Enemy : NodeState.Player;
 
 		return spawnedToy;
 	}

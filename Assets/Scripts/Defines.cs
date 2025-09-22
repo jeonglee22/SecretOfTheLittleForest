@@ -1,10 +1,25 @@
 using UnityEngine;
 
+public enum JsonFileNum
+{
+    UserTotalDeck,
+    StageDeck,
+    StageInfo,
+}
+
 public enum PlayTurn
 {
     None = -1,
     Enemy,
     Player,
+    EliteEnemy,
+}
+
+public enum BattleType
+{
+    Normal,
+    Elite,
+    Boss,
 }
 
 public enum MoveType
@@ -60,6 +75,7 @@ public static class DataTableIds
     public static readonly string AI = "AITable";
     public static readonly string Setting = "Settings";
     public static readonly string Stage = "StageCombinations";
+    public static readonly string BossStage = "BossStageCombinations";
 }
 
 public static class ResourceObjectIds
@@ -99,6 +115,14 @@ public static class Settings
     public const string costLimit2 = "Cost_lim_2";
     public const string costLimit3 = "Cost_lim_3";
     public const string unitLimit = "Unit_lim";
+    public const string eliteBattle = "Elite_spon";
+    public const string bossCount = "Boss_count";
+    public const string bossWeight = "Boss_weight";
+    public const string shopRoom = "Shop_spon";
+    public const string randomRoom = "Random_spon";
+    public const string emptyRoom = "Empty_spon";
+    public const string normalBattle = "Battle_spon";
+    public const string goldLimit = "Gold_lim";
 }
 
 public static class Tags

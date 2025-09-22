@@ -59,7 +59,6 @@ public class SetObjectControl : MonoBehaviour
 				ChangePos(touch);
 				return;
 			}
-			Debug.Log("Touch");
 			isMoving = false;
 			touchStartTime = Time.time;
 			TouchBegin(touch);

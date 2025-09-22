@@ -90,7 +90,7 @@ public class ImageToolManager : MonoBehaviour
 	public void OnClickOpenObj()
 	{
 		OnClickClear();
-		GameObjectManager.ToyResource.Load(id);
+		GameObjectManager.ToyResource.Load(id.ToString());
 		var obj = GameObjectManager.ToyResource.Get(id);
 		objectName.text = obj.name;
 		this.obj = Instantiate(obj, origin);

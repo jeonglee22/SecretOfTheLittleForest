@@ -10,6 +10,7 @@ public class SettingData
 public class SettingTable : DataTable
 {
 	private readonly Dictionary<string, float> table = new Dictionary<string, float>();
+	public int Count { get { return table.Count; } }
 
 	public override void Load(string filename)
 	{

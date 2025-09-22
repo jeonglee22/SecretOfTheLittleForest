@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EnemyTurn : Turn
 {
-	private float turnTimeInterval = 2f;
-	private float turnTime;
+	protected float turnTimeInterval = 2f;
+	protected float turnTime;
 
-	private Dictionary<int, Func<bool>> aiFuncs;
+	protected Dictionary<int, Func<bool>> aiFuncs;
 	public GameCanvasManager canvasManager;
 
-	private void Awake()
+	protected void Awake()
 	{
 		aiFuncs = new Dictionary<int, Func<bool>>();
 		var aiNames = AINames.AINameList;
@@ -37,12 +37,12 @@ public class EnemyTurn : Turn
 		}
 	}
 
-	private void Start()
+	protected void Start()
 	{
 		turnTime = 0;
 	}
 
-	private void Update()
+	protected virtual void Update()
 	{
 		if (playManager.PlayTurn != PlayTurn.Enemy || !playManager.IsTurnStart || toyControl.IsMove)
 			return;
@@ -80,7 +80,7 @@ public class EnemyTurn : Turn
 		playManager.ResetToys();
 	}
 
-	private void EnemyMove()
+	protected void EnemyMove()
 	{
 		for(int i = DataTableManger.AITable.Count - 1; i >= 0; i--)
 		{
@@ -91,12 +91,15 @@ public class EnemyTurn : Turn
 			}
 
 			if (i == 0)
+			{
+				Debug.Log("No Move");
 				moveCount = 0;
+			}
 		}
 		turnTime = 0f;
 	}
 
-	private bool RunAI()
+	protected bool RunAI()
 	{
 		var attackedNodes = FindAttackedNode();
 		if (attackedNodes.Count != 0 && MoveOptimizeAttackedToy(attackedNodes))
@@ -107,7 +110,7 @@ public class EnemyTurn : Turn
 		return false;
 	}
 
-	private bool AtkSaveAI()
+	protected bool AtkSaveAI()
 	{
 		var canAttackNodes = FindCanAttackNode();
 		if (canAttackNodes.Count != 0 && MoveOptimizeForAttackingToy(canAttackNodes, true))
@@ -118,7 +121,7 @@ public class EnemyTurn : Turn
 		return false;
 	}
 
-	private bool MoveSaveAI()
+	protected bool MoveSaveAI()
 	{
 		if (FindMoveAndAttackNode(true))
 		{
@@ -128,7 +131,7 @@ public class EnemyTurn : Turn
 		return false;
 	}
 
-	private bool AtkAI()
+	protected bool AtkAI()
 	{
 		var canAttackNodes = FindCanAttackNode();
 		if (canAttackNodes.Count != 0 && MoveOptimizeForAttackingToy(canAttackNodes, false))
@@ -138,7 +141,7 @@ public class EnemyTurn : Turn
 		}
 		return false;
 	}
-	private bool MoveAI()
+	protected bool MoveAI()
 	{
 		if (FindMoveAndAttackNode(false))
 		{
@@ -147,7 +150,7 @@ public class EnemyTurn : Turn
 		}
 		return false;
 	}
-	private bool RemainMove(int i)
+	protected bool RemainMove(int i)
 	{
 		int moveType = FindRemainAndMoveNode();
 		if (moveType == i)
@@ -159,7 +162,16 @@ public class EnemyTurn : Turn
 		return false;
 	}
 
-	private int FindRemainAndMoveNode()
+	protected void SetPlayerState()
+	{
+		var players = playManager.CurrentPlayers;
+		foreach (var node in players)
+		{
+			node.State = NodeState.Player;
+		}
+	}
+
+	protected int FindRemainAndMoveNode()
 	{
 		var movabledefencePair = new PriorityQueue<(int,int), int>();
 		var movableEmptyPair = new List<(int, int)>();
@@ -174,6 +186,10 @@ public class EnemyTurn : Turn
 				continue;
 			}
 			playLogic.ChoosedNode = enemy;
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
 			var movables = playLogic.ShowMovable(enemy.NodeIndex, 0);
 			var enemiesAttackNodes = FindAllAttackNodes(playManager.CurrentEnemies, enemy);
 			foreach (var movable in movables)
@@ -193,6 +209,7 @@ public class EnemyTurn : Turn
 					movableEmptyPair.Add((movable, enemy.NodeIndex));
 			}
 		}
+		playLogic.ClearNodes();
 
 		(int, int) movePair = new();
 		int moveInt = -1;
@@ -240,7 +257,7 @@ public class EnemyTurn : Turn
 		return moveInt;
 	}
 
-	private List<(int pos, int start)> FindAllAttackNodes(List<Node> nodes, Node except = null)
+	protected List<(int pos, int start)> FindAllAttackNodes(List<Node> nodes, Node except = null)
 	{
 		var result = new List<(int,int)>();
 
@@ -274,7 +291,7 @@ public class EnemyTurn : Turn
 		base.EndTurn();
 	}
 
-	private bool FindMoveAndAttackNode(bool isPlayerAttack)
+	protected bool FindMoveAndAttackNode(bool isPlayerAttack)
 	{
 		var movablePair = new List<(int,int)>();
 		var moveCostPair = new List<(int,int)>();
@@ -288,6 +305,10 @@ public class EnemyTurn : Turn
 				continue;
 
 			playLogic.ChoosedNode = node;
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
 			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
 			foreach (var movable in movables)
 			{
@@ -295,9 +316,12 @@ public class EnemyTurn : Turn
 					boardManager.allNodes[movable].State == NodeState.Attack)
 					continue;
 
-				boardManager.allNodes[movable].State = NodeState.Enemy;
 				boardManager.allNodes[movable].Toy = node.Toy;
+				boardManager.allNodes[movable].State = NodeState.Enemy;
 				playLogic.ChoosedNode = boardManager.allNodes[movable];
+
+				if (boardManager.BattleType == BattleType.Elite)
+					SetPlayerState();
 
 				var movableAtmovePos = playLogic.ShowMovable(movable, 0);
 				foreach(var nextPos in  movableAtmovePos)
@@ -309,8 +333,8 @@ public class EnemyTurn : Turn
 					}
 				}
 
-				boardManager.allNodes[movable].State = NodeState.None;
 				boardManager.allNodes[movable].Toy = null;
+				boardManager.allNodes[movable].State = NodeState.None;
 			}
 		}
 
@@ -329,14 +353,21 @@ public class EnemyTurn : Turn
 		return true;
 	}
 
-	private List<int> FindAttackedNode()
+	protected List<int> FindAttackedNode()
 	{
 		var result = new List<int>();
-
-		foreach (var node in playManager.CurrentPlayers)
+		var players = playManager.CurrentPlayers;
+		//for (int i = 0;i < players.Count; i++)
+		foreach (var player in players)
 		{
-			playLogic.ChoosedNode = node;
-			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
+			//playLogic.ChoosedNode = players[i];
+			playLogic.ChoosedNode = player;
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
+			//var movables = playLogic.ShowMovable(players[i].NodeIndex, 0);
+			var movables = playLogic.ShowMovable(player.NodeIndex, 0);
 			foreach (var movable in movables)
 			{
 				if (boardManager.allNodes[movable].State == NodeState.Attack)
@@ -348,11 +379,12 @@ public class EnemyTurn : Turn
 			}
 			playLogic.ClearNodes();
 		}
+		playLogic.ClearNodes();
 
 		return result;
 	}
 
-	private bool MoveOptimizeForAttackingToy(List<int> toys, bool isPlayerAttack)
+	protected bool MoveOptimizeForAttackingToy(List<int> toys, bool isPlayerAttack)
 	{
 		var canMoves = new List<(int, int)>();
 		var playerIndex = playManager.CurrentPlayers.ConvertAll(x => x.NodeIndex);
@@ -362,6 +394,10 @@ public class EnemyTurn : Turn
 		foreach (var node in toys)
 		{
 			playLogic.ChoosedNode = boardManager.allNodes[node];
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
 			var movables = playLogic.ShowMovable(node, 0);
 			foreach (var movePos in movables)
 			{
@@ -389,13 +425,17 @@ public class EnemyTurn : Turn
 		return true;
 	}
 
-	private List<int> FindAttackPlayerToys()
+	protected List<int> FindAttackPlayerToys()
 	{
 		var result = new List<int>();
 
 		foreach (var player in playManager.CurrentPlayers)
 		{
 			playLogic.ChoosedNode = player;
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
 			var nodes = playLogic.ShowMovable(player.NodeIndex, 0);
 			foreach (var node in nodes)
 			{
@@ -406,10 +446,11 @@ public class EnemyTurn : Turn
 				}
 			}
 		}
+		playLogic.ClearNodes();
 		return result;
 	}
 
-	private List<int> FindCanAttackNode()
+	protected List<int> FindCanAttackNode()
 	{
 		var result = new List<int>();
 
@@ -418,6 +459,10 @@ public class EnemyTurn : Turn
 			if (node.Toy.IsMove)
 				continue;
 			playLogic.ChoosedNode = node;
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
 			var movables = playLogic.ShowMovable(node.NodeIndex, 0);
 			foreach (var movable in movables)
 			{
@@ -428,17 +473,22 @@ public class EnemyTurn : Turn
 				}
 			}
 		}
+		playLogic.ClearNodes();
 
 		return result;
 	}
 
-	private bool MoveOptimizeAttackedToy(List<int> toys)
+	protected bool MoveOptimizeAttackedToy(List<int> toys)
 	{
 		var canMoves = new List<(int,int)>();
 
 		foreach (var node in toys)
 		{
 			playLogic.ChoosedNode = boardManager.allNodes[node];
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
 			var movables = playLogic.ShowMovable(node, 0);
 			foreach (var movePos in movables)
 			{
@@ -465,11 +515,15 @@ public class EnemyTurn : Turn
 		return true;
 	}
 
-	private bool CheckAttacked(int node)
+	protected bool CheckAttacked(int node)
 	{
 		foreach (var player in playManager.CurrentPlayers)
 		{
 			playLogic.ChoosedNode = player;
+
+			if (boardManager.BattleType == BattleType.Elite)
+				SetPlayerState();
+
 			var movables = playLogic.ShowMovable(player.NodeIndex, 0);
 			foreach (var movable in movables)
 			{
@@ -480,11 +534,12 @@ public class EnemyTurn : Turn
 			}
 			playLogic.ClearNodes();
 		}
+		playLogic.ClearNodes();
 
 		return false;
 	}
 
-	private void GetMaxPriceTupleIndex(out int maxCostIndex, List<(int, int)> moveList, bool baseFirst)
+	protected void GetMaxPriceTupleIndex(out int maxCostIndex, List<(int, int)> moveList, bool baseFirst)
 	{
 		maxCostIndex = -1;
 		int maxCost = 0;

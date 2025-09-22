@@ -176,10 +176,12 @@ public class PlayLogic : MonoBehaviour
 
 			for (int i = 0; i < nextNodes.Count; i++)
 			{
-				if (nextNodes[i] != -1 && allNodes[nextNodes[i]].State != choosedNode.State)
+				if ((nextNodes[i] != -1 && currentMoveType == MoveType.Knight) ||
+					(nextNodes[i] != -1 && allNodes[nextNodes[i]].State != choosedNode.State))
 				{
 					resultNodes.Add(nextNodes[i]);
 					allNodes[nextNodes[i]].CommingNode = nodeIndex;
+					allNodes[nextNodes[i]].StartingNode = choosedNode;
 				}
 			}
 
@@ -247,12 +249,19 @@ public class PlayLogic : MonoBehaviour
 				return new List<int>();
 
 			allNodes[index].CommingNode = currIndex;
+			allNodes[index].StartingNode = choosedNode;
 		}
 		return new List<int> { index };
 	}
 
 	private List<int> MoveAxis(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
+		if (currentMoveType == MoveType.Knight && !isFirst)
+		{
+			moveCount++;
+			return Move(nodeIndex, isFirst, true);
+		}
+
 		if (CheckAlreadyUsedPos(nodeIndex, isFirst, true))
 			return new List<int>();
 
@@ -272,6 +281,12 @@ public class PlayLogic : MonoBehaviour
 
 	private List<int> MoveCross(int nodeIndex, ref int moveCount, bool isFirst, bool isDraw = true)
 	{
+		if(currentMoveType == MoveType.Knight && isFirst)
+		{
+			moveCount++;
+			return Move(nodeIndex, isFirst, false);
+		}
+
 		if (CheckAlreadyUsedPos(nodeIndex, isFirst, false))
 			return new List<int>();
 
@@ -324,6 +339,7 @@ public class PlayLogic : MonoBehaviour
 		}
 		else
 		{
+			allNodes[index].StartingNode = ChoosedNode;
 			allNodes[index].State = ChoosedNode.State == NodeState.Enemy ? NodeState.EnemyMove : NodeState.PlayerMove;
 		}
 	}

@@ -29,6 +29,7 @@ public class Toy : MonoBehaviour
 	public int Attack { get;private set; }
 
 	public bool IsEnemy { get; set; }
+	public bool IsElite { get; set; }
 
 	public bool IsMove { get; set; }
 	public Sprite Toy2D { get; private set; }

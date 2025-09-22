@@ -13,13 +13,14 @@ public class ToyResource : ObjectResource
 		var toyData = DataTableManger.ToyTable.Table;
 		foreach( var toy in toyData)
 		{
-			Load(toy.ModelCode);
+			Load(toy.ModelCode.ToString());
 		}
 	}
 
-	public override bool Load(int id)
+	public override bool Load(string id)
 	{
-		if (toys.ContainsKey(id))
+		var idInt = int.Parse(id);
+		if (toys.ContainsKey(idInt))
 			return true;
 
 		var filePath = string.Format(FormatPath, name);
@@ -31,7 +32,7 @@ public class ToyResource : ObjectResource
 			return false;
 		}
 
-		toys.Add(id, prefab);
+		toys.Add(idInt, prefab);
 
 		return true;
 	}

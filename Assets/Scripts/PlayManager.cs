@@ -5,12 +5,49 @@ using UnityEngine;
 public class PlayManager : MonoBehaviour
 {
 	private List<Node> enemies;
-	public List<Node> CurrentEnemies { get => enemies; }
+	public List<Node> CurrentEnemies 
+	{ 
+		get {
+			if (boardManager.BattleType == BattleType.Elite)
+			{
+				if (playTurn == PlayTurn.Enemy)
+					return enemies;
+				else
+					return eliteEnemies;
+			}
+			else
+			{
+				return enemies;
+			}
+		}
+	}
+	private List<Node> eliteEnemies;
 	private List<Node> players;
-	public List<Node> CurrentPlayers { get => players; }
+	public List<Node> CurrentPlayers 
+	{
+		get
+		{
+			if(boardManager.BattleType == BattleType.Elite)
+			{
+				var result = new List<Node>(players);
+				if (playTurn == PlayTurn.Enemy)
+				{
+					result.AddRange(eliteEnemies);
+				}
+				else if (playTurn == PlayTurn.EliteEnemy)
+				{
+					result.AddRange(enemies);
+				}
+				return result;
+			}
+			else
+				return players;
+		}
+	}
 
 	public PlayerTurn playerTurn;
 	public EnemyTurn enemyTurn;
+	public EliteEnemyTurn eliteEnemyTurn;
 	public UIManager manager;
 	public BoardManager boardManager;
 	public GameCanvasManager gameCanvasManager;
@@ -28,6 +65,7 @@ public class PlayManager : MonoBehaviour
 	private void Awake()
 	{
 		enemies = new List<Node>();
+		eliteEnemies = new List<Node>();
 		players = new List<Node>();
 	}
 
@@ -52,6 +90,10 @@ public class PlayManager : MonoBehaviour
 		{
 			UpdateEnemy();
 		}
+		else if(boardManager.BattleType == BattleType.Elite && playTurn == PlayTurn.EliteEnemy)
+		{
+			UpdateEliteEnemy();
+		}
 	}
 
 	private void EndGame()
@@ -70,8 +112,31 @@ public class PlayManager : MonoBehaviour
 		if (IsFinishTurn)
 		{
 			EndEachTurn(false);
+			if(boardManager.BattleType == BattleType.Elite)
+			{
+				playTurn = PlayTurn.EliteEnemy;
+				manager.SetTurnText(playTurn);
+			}
+			else
+			{
+				playTurn = PlayTurn.Player;
+				manager.SetTurnText(playTurn);
+			}
+		}
+	}
+	private void UpdateEliteEnemy()
+	{
+		if(!IsTurnStart)
+		{
+			eliteEnemyTurn.StartTurn();
+			IsTurnStart = true;
+		}
+
+		if (IsFinishTurn)
+		{
+			EndEachTurn(false);
 			playTurn = PlayTurn.Player;
-			manager.SetTurnText(false);
+			manager.SetTurnText(playTurn);
 		}
 	}
 
@@ -87,14 +152,14 @@ public class PlayManager : MonoBehaviour
 		{
 			EndEachTurn(true);
 			playTurn = PlayTurn.Enemy;
-			manager.SetTurnText(true);
+			manager.SetTurnText(playTurn);
 		}
 	}
 
 	public void StartGame()
 	{
 		playTurn = PlayTurn.Player;
-		manager.SetTurnText(false);
+		manager.SetTurnText(playTurn);
 	}
 
 	public void EndEachTurn(bool isPlayerTurn)
@@ -120,11 +185,17 @@ public class PlayManager : MonoBehaviour
 	{
 		var allNodes = boardManager.allNodes;
 		enemies = new List<Node>();
+		eliteEnemies = new List<Node>();
 		players = new List<Node>();
 		foreach (var node in allNodes)
 		{
 			if (node.State == NodeState.Enemy)
-				enemies.Add(node);
+			{
+				if (node.Toy.IsElite)
+					eliteEnemies.Add(node);
+				else
+					enemies.Add(node);
+			}
 			else if (node.State == NodeState.Player)
 				players.Add(node);
 		}
@@ -146,6 +217,10 @@ public class PlayManager : MonoBehaviour
 	{
 		ResetToys();
 		foreach (var node in enemies)
+		{
+			node.Toy.SetActiveInfoCanvas(b);
+		}
+		foreach (var node in eliteEnemies)
 		{
 			node.Toy.SetActiveInfoCanvas(b);
 		}

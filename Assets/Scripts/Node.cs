@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -38,6 +39,7 @@ public class Node : MonoBehaviour, IDropHandler
 	public List<int> CenterCrossNode2 { get => centerCrossNode2; }
 
 	public int CommingNode { get; set; }
+	public Node StartingNode { get; set; }
 
 	public static int outSide = -1;
 
@@ -117,14 +119,17 @@ public class Node : MonoBehaviour, IDropHandler
 		color = (state) switch
 		{
 			NodeState.None => initColor,
-			NodeState.Enemy => Color.red,
-			NodeState.EnemyMove => new Color(1f, 0.5f, 0f, 1f),
+			NodeState.Enemy => !toy.IsElite ? Color.red : new Color(0f, 100f/255f, 0f, 1f),
+			NodeState.EnemyMove => 
+				StartingNode != null ? 
+				(!StartingNode.Toy.IsElite ? new Color(1f, 0.5f, 0f, 1f) : Color.green) : 
+				new Color(1f, 0.5f, 0f, 1f),
 			NodeState.Player => Color.blue,
 			NodeState.PlayerMove => Color.cyan,
 			NodeState.Attack => Color.yellow,
 			NodeState.Choose => Color.yellow,
 			NodeState.Moved => Color.gray,
-			NodeState.ReadyMove => Color.green,
+			NodeState.ReadyMove => Color.magenta,
 			_ => initColor,
 		};
 
@@ -133,10 +138,8 @@ public class Node : MonoBehaviour, IDropHandler
 
 	public void OnDrop(PointerEventData eventData)
 	{
-		Debug.Log("Drop");
 		if (State != NodeState.Choose)
 			return;
-		Debug.Log("Drop");
 		var obj = eventData.pointerDrag;
 		var toy = obj.GetComponent<Toy>();
 

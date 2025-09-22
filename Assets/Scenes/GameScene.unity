@@ -4988,6 +4988,7 @@ GameObject:
   - component: {fileID: 1174098597}
   - component: {fileID: 1174098599}
   - component: {fileID: 1174098598}
+  - component: {fileID: 1174098600}
   m_Layer: 0
   m_Name: PlayManager
   m_TagString: Untagged
@@ -5024,6 +5025,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTurn: {fileID: 1174098599}
   enemyTurn: {fileID: 1174098598}
+  eliteEnemyTurn: {fileID: 1174098600}
   manager: {fileID: 495656391}
   boardManager: {fileID: 3386968198759226174}
   gameCanvasManager: {fileID: 72617637}
@@ -5054,6 +5056,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcb4573ab7207b84891b318e0e8c6c15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playManager: {fileID: 1174098597}
+  boardManager: {fileID: 3386968198759226174}
+  playLogic: {fileID: 8033447157172070749}
+  toyControl: {fileID: 8033447157172070750}
+  canvasManager: {fileID: 72617637}
+--- !u!114 &1174098600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174098595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 957edd14ea6b0d74faca03a2aab3e522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playManager: {fileID: 1174098597}
@@ -8753,6 +8772,64 @@ MonoBehaviour:
   - {fileID: 1704601314}
   - {fileID: 1334995404}
   - {fileID: 1971025571}
+  eliteStartNodes:
+  - {fileID: 887252125}
+  - {fileID: 1312971092}
+  - {fileID: 1563086624}
+  - {fileID: 1906424886}
+  - {fileID: 1949537210}
+  - {fileID: 1664365852}
+  - {fileID: 1513119534}
+  - {fileID: 1882507011}
+  - {fileID: 1643098908}
+  - {fileID: 2020252207}
+  - {fileID: 1522744324}
+  - {fileID: 1924158195}
+  - {fileID: 1974334806}
+  - {fileID: 2044259000}
+  - {fileID: 2016231139}
+  - {fileID: 2001428615}
+  - {fileID: 1100288069}
+  - {fileID: 1971025571}
+  - {fileID: 1423136909}
+  - {fileID: 1629532412}
+  - {fileID: 1405518144}
+  - {fileID: 1308416428}
+  - {fileID: 1564129173}
+  - {fileID: 1469078581}
+  - {fileID: 1861987985}
+  - {fileID: 1334995404}
+  - {fileID: 1474113267}
+  - {fileID: 1723430373}
+  - {fileID: 641458770}
+  - {fileID: 1113378432}
+  - {fileID: 1930776076}
+  - {fileID: 1636219506}
+  bossStartNodes:
+  - {fileID: 887252125}
+  - {fileID: 1643098908}
+  - {fileID: 1030685349}
+  - {fileID: 1816945927}
+  - {fileID: 1780463040}
+  - {fileID: 972815084}
+  - {fileID: 1861987985}
+  - {fileID: 1100288069}
+  - {fileID: 1312971092}
+  - {fileID: 2020252207}
+  - {fileID: 2087472670}
+  - {fileID: 1974830879}
+  - {fileID: 2077451238}
+  - {fileID: 1704601314}
+  - {fileID: 1334995404}
+  - {fileID: 1971025571}
+  - {fileID: 1563086624}
+  - {fileID: 1522744324}
+  - {fileID: 1890841094}
+  - {fileID: 1606137902}
+  - {fileID: 918105012}
+  - {fileID: 1129542051}
+  - {fileID: 1474113267}
+  - {fileID: 1423136909}
 --- !u!1001 &5248089905234752743
 PrefabInstance:
   m_ObjectHideFlags: 0

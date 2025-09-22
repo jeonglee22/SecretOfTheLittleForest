@@ -19,8 +19,11 @@ public class SaveLoadManager
     {
         "UserTotalDeck.json",
         "StageDeck.json",
-        "Save2.json",
-        "Save3.json",
+		"StageInfo.json",
+
+		"Save2.json",
+        "Save3.json"
+        
     };
 
     public static string SaveDirectory => $"{Application.persistentDataPath}/Save";

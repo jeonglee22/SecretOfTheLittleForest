@@ -28,6 +28,10 @@ public static class DataTableManger
         var stageTable = new StageTable();
 		stageTable.Load(DataTableIds.Stage);
         tables.Add(DataTableIds.Stage, stageTable);
+
+  //      var bossstageTable = new BossStageTable();
+		//bossstageTable.Load(DataTableIds.BossStage);
+  //      tables.Add(DataTableIds.BossStage, bossstageTable);
 	}
 
     public static ToyTable ToyTable
@@ -61,6 +65,14 @@ public static class DataTableManger
             return Get<StageTable>(DataTableIds.Stage);
         }
     }
+
+  //  public static BossStageTable BossStageTable
+  //  {
+  //      get
+  //      {
+		//	return Get<BossStageTable>(DataTableIds.BossStage);
+		//}
+  //  }
 
     public static T Get<T>(string id) where T : DataTable
     {
