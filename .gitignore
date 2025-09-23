@@ -13,10 +13,10 @@
 *.log
 /Assets/GUIPack-Clean&Minimalist
 /Assets/GUIPack-Clean&Minimalist.meta
-/Assets/KindergartenInterior
+/Assets/Kindergarten Interior
 /Assets/LaxminarayanArtistry
 /Assets/SkymonIconPackFree
-/Assets/KindergartenInterior.meta
+/Assets/Kindergarten Interior.meta
 /Assets/LaxminarayanArtistry.meta
 /Assets/SkymonIconPackFree.meta
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
