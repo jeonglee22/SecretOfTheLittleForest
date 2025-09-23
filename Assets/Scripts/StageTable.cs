@@ -133,6 +133,17 @@ public class StageTable : DataTable
 		var stageList = table.Values.ToList();
 		return stageList[Random.Range(0, stageList.Count)];
 	}
+
+	public StageData GetBoss(int stageid)
+	{
+		var stageList = table.Values.ToList();
+		foreach(var stage in stageList)
+		{
+			if (stage.Stage == stageid)
+				return stage;
+		}
+		return null;
+	}
 }
 
 public class EliteStageTable : DataTable

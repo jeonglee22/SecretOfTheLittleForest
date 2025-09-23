@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Overlays;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -115,8 +116,7 @@ public class BoardManager : MonoBehaviour
 		}
 		else
 		{
-			var stageData = DataTableManger.StageTable.Get(-stageId);
-			result = stageData.Pos.ToList();
+			result = DataTableManger.StageTable.GetBoss(-stageId).Pos.ToList();
 		}
 
 		return result;

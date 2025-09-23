@@ -33,10 +33,6 @@ public static class DataTableManger
         eliteStageTable.Load(DataTableIds.EliteStage);
         tables.Add(DataTableIds.EliteStage, eliteStageTable);
 
-  //      var bossstageTable = new BossStageTable();
-		//bossstageTable.Load(DataTableIds.BossStage);
-  //      tables.Add(DataTableIds.BossStage, bossstageTable);
-
         var rewardTable = new RewardTable();
         rewardTable.Load(DataTableIds.Reward);
 		tables.Add(DataTableIds.Reward, rewardTable);

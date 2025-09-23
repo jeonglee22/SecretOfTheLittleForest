@@ -98,7 +98,6 @@ public class ChoosingSceneManager : MonoBehaviour
 			case Room.Shop:
 			case Room.Unknown:
 			case Room.Empty:
-                SaveLoadManager.Data.StageCount++;
 				SaveLoadManager.Save();
 				SceneManager.LoadScene((int)Scenes.StageChoosing);
 				break;
@@ -127,6 +126,11 @@ public class ChoosingSceneManager : MonoBehaviour
                 room = GetRandomWithBoss();
             }
 
+            if (stageCount > DataTableManger.SettingTable.Get(Settings.bossCount) + 20)
+            {
+                result.Add(Room.Boss);
+                continue;
+            }
             if (room == Room.Init)
                 continue;
 

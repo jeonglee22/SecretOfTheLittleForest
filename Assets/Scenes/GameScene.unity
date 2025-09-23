@@ -6219,7 +6219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b6bbeae1de9e564a821a6efc0fd38f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomSpeed: 50
+  zoomSpeed: 200
   moveSpeed: 1
   chessboard: {fileID: 357653088}
 --- !u!1001 &481456997

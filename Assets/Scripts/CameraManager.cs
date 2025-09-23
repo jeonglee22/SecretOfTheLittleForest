@@ -15,7 +15,7 @@ public class CameraManager : MonoBehaviour
 	//public float rotationYSpeed = 120f;
 	//public float rotationXSpeed = 60f;
 
-	public float zoomSpeed = 100f;
+	public float zoomSpeed = 200f;
 	public float moveSpeed = 0.2f;
 
 	private float cameraMaxDistance = 33f;
