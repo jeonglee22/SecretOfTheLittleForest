@@ -29,6 +29,10 @@ public static class DataTableManger
 		stageTable.Load(DataTableIds.Stage);
         tables.Add(DataTableIds.Stage, stageTable);
 
+        var eliteStageTable = new EliteStageTable();
+        eliteStageTable.Load(DataTableIds.EliteStage);
+        tables.Add(DataTableIds.EliteStage, eliteStageTable);
+
   //      var bossstageTable = new BossStageTable();
 		//bossstageTable.Load(DataTableIds.BossStage);
   //      tables.Add(DataTableIds.BossStage, bossstageTable);
@@ -36,7 +40,19 @@ public static class DataTableManger
         var rewardTable = new RewardTable();
         rewardTable.Load(DataTableIds.Reward);
 		tables.Add(DataTableIds.Reward, rewardTable);
+
+        var stageStringTable = new StageStringTable();
+        stageStringTable.Load(DataTableIds.Strings);
+		tables.Add(DataTableIds.Strings, stageStringTable);
 	}
+
+    public static StageStringTable StageStringTable
+    {
+        get
+        {
+            return Get<StageStringTable>(DataTableIds.Strings);
+		}
+    }
 
     public static ToyTable ToyTable
     {
@@ -67,6 +83,14 @@ public static class DataTableManger
         get
         {
             return Get<StageTable>(DataTableIds.Stage);
+        }
+    }
+
+    public static EliteStageTable EliteStageTable
+    {
+        get
+        {
+            return Get<EliteStageTable>(DataTableIds.EliteStage);
         }
     }
 

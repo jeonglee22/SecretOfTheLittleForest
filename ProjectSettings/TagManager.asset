@@ -8,6 +8,7 @@ TagManager:
   - BillBoard
   - Trigger
   - BoardManager
+  - BackGround
   layers:
   - Default
   - TransparentFX

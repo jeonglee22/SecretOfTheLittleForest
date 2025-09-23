@@ -72,6 +72,6 @@ public class ChoosingSceneUIManager : MonoBehaviour
 
 	public void SetBottomText(int index)
 	{
-		bottomText.text = "1대1전투를 하고 골드와 유닛을 얻습니다.\r\n";
+		bottomText.text = DataTableManger.StageStringTable.GetExplainString(index);
 	}
 }

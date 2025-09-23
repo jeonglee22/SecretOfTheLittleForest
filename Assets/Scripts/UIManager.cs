@@ -13,6 +13,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI turnText;
     public TextMeshProUGUI endText;
 
+    public TextMeshProUGUI fpsText;
+    private float fpsreloadTime;
+    private float fpsreloadTimeMax = 0.3f;
+
     private float initFontSize;
     //public TextMeshProUGUI statText;
 
@@ -21,55 +25,36 @@ public class UIManager : MonoBehaviour
     private bool isSetEnemy = false;
     private float speed = 500f;
 
+    private int enemyTurn = 1;
+    private int playerTurn = 0;
+
 	private void Start()
 	{
 		turnText.text = string.Empty;
         endText.text = string.Empty;
         initFontSize = turnText.fontSize;
-        //statText.text = string.Empty;
-
-        OnClickSetEnemyToy();
 	}
 
-	public void OnValueChangeMoveType()
-    {
-        var moveType = (MoveType)dropdown.value;
-        playLogic.ClearNodes();
-    }
-
-    public void OnClickSetPlayerToy()
-    {
-        var node = boardManager.GetRandomNodeInPlayer();
-        do
+	private void Update()
+	{
+        if(fpsreloadTime < fpsreloadTimeMax)
         {
-            toy.Data = DataTableManger.ToyTable.GetRandom();
-        } while (toy.Data.Movement == 0);
-		GameObjectManager.ToyResource.Load(toy.Data.ModelCode.ToString());
-		if (node != null )
-            boardManager.ToySettingOnNode( node, toy, false);
-    }
-    public void OnClickSetEnemyToy()
-    {
-        if (isSetEnemy)
-            return ;
+            fpsreloadTime += Time.deltaTime;
+            return;
+        }    
 
-        isSetEnemy = true;
-        var nodeTuples = boardManager.SetEnemyStageData();
-        for(int i = 0; i < nodeTuples.Count; i++)
-        {
-            toy.Data = nodeTuples[i].data;
-            boardManager.ToySettingOnNode(nodeTuples[i].node, toy, true, i);
-        }
-    }
+        fpsText.text = $"FPS: {1f / Time.deltaTime:F0} ({Time.deltaTime:F5} ms)";
+        fpsreloadTime = 0f;
+	}
 
     public void SetTurnText(PlayTurn turn)
     {
         turnText.gameObject.SetActive(true);
         turnText.text = turn switch
         {
-            PlayTurn.Enemy => "상대 턴",
-            PlayTurn.Player => "나의 턴",
-            PlayTurn.EliteEnemy => "상대 턴",
+            PlayTurn.Enemy => DataTableManger.StageStringTable.GetStageString(enemyTurn),
+            PlayTurn.Player => DataTableManger.StageStringTable.GetStageString(playerTurn),
+            PlayTurn.EliteEnemy => DataTableManger.StageStringTable.GetStageString(enemyTurn),
             _ => "",
         };
         turnText.color = turn switch
@@ -100,9 +85,4 @@ public class UIManager : MonoBehaviour
         turnText.fontSize = initFontSize;
         playManager.IsTurnShown = false;
     }
-
-	public void SetEndText(bool isEnemyWin)
-	{
-		endText.text = isEnemyWin ? "Enemy Win" : "Player Win";
-	}
 }

@@ -52,6 +52,7 @@ public class PlayManager : MonoBehaviour
 	public BoardManager boardManager;
 	public GameCanvasManager gameCanvasManager;
 
+	public GameObject blockPlane;
 	public List<GameObject> resultWindows;
 
 	private PlayTurn playTurn = PlayTurn.None;
@@ -76,6 +77,7 @@ public class PlayManager : MonoBehaviour
 	{
 		//totalTurn = (int) DataTableManger.SettingTable.Get(Settings.battleTurnCount);
 		totalTurn = 4;
+		blockPlane.SetActive(false);
 		gameCanvasManager.SetTurnText(totalTurn);
 	}
 
@@ -106,6 +108,7 @@ public class PlayManager : MonoBehaviour
 
 	private void EndGame()
 	{
+		blockPlane.SetActive(true);
 		if(totalTurn == 0)
 		{
 			var playLogic = boardManager.gameObject.GetComponent<PlayLogic>();

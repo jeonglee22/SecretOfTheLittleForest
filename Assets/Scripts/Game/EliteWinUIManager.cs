@@ -9,12 +9,15 @@ public class EliteWinUIManager : MonoBehaviour
 	public TextMeshProUGUI goldText;
 	public TextMeshProUGUI unitText;
 	public TextMeshProUGUI winText;
+	public TextMeshProUGUI goldButtonText;
 
 	public List<TouchManager> touchManagers;
 
 	public float Gold { get; set; }
 	private float unitLimit;
 	private float unitCount;
+
+	private float blockTouchAlpha = 0.8f;
 
 	private void OnEnable()
 	{
@@ -27,6 +30,9 @@ public class EliteWinUIManager : MonoBehaviour
 		unitLimit = data.unitLimit;
 		unitCount = data.unitCount;
 		Gold = data.gold;
+
+		goldButtonText.text = string.Format(DataTableManger.StageStringTable.GetWinString(3),
+			DataTableManger.SettingTable.Get(Settings.eliteGold));
 
 		SetGoldText();
 		SetUnitText(data.Deck.GetDeckTotalCount());
@@ -58,17 +64,13 @@ public class EliteWinUIManager : MonoBehaviour
 		if(unitCount == 16)
 		{
 			var color = leftPart.gameObject.GetComponent<Image>().color;
-			color.r *= 0.2f;
-			color.g *= 0.2f;
-			color.b *= 0.2f;
+			color.a = blockTouchAlpha;
 			leftPart.gameObject.GetComponent<Image>().color = color;
 		}
 		if(unitLimit == DataTableManger.SettingTable.Get(Settings.unitLimitMax))
 		{
 			var color = rightPart.gameObject.GetComponent<Image>().color;
-			color.r *= 0.2f;
-			color.g *= 0.2f;
-			color.b *= 0.2f;
+			color.a = blockTouchAlpha;
 			rightPart.gameObject.GetComponent<Image>().color = color;
 		}
 

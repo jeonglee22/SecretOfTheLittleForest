@@ -24,11 +24,14 @@ public class BoardManager : MonoBehaviour
 	public BattleType BattleType { get { return battleType; } }
 
 	public bool IsChoosed { get; set; }
+	private float stageId;
 
 	private void OnEnable()
 	{
 		SaveLoadManager.Load();
-		battleType = SaveLoadManager.Data.BattleType;
+		var data = SaveLoadManager.Data;
+		battleType = data.BattleType;
+		stageId = data.stageId;
 	}
 
 	public Node GetRandomNodeInPlayer()
@@ -63,7 +66,7 @@ public class BoardManager : MonoBehaviour
 
 	public List<(Node node, ToyData data)> SetEnemyStageData()
 	{
-		var enemyIds = GetStageDataIds();
+		var enemyIds = GetStageDataIds((int)stageId);
 
 		eliteEnemy2GroupFirst = 0;
 		var result = new List<(Node node, ToyData data)>();
@@ -73,6 +76,7 @@ public class BoardManager : MonoBehaviour
 				continue;
 			if(battleType == BattleType.Elite && i < 16)
 				eliteEnemy2GroupFirst++;
+
 			GameObjectManager.ToyResource.Load(DataTableManger.ToyTable.Get(enemyIds[i]).ModelCode.ToString());
 			if (battleType == BattleType.Normal)
 				result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
@@ -87,7 +91,7 @@ public class BoardManager : MonoBehaviour
 		return result;
 	}
 
-	private List<int> GetStageDataIds()
+	private List<int> GetStageDataIds(int stageId)
 	{
 		var result = new List<int>();
 
@@ -97,32 +101,21 @@ public class BoardManager : MonoBehaviour
 			do
 			{
 				stageData = DataTableManger.StageTable.GetRandom();
-			} while (stageData.Stage != 1);
+			} while (stageData.Stage != stageId);
 			result = stageData.Pos.ToList();
 		}
 		else if (battleType == BattleType.Elite)
 		{
-			var stageData = new StageData();
+			var stageData = new EliteStageData();
 			do
 			{
-				stageData = DataTableManger.StageTable.GetRandom();
-			} while (stageData.Stage != 1);
+				stageData = DataTableManger.EliteStageTable.GetRandom();
+			} while (stageData.Stage != stageId);
 			result = stageData.Pos.ToList();
-
-			stageData = new StageData();
-			do
-			{
-				stageData = DataTableManger.StageTable.GetRandom();
-			} while (stageData.Stage != 1);
-			result.AddRange(stageData.Pos.ToList());
 		}
 		else
 		{
-			var stageData = new StageData();
-			do
-			{
-				stageData = DataTableManger.StageTable.GetRandom();
-			} while (stageData.Stage > 0);
+			var stageData = DataTableManger.StageTable.Get(-stageId);
 			result = stageData.Pos.ToList();
 		}
 

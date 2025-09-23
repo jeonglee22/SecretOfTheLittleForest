@@ -676,6 +676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7d40fea183c7874083346cbd5ed23e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tapTimeLimit: 0.4
 --- !u!1 &154123468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1038,7 @@ GameObject:
   - component: {fileID: 316241417}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: BackGround
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1162,6 +1163,7 @@ MonoBehaviour:
   - {fileID: 143018378}
   - {fileID: 615975975}
   - {fileID: 1527892899}
+  background: {fileID: 1016314198}
 --- !u!1 &426888590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1794,6 +1796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7d40fea183c7874083346cbd5ed23e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tapTimeLimit: 0.4
 --- !u!1 &652944750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,7 +2512,7 @@ GameObject:
   - component: {fileID: 1016314198}
   m_Layer: 5
   m_Name: Panel
-  m_TagString: Untagged
+  m_TagString: BackGround
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3538,6 +3541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7d40fea183c7874083346cbd5ed23e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tapTimeLimit: 0.4
 --- !u!1 &1532780640
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,20 @@ public enum BattleType
     Boss,
 }
 
+public enum WinType
+{
+    KillKing,
+    KillExceptKing,
+    WinTotalCost,
+}
+
+public enum LoseType
+{
+	KilledKing,
+	KilledExceptKing,
+	LoseTotalCost,
+}
+
 public enum MoveType
 {
     Pawn,
@@ -63,19 +77,17 @@ public enum Languages
 
 public static class DataTableIds
 {
-	public static readonly string[] StringTableIds =
-	{
-		"StringTableKr",
-		"StringTableEn",
-		"StringTableJp",
-	};
-	public static string String => StringTableIds[(int)Variables.Language];
+	public static readonly string Strings = "StageStrings";
+
+    public static readonly string Explain = "StageExplain";
+    public static readonly string Lose = "LoseText";
+    public static readonly string Win = "WinText";
 
 	public static readonly string Toy = "ToyTable";
     public static readonly string AI = "AITable";
     public static readonly string Setting = "Settings";
     public static readonly string Stage = "StageCombinations";
-    public static readonly string BossStage = "BossStageCombinations";
+    public static readonly string EliteStage = "EliteStage";
     public static readonly string Reward = "Reward";
 }
 
@@ -93,8 +105,20 @@ public static class Variables
 
 public static class Icons
 {
-    public static readonly string heartPath = "Icons/card-hearts";
-    public static readonly string attackPath = "Icons/battle";
+    public static readonly string[] roomIcons =
+    {
+        swordPath, bannerPath, diamondPath, questionPath, signBoardPath, bossPath
+	};
+    
+    public const string heartPath = "Icons/card-hearts";
+    public const string attackPath = "Icons/battle";
+    public const string swordPath = "Icons/sword";
+    public const string bannerPath = "Icons/banner";
+    public const string bossPath = "Icons/boss";
+    public const string diamondPath = "Icons/diamond";
+    public const string signBoardPath = "Icons/signboard";
+    public const string questionPath = "Icons/info-question";
+
 }
 
 public static class AINames
@@ -136,6 +160,7 @@ public static class Settings
     public const string bossGold = "Boss_gold";
     public const string eliteGold = "Elite_gold";
     public const string unitLimitMax = "Unit_max_lim";
+    public const string bossReward = "Boss_reward";
 }
 
 public static class Tags
@@ -143,6 +168,20 @@ public static class Tags
     public static readonly string BillBoard = "BillBoard";
     public static readonly string Trigger = "Trigger";
     public static readonly string BoardManager = "BoardManager";
+    public static readonly string BackGround = "BackGround";
+}
+
+public enum Room
+{
+    Init = -1,
+    Normal,
+    Elite,
+    Shop,
+    Unknown,
+    Empty,
+    Boss,
+
+    Count,
 }
 
 public enum Windows

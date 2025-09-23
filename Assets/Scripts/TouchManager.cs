@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -9,16 +10,18 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	private Vector2 fingerTouchStartPosition;
 	private float fingerTouchStartTime;
 
-	private float tapTimeLimit = 0.2f;
+	public float tapTimeLimit = 0.2f;
 
-	public static float FingersDelta { get; private set; }
-	public static bool IsTap { get; private set; } = false;
-	public static bool IsLongPress { get; private set; } = false;
+	public float FingersDelta { get; private set; }
+	public bool IsTap { get; private set; } = false;
+	public bool IsLongPress { get; private set; } = false;
 
 	private float deltaOffset = 5f;
 
 	public Action tapFunc;
 	public Action longPressFunc;
+	public Action longPressEnterFunc;
+	private bool longPressEnter = true;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -39,10 +42,17 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 				case TouchPhase.Moved:
 					break;
 				case TouchPhase.Stationary:
-
+					var time = Time.time - fingerTouchStartTime;
+					if (time > tapTimeLimit && longPressEnter && longPressEnterFunc != null &&
+						RectTransformUtility.RectangleContainsScreenPoint(GetComponent<Image>().rectTransform, Input.GetTouch(0).position, null))
+					{
+						longPressEnterFunc();
+						longPressEnter = false;
+					}
 					break;
 				case TouchPhase.Ended:
 				case TouchPhase.Canceled:
+					longPressEnter = true;
 					break;
 			}
 		}

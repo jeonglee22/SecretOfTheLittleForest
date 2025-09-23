@@ -18,6 +18,8 @@ public class SaveDataV1 : SaveData
 	public float unitLimit = 12;
 	public float unitCount = 8;
 	public float gold = 0;
+	public int Crystal = 0;
+	public int StageCount = 0;
 
 	public SaveDataV1()
 	{
