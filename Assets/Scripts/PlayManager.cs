@@ -52,6 +52,8 @@ public class PlayManager : MonoBehaviour
 	public BoardManager boardManager;
 	public GameCanvasManager gameCanvasManager;
 
+	public List<GameObject> resultWindows;
+
 	private PlayTurn playTurn = PlayTurn.None;
 	public PlayTurn PlayTurn { get { return playTurn; } set { playTurn = value; } }
 
@@ -112,15 +114,33 @@ public class PlayManager : MonoBehaviour
 			int playerCost = GetRemainToyCost(players);
 			int enemyCost = GetRemainToyCost(enemies);
 			int enemy2Cost = GetRemainToyCost(eliteEnemies);
-			if (playerCost > enemyCost + enemy2Cost)
-				manager.SetEndText(false);
-			else if (playerCost < enemyCost + enemy2Cost)
-				manager.SetEndText(true);
-			else
-				manager.SetEndText(false);
+			int gameResult = playerCost > enemyCost + enemy2Cost ? 1 : (playerCost < enemyCost + enemy2Cost ? -1 : 0);
+
+			OpenResultWindow(gameResult);
 		}
 		else
-			manager.SetEndText(IsEnemyWin);
+		{
+			int gameResult = IsEnemyWin ? 1 : -1;
+			OpenResultWindow(gameResult);
+		}
+	}
+
+	public void ForceEndGame(bool end = true)
+	{
+		IsEnemyWin = end;
+		EndGame();
+	}
+
+	private void OpenResultWindow(int num)
+	{
+		List<GameObject> cases = new List<GameObject>()
+		{
+		resultWindows[(int)boardManager.BattleType],
+		resultWindows[3],
+		resultWindows[4],
+		};
+
+		cases[1 - num].SetActive(true);
 	}
 
 	private int GetRemainToyCost(List<Node> toys)

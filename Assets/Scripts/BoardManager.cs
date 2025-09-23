@@ -27,7 +27,7 @@ public class BoardManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		SaveLoadManager.Load((int)JsonFileNum.StageInfo);
+		SaveLoadManager.Load();
 		battleType = SaveLoadManager.Data.BattleType;
 	}
 

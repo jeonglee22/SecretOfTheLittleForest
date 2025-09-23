@@ -14,7 +14,8 @@ public class ReadyCanvasManager : MonoBehaviour
 	public void SetUnitCountText(int count)
     {
         var sb = new StringBuilder();
-        var maxCount = DataTableManger.SettingTable.Get(Settings.unitCount);
+        SaveLoadManager.Load();
+        var maxCount = SaveLoadManager.Data.unitCount;
 
 		sb.Append("배치 가능\n").Append($"({count}/{maxCount})");
         unitCountText.text = sb.ToString();

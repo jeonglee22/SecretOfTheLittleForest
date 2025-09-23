@@ -58,7 +58,7 @@ public class ChoosingSceneManager : MonoBehaviour
     private void TapFunc(int x)
     {
         SaveLoadManager.Data.BattleType = (BattleType)x;
-        SaveLoadManager.Save((int)JsonFileNum.StageInfo);
+        SaveLoadManager.Save();
         SceneManager.LoadScene((int)Scenes.Game);
     }
     private void HoldingFunc()

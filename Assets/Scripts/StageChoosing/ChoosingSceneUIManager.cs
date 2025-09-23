@@ -17,9 +17,25 @@ public class ChoosingSceneUIManager : MonoBehaviour
 
     private ChoosingSceneManager choosingManager;
 
+	private float unitLimit;
+	private float gold;
+	private float unitCount;
+
 	private void Awake()
 	{
 		choosingManager = GetComponent<ChoosingSceneManager>();
+	}
+
+	private void OnEnable()
+	{
+		SaveLoadManager.Load();
+		var data = SaveLoadManager.Data;
+		unitLimit = data.unitLimit;
+		gold = data.gold;
+		unitCount = data.Deck.GetDeckTotalCount();
+
+		SetCoinText();
+		SetCountText();
 	}
 
 	public void SetImage(int pos, Sprite image)
@@ -44,14 +60,14 @@ public class ChoosingSceneUIManager : MonoBehaviour
 		};
 	}
 
-	public void SetCountText(int count)
+	public void SetCountText()
 	{
-		countText.text = $"  ({count}/{DataTableManger.SettingTable.Get(Settings.unitLimit)})";
+		countText.text = $"  ({unitCount}/{unitLimit})";
 	}
 
-	public void SetCoinText(int coin)
+	public void SetCoinText()
 	{
-		coinText.text = $"  ({coin}/{DataTableManger.SettingTable.Get(Settings.goldLimit)})";
+		coinText.text = $"  ({gold}/{DataTableManger.SettingTable.Get(Settings.goldLimit)})";
 	}
 
 	public void SetBottomText(int index)

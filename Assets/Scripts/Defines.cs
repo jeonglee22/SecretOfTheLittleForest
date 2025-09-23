@@ -91,6 +91,12 @@ public static class Variables
     public static readonly string SpritePath = "Images/Toy{0}";
 }
 
+public static class Icons
+{
+    public static readonly string heartPath = "Icons/card-hearts";
+    public static readonly string attackPath = "Icons/battle";
+}
+
 public static class AINames
 {
     public static readonly string[] AINameList =
@@ -129,6 +135,7 @@ public static class Settings
     public const string battleGold = "Battle_gold";
     public const string bossGold = "Boss_gold";
     public const string eliteGold = "Elite_gold";
+    public const string unitLimitMax = "Unit_max_lim";
 }
 
 public static class Tags

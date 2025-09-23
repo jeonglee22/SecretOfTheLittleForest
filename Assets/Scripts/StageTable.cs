@@ -135,6 +135,56 @@ public class StageTable : DataTable
 	}
 }
 
+public class EliteStageTable : DataTable
+{
+	private readonly Dictionary<int, EliteStageData> table = new Dictionary<int, EliteStageData>();
+	public int Count { get { return table.Count; } }
+
+	public override void Load(string filename)
+	{
+		table.Clear();
+
+		var path = string.Format(FormatPath, filename);
+		var textAsset = Resources.Load<TextAsset>(path);
+		var list = LoadCSV<EliteStageData>(textAsset.text);
+		foreach (var stage in list)
+		{
+			stage.Pos = new int[32] { stage.Pos0, stage.Pos1, stage.Pos2, stage.Pos3,
+									  stage.Pos4, stage.Pos5, stage.Pos6, stage.Pos7,
+									  stage.Pos8, stage.Pos9, stage.Pos10, stage.Pos11,
+									  stage.Pos12, stage.Pos13, stage.Pos14, stage.Pos15,
+									  stage.Pos16, stage.Pos17, stage.Pos18, stage.Pos19,
+									  stage.Pos20, stage.Pos21, stage.Pos22, stage.Pos23,
+									  stage.Pos24, stage.Pos25, stage.Pos26, stage.Pos27,
+									  stage.Pos28, stage.Pos29, stage.Pos30, stage.Pos31
+			};
+			if (!table.ContainsKey(stage.ID))
+			{
+				table.Add(stage.ID, stage);
+			}
+			else
+			{
+				Debug.LogError("아이템 아이디 중복!");
+			}
+		}
+	}
+
+	public EliteStageData Get(int id)
+	{
+		if (!table.ContainsKey(id))
+		{
+			return null;
+		}
+		return table[id];
+	}
+
+	public EliteStageData GetRandom()
+	{
+		var stageList = table.Values.ToList();
+		return stageList[Random.Range(0, stageList.Count)];
+	}
+}
+
 public class BossStageTable : DataTable
 {
 	private readonly Dictionary<int, BossStageData> table = new Dictionary<int, BossStageData>();

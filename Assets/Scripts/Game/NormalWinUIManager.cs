@@ -44,11 +44,6 @@ public class NormalWinUIManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		SaveLoadManager.Data.unitLimit = unitLimit;
-		SaveLoadManager.Data.stageId = stageId;
-		//SaveLoadManager.Data.gold = Gold;
-		SaveLoadManager.Data.gold = Gold;
-		SaveLoadManager.Data.Deck = currentDeck;
 		SaveLoadManager.Save();
 	}
 
@@ -80,6 +75,7 @@ public class NormalWinUIManager : MonoBehaviour
 
 		SetGoldText();
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
+		SaveLoadManager.Data.gold = Gold;
 	}
 
 	private void SetImageAndInfo(List<int> ids)
@@ -97,10 +93,17 @@ public class NormalWinUIManager : MonoBehaviour
 
 	private void SettingTouchFunction()
 	{
-		for(int i =0; i < touchManagers.Count; i++)
+		for (int i = 0; i < touchManagers.Count; i++)
 		{
 			if (currentDeck.GetDeckTotalCount() == unitLimit)
-				images[i].color *= 0.5f;
+			{
+				var color = touchManagers[i].gameObject.GetComponent<Image>().color;
+				color.r *= 0.2f;
+				color.g *= 0.2f;
+				color.b *= 0.2f;
+				touchManagers[i].gameObject.GetComponent<Image>().color = color;
+			}
+
 			var index = i;
 			touchManagers[i].tapFunc = () =>
 			{
@@ -108,6 +111,7 @@ public class NormalWinUIManager : MonoBehaviour
 					return;
 				currentDeck.AddDeckData(DataTableManger.ToyTable.Get(choosedIds[index]));
 				SceneManager.LoadScene((int)Scenes.StageChoosing);
+				SaveLoadManager.Data.Deck = currentDeck;
 			};
 		}
 	}

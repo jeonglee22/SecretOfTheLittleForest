@@ -42,8 +42,8 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 
 	private void OnDisable()
 	{
-		SaveLoadManager.Save();
 		SaveLoadManager.Data.Deck = unitDeck;
+		SaveLoadManager.Save();
 	}
 
 	private void Start()

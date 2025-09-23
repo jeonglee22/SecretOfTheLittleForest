@@ -35,7 +35,7 @@ public class ChoosingUnitManager : MonoBehaviour
 	private void OnDisable()
 	{
 		SaveLoadManager.Data.Deck = chooseDeck;
-		SaveLoadManager.Save(1);
+		SaveLoadManager.Save();
 	}
 
 	public void AddToyOnChoosedDeck(GameObject go)

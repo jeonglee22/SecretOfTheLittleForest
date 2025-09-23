@@ -13,9 +13,7 @@ public class UnitSetting : MonoBehaviour
 	private Deck unitDeck;
 
 	private Sprite heartSprite;
-	private string heartPath = "Icons/card-hearts";
 	private Sprite attackSprite;
-	private string attackPath = "Icons/battle";
 
 	public GameObject toy2D;
 	public GameObject toy;
@@ -35,8 +33,8 @@ public class UnitSetting : MonoBehaviour
     {
 		unitContent = unitRect.content;
 
-		heartSprite = Resources.Load<Sprite>(heartPath);
-		attackSprite = Resources.Load<Sprite>(attackPath);
+		heartSprite = Resources.Load<Sprite>(Icons.heartPath);
+		attackSprite = Resources.Load<Sprite>(Icons.attackPath);
 
 		UnitSettingOnBoard();
 
@@ -45,7 +43,7 @@ public class UnitSetting : MonoBehaviour
 
 	private void OnEnable()
 	{
-		SaveLoadManager.Load(1);
+		SaveLoadManager.Load();
 		unitDeck = SaveLoadManager.Data.Deck;
 	}
 
