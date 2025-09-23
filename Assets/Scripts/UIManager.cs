@@ -33,6 +33,8 @@ public class UIManager : MonoBehaviour
 		turnText.text = string.Empty;
         endText.text = string.Empty;
         initFontSize = turnText.fontSize;
+
+		OnClickSetEnemyToy();
 	}
 
 	private void Update()
@@ -47,7 +49,21 @@ public class UIManager : MonoBehaviour
         fpsreloadTime = 0f;
 	}
 
-    public void SetTurnText(PlayTurn turn)
+	public void OnClickSetEnemyToy()
+	{
+		if (isSetEnemy)
+			return;
+
+		isSetEnemy = true;
+		var nodeTuples = boardManager.SetEnemyStageData();
+		for (int i = 0; i < nodeTuples.Count; i++)
+		{
+			toy.Data = nodeTuples[i].data;
+			boardManager.ToySettingOnNode(nodeTuples[i].node, toy, true, i);
+		}
+	}
+
+	public void SetTurnText(PlayTurn turn)
     {
         turnText.gameObject.SetActive(true);
         turnText.text = turn switch
