@@ -14,6 +14,9 @@ public class ShopLogicManager : MonoBehaviour
 	public float Gold { get; set; }
 
 	private Deck userDeck;
+	private Deck reGetDeck;
+
+	public ToyData ChooosedData { get; set; }
 
 	public List<TouchManager> touchManagers;
 	public List<Image> buyBlockImages;
@@ -22,6 +25,7 @@ public class ShopLogicManager : MonoBehaviour
 	{
 		uIManagers = GetComponent<ShopUIManagers>();
 		buttonFunctions = GetComponent<ShopButtonFunctions>();
+		reGetDeck = new Deck();
 	}
 
 	private void OnEnable()
@@ -48,6 +52,9 @@ public class ShopLogicManager : MonoBehaviour
 		uIManagers.SetGoldText(Gold);
 		uIManagers.SetCostText();
 		uIManagers.SetUnitText(userDeck.GetDeckTotalCount());
+
+		uIManagers.SetRect(userDeck, true);
+		uIManagers.SetRect(reGetDeck, false);
 
 		buttonFunctions.OnClickChangeColor(true);
 
@@ -83,6 +90,17 @@ public class ShopLogicManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
+
+	public void MoveDataTo(bool isuserDeck)
+	{
+		if (isuserDeck)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
 }

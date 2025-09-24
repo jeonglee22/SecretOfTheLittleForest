@@ -8,7 +8,7 @@ public class ShopButtonFunctions : MonoBehaviour
 	public GameObject buyPanel;
 	public GameObject sellPanel;
 
-	private int reloadCost = 4;
+	private int reloadCost;
 
 	private ShopUIManagers shopUIManagers;
 	private ShopLogicManager logicManager;
@@ -24,6 +24,11 @@ public class ShopButtonFunctions : MonoBehaviour
 		SaveLoadManager.Load();
 		var data = SaveLoadManager.Data;
 		unitCount = data.unitCount;
+	}
+
+	private void Start()
+	{
+		reloadCost = Mathf.FloorToInt(DataTableManger.SettingTable.Get(Settings.battleGold));
 	}
 
 	public void OnClickBuy()

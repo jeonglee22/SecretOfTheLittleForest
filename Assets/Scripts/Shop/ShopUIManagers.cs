@@ -36,7 +36,14 @@ public class ShopUIManagers : MonoBehaviour
     private Color notSelectedColor = new Color(0.462f, 0.462f, 0.462f, 0.165f);
     private Color orangeColor = new Color(1f, 0.7529f, 0f, 1f);
 
+    private ShopLogicManager logicManager;
+
 	public bool IsFree { get; set; } = true;
+
+	private void Awake()
+	{
+		logicManager = GetComponent<ShopLogicManager>();
+	}
 
 	private void OnEnable()
 	{
@@ -193,6 +200,7 @@ public class ShopUIManagers : MonoBehaviour
     public void SetRect(Deck deck, bool isuserDeck)
     {
         var scrollRect = isuserDeck ? unitHavingRect : unitRegetRect;
+        var content = scrollRect.content;
 
         var toys = deck.Toys;
         foreach(var toy in toys )
@@ -200,7 +208,10 @@ public class ShopUIManagers : MonoBehaviour
             var count = toy.count;
             var data = toy.data;
 
-
+            var obj = Instantiate(contentGO, content);
+            var realCost = isuserDeck ? toy.data.Price : GetBuyCost(toy.data.Price);
+            obj.GetComponent<ContentPanelData>().SetData(data, count, Mathf.FloorToInt(realCost));
+            obj.GetComponent<TouchManager>().tapFunc = () => logicManager.ChooosedData = data;
         }
     }
 }
