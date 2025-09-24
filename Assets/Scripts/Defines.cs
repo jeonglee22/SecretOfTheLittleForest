@@ -94,6 +94,7 @@ public static class DataTableIds
 public static class ResourceObjectIds
 {
 	public static readonly string Toy = "Toys";
+	public static readonly string ToyImages = "Images";
 }
 
 public static class Variables

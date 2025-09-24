@@ -15,6 +15,9 @@ public static class GameObjectManager
 	{
 		var toyResource = new ToyResource();
 		resources.Add(ResourceObjectIds.Toy, toyResource);
+
+		var iconResource = new IconResource();
+		resources.Add(ResourceObjectIds.ToyImages, iconResource);
 	}
 
 	public static ToyResource ToyResource
@@ -22,6 +25,13 @@ public static class GameObjectManager
 		get
 		{
 			return Get<ToyResource>(ResourceObjectIds.Toy);
+		}
+	}
+	public static IconResource IconResource
+	{
+		get
+		{
+			return Get<IconResource>(ResourceObjectIds.ToyImages);
 		}
 	}
 

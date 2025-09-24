@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using SaveDataVC = SaveDataV1;
 
@@ -32,7 +33,7 @@ public class SaveLoadManager
     {
         Formatting = Formatting.Indented,
         TypeNameHandling = TypeNameHandling.All,
-    };
+	};
 
     public static bool Save(int slot = 0)
     {
