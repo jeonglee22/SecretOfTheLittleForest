@@ -11,10 +11,12 @@ public class ShopButtonFunctions : MonoBehaviour
 	private int reloadCost = 4;
 
 	private ShopUIManagers shopUIManagers;
+	private ShopLogicManager logicManager;
 
 	private void Awake()
 	{
 		shopUIManagers = GetComponent<ShopUIManagers>();
+		logicManager = GetComponent<ShopLogicManager>();
 	}
 
 	private void OnEnable()
@@ -55,20 +57,22 @@ public class ShopButtonFunctions : MonoBehaviour
 		}
 		else
 		{
-			shopUIManagers.Gold -= reloadCost;
+			logicManager.Gold -= reloadCost;
 
-			if (shopUIManagers.Gold < reloadCost && !shopUIManagers.IsFree)
+			if (logicManager.Gold < 0 && !shopUIManagers.IsFree)
 			{
 				shopUIManagers.SetGoldColor(true);
-				shopUIManagers.Gold += reloadCost;
+				logicManager.Gold += reloadCost;
 				return;
 			}
 
-			SaveLoadManager.Data.gold -= 4;
+			SaveLoadManager.Data.gold -= reloadCost;
 		}
 
+		logicManager.buyBlockImages.ForEach(x => x.gameObject.SetActive(false));
+
 		shopUIManagers.SetBuyItems();
-		shopUIManagers.SetGoldText(shopUIManagers.Gold);
+		shopUIManagers.SetGoldText(logicManager.Gold);
 		shopUIManagers.SetCostText();
 	}
 }

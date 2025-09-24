@@ -8,6 +8,7 @@ public class ShopUIManagers : MonoBehaviour
 {
     public ScrollRect unitHavingRect;
     public ScrollRect unitRegetRect;
+    public GameObject contentGO;
 
     public TextMeshProUGUI goldText;
     public TextMeshProUGUI goldText2;
@@ -25,11 +26,8 @@ public class ShopUIManagers : MonoBehaviour
 
     private Coroutine colorCorout;
 
-    public List<TouchManager> touchManagers;
-    public List<Image> buyBlockImages;
-
-    private List<int> choosedIds;
-    private List<int> costs;
+    public List<int> ChoosedIds {  get; private set; }
+    public List<int> Costs { get; private set; }
     private int stageId;
 	private float unitLimit;
 	private float goldLimit;
@@ -40,44 +38,28 @@ public class ShopUIManagers : MonoBehaviour
 
 	public bool IsFree { get; set; } = true;
 
-    private Deck userDeck;
-    public float Gold;
-
 	private void OnEnable()
 	{
         SaveLoadManager.Load();
         var data = SaveLoadManager.Data;
         stageId = data.stageId;
         unitLimit = data.unitLimit;
-        userDeck = data.Deck;
-        Gold = data.gold;
 	}
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
-        for(int i = 0; i < touchManagers.Count; i++)
-        {
-            var manager = touchManagers[i];
-
-            if (!manager.IsTap)
-                return;
-
-            manager.gameObject.SetActive(false);
-            manager.tapFunc = () =>
-            {
-                if (costs[i] > gold)
-            };
-        }
+        Costs = new List<int>();
     }
 
     public void SetBuyItems()
     {
-		choosedIds = DataTableManger.RewardTable.GetRandomUnitIds(stageId, 3);
+        Costs.Clear();
+		ChoosedIds = DataTableManger.RewardTable.GetRandomUnitIds(stageId, 3);
 		goldLimit = DataTableManger.SettingTable.Get(Settings.goldLimit);
 		for (int i = 0; i < 3; i++)
         {
-            SetImageAndInfo(DataTableManger.ToyTable.Get(choosedIds[i]), i);
+            SetImageAndInfo(DataTableManger.ToyTable.Get(ChoosedIds[i]), i);
         }
     }
 
@@ -90,7 +72,7 @@ public class ShopUIManagers : MonoBehaviour
         var value = GetBuyCost(data.Price);
 
 		coinTexts[index].text = value.ToString();
-        costs.Add(Mathf.FloorToInt(value));
+        Costs.Add(Mathf.FloorToInt(value));
         toyImages[index].sprite = GameObjectManager.IconResource.GetToyImage(data.ModelCode);
     }
 
@@ -133,7 +115,7 @@ public class ShopUIManagers : MonoBehaviour
 
     public void SetUnitText(float unitCount)
     {
-        unitText.text = $"({userDeck.GetDeckTotalCount()}/{unitLimit})";
+        unitText.text = $"({unitCount}/{unitLimit})";
     }
 
     public void SetCostText()
@@ -167,7 +149,7 @@ public class ShopUIManagers : MonoBehaviour
 			goldText.color = Color.red;
             goldText2.color = Color.red;
 
-            colorCorout = StartCoroutine(CoTextColorChange());
+            colorCorout = StartCoroutine(CoGoldTextColorChange());
         }
         else
         {
@@ -176,7 +158,7 @@ public class ShopUIManagers : MonoBehaviour
 		}
     }
 
-    private IEnumerator CoTextColorChange()
+    private IEnumerator CoGoldTextColorChange()
     {
         yield return new WaitForSeconds(1);
         SetGoldColor(false);
@@ -186,13 +168,39 @@ public class ShopUIManagers : MonoBehaviour
     {
         if(isLimit)
         {
-            unitText.color = Color.red;
+			if (colorCorout != null)
+				StopCoroutine(colorCorout);
+			colorCorout = null;
+
+			unitText.color = Color.red;
             unitText2.color = Color.red;
-        }
+
+			colorCorout = StartCoroutine(CoUnitTextColorChange());
+		}
         else
         {
 			unitText.color = Color.white;
 			unitText2.color = orangeColor;
 		}
+    }
+
+	private IEnumerator CoUnitTextColorChange()
+	{
+		yield return new WaitForSeconds(1);
+		SetUnitColor(false);
+	}
+
+    public void SetRect(Deck deck, bool isuserDeck)
+    {
+        var scrollRect = isuserDeck ? unitHavingRect : unitRegetRect;
+
+        var toys = deck.Toys;
+        foreach(var toy in toys )
+        {
+            var count = toy.count;
+            var data = toy.data;
+
+
+        }
     }
 }
