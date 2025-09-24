@@ -18118,6 +18118,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 495656393}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickStageChoosing
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ButtonFunctions, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7311496522119292736, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
       propertyPath: m_Color.b
       value: 0.31132078
@@ -22357,6 +22385,34 @@ PrefabInstance:
     - target: {fileID: 6444210167037268740, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 495656393}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickHome
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ButtonFunctions, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523490589372864984, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7311496522119292736, guid: 7135f27e303285e4cad8ff97be935fc4, type: 3}
       propertyPath: m_Color.b

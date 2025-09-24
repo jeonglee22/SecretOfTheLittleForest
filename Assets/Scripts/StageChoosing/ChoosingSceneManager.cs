@@ -24,6 +24,8 @@ public class ChoosingSceneManager : MonoBehaviour
 
     public Image background;
 
+    private bool alreadyChoose = false;
+
 	private void Awake()
 	{
 		uIManager = GetComponent<ChoosingSceneUIManager>();
@@ -40,6 +42,8 @@ public class ChoosingSceneManager : MonoBehaviour
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
+        alreadyChoose = false;
+
         emptyProb = DataTableManger.SettingTable.Get(Settings.emptyRoom);
         normalProb = DataTableManger.SettingTable.Get(Settings.normalBattle);
         eliteProb = DataTableManger.SettingTable.Get(Settings.eliteBattle);
@@ -85,6 +89,11 @@ public class ChoosingSceneManager : MonoBehaviour
 
 	private void TapFunc(Room x)
     {
+        if (alreadyChoose)
+            return;
+
+        alreadyChoose = true;
+
         SaveLoadManager.Data.StageCount = ++stageCount;
 		switch (x)
 		{
@@ -126,7 +135,7 @@ public class ChoosingSceneManager : MonoBehaviour
                 room = GetRandomWithBoss();
             }
 
-            if (stageCount > DataTableManger.SettingTable.Get(Settings.bossCount) + 20)
+            if (stageCount >= DataTableManger.SettingTable.Get(Settings.bossCount) + 20)
             {
                 result.Add(Room.Boss);
                 continue;
@@ -168,7 +177,7 @@ public class ChoosingSceneManager : MonoBehaviour
     {
 		float prob = UnityEngine.Random.value;
 
-        if(prob < bossProb * (stageCount - bossCount))
+        if(prob <= bossProb * (stageCount - bossCount))
             return Room.Boss;
 
         return GetRandomWithoutBoss();

@@ -40,4 +40,16 @@ public class ButtonFunctions : MonoBehaviour
 	{
 		Camera.main.transform.position = gameCameraPos;
 	}
+
+	public void OnClickHome()
+	{
+		SaveLoadManager.Save();
+		SceneManager.LoadScene((int)Scenes.Lobby);
+	}
+
+	public void OnClickStageChoosing()
+	{
+		SaveLoadManager.Save();
+		SceneManager.LoadScene((int)Scenes.StageChoosing);
+	}
 }
