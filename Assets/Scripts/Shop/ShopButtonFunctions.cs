@@ -3,11 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class ShopButtonFunctions : MonoBehaviour
 {
-	private float gold;
 	private float unitCount;
 
 	public GameObject buyPanel;
 	public GameObject sellPanel;
+
+	private int reloadCost = 4;
 
 	private ShopUIManagers shopUIManagers;
 
@@ -20,8 +21,6 @@ public class ShopButtonFunctions : MonoBehaviour
 	{
 		SaveLoadManager.Load();
 		var data = SaveLoadManager.Data;
-
-		gold = data.gold;
 		unitCount = data.unitCount;
 	}
 
@@ -49,18 +48,27 @@ public class ShopButtonFunctions : MonoBehaviour
 	}
 
 	public void OnClickReloadElements()
-	{
-		shopUIManagers.SetBuyItems();
-
+	{		
 		if (shopUIManagers.IsFree)
 		{
 			shopUIManagers.IsFree = false;
 		}
 		else
 		{
-			gold -= 4;
+			shopUIManagers.Gold -= reloadCost;
+
+			if (shopUIManagers.Gold < reloadCost && !shopUIManagers.IsFree)
+			{
+				shopUIManagers.SetGoldColor(true);
+				shopUIManagers.Gold += reloadCost;
+				return;
+			}
+
 			SaveLoadManager.Data.gold -= 4;
 		}
-		shopUIManagers.SetGoldText(gold);
+
+		shopUIManagers.SetBuyItems();
+		shopUIManagers.SetGoldText(shopUIManagers.Gold);
+		shopUIManagers.SetCostText();
 	}
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 public class ShopLogicManager : MonoBehaviour
 {
     private ShopUIManagers uIManagers;
+	private ShopButtonFunctions buttonFunctions;
 
 	private int stageId;
 	private float unitLimit;
@@ -17,6 +18,7 @@ public class ShopLogicManager : MonoBehaviour
 	private void Awake()
 	{
 		uIManagers = GetComponent<ShopUIManagers>();
+		buttonFunctions = GetComponent<ShopButtonFunctions>();
 	}
 
 	private void OnEnable()
@@ -35,7 +37,7 @@ public class ShopLogicManager : MonoBehaviour
         uIManagers.SetBuyItems();
 		uIManagers.SetGoldText(gold);
 		uIManagers.SetCostText();
-
+		buttonFunctions.OnClickChangeColor(true);
 	}
 
     // Update is called once per frame

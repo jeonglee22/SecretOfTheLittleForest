@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -22,7 +23,13 @@ public class ShopUIManagers : MonoBehaviour
 
     public List<Image> buttonImages;
 
+    private Coroutine colorCorout;
+
+    public List<TouchManager> touchManagers;
+    public List<Image> buyBlockImages;
+
     private List<int> choosedIds;
+    private List<int> costs;
     private int stageId;
 	private float unitLimit;
 	private float goldLimit;
@@ -34,6 +41,7 @@ public class ShopUIManagers : MonoBehaviour
 	public bool IsFree { get; set; } = true;
 
     private Deck userDeck;
+    public float Gold;
 
 	private void OnEnable()
 	{
@@ -42,11 +50,25 @@ public class ShopUIManagers : MonoBehaviour
         stageId = data.stageId;
         unitLimit = data.unitLimit;
         userDeck = data.Deck;
+        Gold = data.gold;
 	}
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        for(int i = 0; i < touchManagers.Count; i++)
+        {
+            var manager = touchManagers[i];
+
+            if (!manager.IsTap)
+                return;
+
+            manager.gameObject.SetActive(false);
+            manager.tapFunc = () =>
+            {
+                if (costs[i] > gold)
+            };
+        }
     }
 
     public void SetBuyItems()
@@ -65,7 +87,10 @@ public class ShopUIManagers : MonoBehaviour
         nameTexts[index].color = ConvertRating(data.Rating);
         heartTexts[index].text = data.HP.ToString();
         attackTexts[index].text = data.Attack.ToString();
-        coinTexts[index].text = GetBuyCost(data.Price).ToString();
+        var value = GetBuyCost(data.Price);
+
+		coinTexts[index].text = value.ToString();
+        costs.Add(Mathf.FloorToInt(value));
         toyImages[index].sprite = GameObjectManager.IconResource.GetToyImage(data.ModelCode);
     }
 
@@ -135,8 +160,14 @@ public class ShopUIManagers : MonoBehaviour
     {
         if(isLimit)
         {
-            goldText.color = Color.red;
+			if (colorCorout != null)
+				StopCoroutine(colorCorout);
+			colorCorout = null;
+
+			goldText.color = Color.red;
             goldText2.color = Color.red;
+
+            colorCorout = StartCoroutine(CoTextColorChange());
         }
         else
         {
@@ -144,6 +175,12 @@ public class ShopUIManagers : MonoBehaviour
             goldText2.color = orangeColor;
 		}
     }
+
+    private IEnumerator CoTextColorChange()
+    {
+        yield return new WaitForSeconds(1);
+        SetGoldColor(false);
+	}
 
     public void SetUnitColor(bool isLimit)
     {
