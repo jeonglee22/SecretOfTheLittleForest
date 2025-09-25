@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -119,7 +118,9 @@ public class Node : MonoBehaviour, IDropHandler
 		color = (state) switch
 		{
 			NodeState.None => initColor,
-			NodeState.Enemy => !toy.IsElite ? Color.red : new Color(0f, 100f/255f, 0f, 1f),
+			NodeState.Enemy => 
+				toy == null ? Color.red :	
+				(!toy.IsElite ? Color.red : new Color(0f, 100f/255f, 0f, 1f)),
 			NodeState.EnemyMove => 
 				StartingNode != null ? 
 				(!StartingNode.Toy.IsElite ? new Color(1f, 0.5f, 0f, 1f) : Color.green) : 

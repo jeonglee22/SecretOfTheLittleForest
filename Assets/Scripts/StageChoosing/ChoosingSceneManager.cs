@@ -36,7 +36,7 @@ public class ChoosingSceneManager : MonoBehaviour
         SaveLoadManager.Load();
         var data = SaveLoadManager.Data;
         stageCount = data.StageCount;
-		
+		rooms = data.Rooms;
 	}
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,7 +53,8 @@ public class ChoosingSceneManager : MonoBehaviour
         bossCount = DataTableManger.SettingTable.Get(Settings.bossCount);
         probList = new List<float> { normalProb, eliteProb, shopProb, randomProb,emptyProb };
 
-        rooms = GetRandomRoom(3);
+        if (rooms == null)
+            rooms = GetRandomRoom(3);
 
 		for (int i = 0; i < rooms.Count; i++)
         {
@@ -87,6 +88,14 @@ public class ChoosingSceneManager : MonoBehaviour
 		}
     }
 
+    public void OnClickNodeSettingAtChoosing()
+    {
+		SaveLoadManager.Data.Scenes = Scenes.StageChoosing;
+        SaveLoadManager.Data.Rooms = rooms;
+		SaveLoadManager.Save();
+		SceneManager.LoadScene((int)Scenes.NodeSetting);
+	}
+
 	private void TapFunc(Room x)
     {
         if (alreadyChoose)
@@ -95,6 +104,7 @@ public class ChoosingSceneManager : MonoBehaviour
         alreadyChoose = true;
 
         SaveLoadManager.Data.StageCount = ++stageCount;
+        SaveLoadManager.Data.Rooms = null;
 		switch (x)
 		{
 			case Room.Normal:

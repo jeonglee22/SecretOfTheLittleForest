@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BoardManager : MonoBehaviour
 {
@@ -26,27 +27,63 @@ public class BoardManager : MonoBehaviour
 	public bool IsChoosed { get; set; }
 	private float stageId;
 
+	private Deck playerDeck;
+	public Deck PlayerDeck { get { return playerDeck; } set { playerDeck = value; } }
+	public Toy toy;
+
 	private void OnEnable()
 	{
 		SaveLoadManager.Load();
 		var data = SaveLoadManager.Data;
 		battleType = data.BattleType;
 		stageId = data.stageId;
+		playerDeck = data.Deck;
+		playerDeck.Pos = data.Deck.Pos;
+		playerDeck.Toys = data.Deck.Toys;
 	}
 
-	public Node GetRandomNodeInPlayer()
+	private void Start()
 	{
-		if(playManager.GetAlivePlayerCount() == playerStartNodes.Count)
-			return null;
+		SetPlayerDeckOnNode();
+		if(SceneManager.GetActiveScene().buildIndex == (int)Scenes.NodeSetting)
+			SetBoardColor(false);
+	}
 
-		var index = 0;
-		do
+	private void OnDisable()
+	{
+		
+	}
+
+	public void SaveDeckSetting()
+	{
+		var posList = new List<int>();
+		for (int i = 0; i < playerStartNodes.Count; i++)
 		{
-			index = UnityEngine.Random.Range(0, playerStartNodes.Count);
-		} while (playerStartNodes[index].State == NodeState.Player);
+			if (playerStartNodes[i].Toy == null)
+				posList.Add(0);
+			else
+				posList.Add(playerStartNodes[i].Toy.Data.UnitID);
+		}
+		playerDeck.Pos = posList;
+		SaveLoadManager.Data.Deck = playerDeck;
+		SaveLoadManager.Data.Deck.Pos = posList;
+		SaveLoadManager.Save();
+	}
 
-		playManager.AddPlayers(playerStartNodes[index]);
-		return playerStartNodes[index];
+	public void SetPlayerDeckOnNode()
+	{
+		var posList = playerDeck.Pos;
+		var toys = playerDeck.Toys;
+
+		for (int i = 0; i < posList.Count; i++)
+		{
+			var id = posList[i];
+			if (id == 0)
+				continue;
+
+			toy.Data = DataTableManger.ToyTable.Get(posList[i]);
+			ToySettingOnNode(playerStartNodes[i], toy, false);
+		}
 	}
 
 	public Node GetRandomNodeInEnemy()
@@ -141,5 +178,14 @@ public class BoardManager : MonoBehaviour
 		node.State = isEnemy ? NodeState.Enemy : NodeState.Player;
 
 		return spawnedToy;
+	}
+
+	public void SetBoardColor(bool isElite)
+	{
+		eliteStartNodes.ForEach(n => n.State = NodeState.None);
+		enemyStartNodes.ForEach(n => n.State = NodeState.None);
+
+		List<Node> nodes = isElite ? eliteStartNodes : enemyStartNodes;
+		nodes.ForEach(n => n.State = NodeState.Enemy);
 	}
 }

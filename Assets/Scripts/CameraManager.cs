@@ -39,7 +39,7 @@ public class CameraManager : MonoBehaviour
 		//isDrag = false;
 		CameraDeckSettingGamePos = chessboard.transform.position + gameOffset;
 		CameraDeckSettingInitPos = chessboard.transform.position + initOffset;
-		Camera.main.transform.position = CameraDeckSettingInitPos;
+		//Camera.main.transform.position = CameraDeckSettingInitPos;
 		cameraDistance = transform.position.y - chessboard.transform.position.y;
 	}
 

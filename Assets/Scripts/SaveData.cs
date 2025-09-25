@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public abstract class SaveData
@@ -20,6 +21,8 @@ public class SaveDataV1 : SaveData
 	public float gold = 0;
 	public int Crystal = 0;
 	public int StageCount = 0;
+	public Scenes Scenes { get; set; } = Scenes.Game;
+	public List<Room> Rooms { get; set; }
 
 	public SaveDataV1()
 	{

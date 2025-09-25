@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/TestScene.unity
     guid: 9a3cf1a25b4ee0a478296321edfbca31
   - enabled: 1
+    path: Assets/Scenes/NodeSettingScene.unity
+    guid: 2360d89101f2c20438ef7421d36a2b35
+  - enabled: 1
     path: Assets/Scenes/ShopScene.unity
     guid: e49b902bd8519254eb7ee38cb28979f9
   m_configObjects:

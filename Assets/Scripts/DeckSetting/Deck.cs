@@ -7,9 +7,9 @@ using UnityEngine;
 public class Deck
 {
 	[SerializeField] private List<(int count, ToyData data)> toys;
-	public List<(int count,ToyData data)> Toys { get { return toys; } }
+	public List<(int count,ToyData data)> Toys { get { return toys; } set { toys = value; } }
 	[SerializeField]private List<int> pos;
-	public List<int> Pos { get { return pos; } }
+	public List<int> Pos { get { return pos; } set { pos = value; } }
 	[SerializeField] private int kingId;
 	public int KingId { get { return kingId; } set { kingId = value; } }
 	public int KingPos { get; set; }

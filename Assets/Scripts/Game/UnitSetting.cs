@@ -11,6 +11,7 @@ public class UnitSetting : MonoBehaviour
 	public TextMeshProUGUI countText;
 
 	private Deck unitDeck;
+	private List<int> unitPos;
 
 	private Sprite heartSprite;
 	private Sprite attackSprite;
@@ -25,26 +26,34 @@ public class UnitSetting : MonoBehaviour
 
 	public CameraManager cameraManager;
 	public ReadyCanvasManager readyCanvasManager;
+	public BoardManager boardManager;
 
 	private int count = 0;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
-    {
+	{
 		unitContent = unitRect.content;
 
 		heartSprite = Resources.Load<Sprite>(Icons.heartPath);
 		attackSprite = Resources.Load<Sprite>(Icons.attackPath);
 
+		for(int i = 0; i < unitPos.Count; i++)
+		{
+			if (unitPos[i] != 0)
+			{
+				unitDeck.RemoveDeckData(DataTableManger.ToyTable.Get(unitPos[i]));
+				count++;
+			}
+				
+		}
 		UnitSettingOnBoard();
-
-		cameraManager.SetCameraToSettingPos();
 	}
 
 	private void OnEnable()
 	{
-		SaveLoadManager.Load();
 		unitDeck = SaveLoadManager.Data.Deck;
+		unitPos = SaveLoadManager.Data.Deck.Pos;
 	}
 
 	// Update is called once per frame

@@ -201,6 +201,7 @@ public enum Scenes
 	DeckSetting,
     StageChoosing,
 	Game,
+    NodeSetting,
     Shop,
 
     Test,
