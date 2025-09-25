@@ -144,6 +144,8 @@ public static class Settings
     public const string moveCount = "Move_count";
     public const string unitCount = "Unit_count";
     public const string battleTurnCount = "Battle_Turn";
+    public const string eliteTurnCount = "Elite_Turn";
+    public const string bossTurnCount = "Boss_Turn";
     public const string costLimit0 = "Cost_lim";
     public const string costLimit1 = "Cost_lim_1";
     public const string costLimit2 = "Cost_lim_2";

@@ -45,6 +45,26 @@ public class EliteWinUIManager : MonoBehaviour
 		SaveLoadManager.Save();
 	}
 
+	public void OnClickGetGold()
+	{
+		var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
+
+		var battleType = boardManager.BattleType;
+		var gold = battleType switch
+		{
+			BattleType.Normal => DataTableManger.SettingTable.Get(Settings.battleGold),
+			BattleType.Elite => DataTableManger.SettingTable.Get(Settings.eliteGold),
+			BattleType.Boss => DataTableManger.SettingTable.Get(Settings.bossGold),
+			_ => throw new System.InvalidOperationException(),
+		};
+		Gold += gold;
+		Gold = Mathf.Clamp(Gold, 0, DataTableManger.SettingTable.Get(Settings.goldLimit));
+
+		SetGoldText();
+		SceneManager.LoadScene((int)Scenes.StageChoosing);
+		SaveLoadManager.Data.gold = Gold;
+	}
+
 	private void SetGoldText()
 	{
 		var goldLimit = DataTableManger.SettingTable.Get(Settings.goldLimit);

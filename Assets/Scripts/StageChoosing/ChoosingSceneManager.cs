@@ -170,7 +170,7 @@ public class ChoosingSceneManager : MonoBehaviour
 
 	private Room GetRandomWithoutBoss()
 	{
-		float prob = UnityEngine.Random.value;
+		float prob = Random.value;
 		int index = -1;
 		while (prob > 0f)
 		{
@@ -185,7 +185,7 @@ public class ChoosingSceneManager : MonoBehaviour
 
 	private Room GetRandomWithBoss()
     {
-		float prob = UnityEngine.Random.value;
+		float prob = Random.value;
 
         if(prob <= bossProb * (stageCount - bossCount))
             return Room.Boss;

@@ -75,8 +75,15 @@ public class PlayManager : MonoBehaviour
 
 	private void Start()
 	{
-		//totalTurn = (int) DataTableManger.SettingTable.Get(Settings.battleTurnCount);
-		totalTurn = 4;
+		string turnCount = boardManager.BattleType switch
+		{
+			BattleType.Normal => Settings.battleTurnCount,
+			BattleType.Elite => Settings.eliteTurnCount,
+			BattleType.Boss => Settings.bossTurnCount
+		};
+
+		totalTurn = (int) DataTableManger.SettingTable.Get(turnCount);
+		//totalTurn = 4;
 		blockPlane.SetActive(false);
 		gameCanvasManager.SetTurnText(totalTurn);
 	}
@@ -123,7 +130,7 @@ public class PlayManager : MonoBehaviour
 		}
 		else
 		{
-			int gameResult = IsEnemyWin ? 1 : -1;
+			int gameResult = IsEnemyWin ? -1 : 1;
 			OpenResultWindow(gameResult);
 		}
 	}

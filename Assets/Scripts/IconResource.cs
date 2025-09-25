@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class IconResource : ObjectResource
 {
-	private string name = "Toys/Toy{0}";
+	//private string name = "Toys/Toy{0}";
 
 	private Dictionary<string, Sprite> icons = new Dictionary<string, Sprite>();
 	private Dictionary<string, Sprite> toyImages = new Dictionary<string, Sprite>();

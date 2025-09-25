@@ -7,6 +7,7 @@ public class GameCanvasManager : MonoBehaviour
 {
     public List<GameObject> turnImages;
 	public PlayManager playManager;
+	public BoardManager boardManager;
 	public Turn playerturn;
 	public TextMeshProUGUI turnText;
 
@@ -15,8 +16,15 @@ public class GameCanvasManager : MonoBehaviour
 
 	private void Start()
 	{
-		//SetTurnText((int)DataTableManger.SettingTable.Get(Settings.battleTurnCount));
-		SetTurnText(4);
+		string turnCount = boardManager.BattleType switch
+		{
+			BattleType.Normal => Settings.battleTurnCount,
+			BattleType.Elite => Settings.eliteTurnCount,
+			BattleType.Boss => Settings.bossTurnCount
+		};
+
+		SetTurnText((int)DataTableManger.SettingTable.Get(turnCount));
+		//SetTurnText(4);
 		turnText.outlineColor = Color.black;
 		turnText.outlineWidth = 0.2f;
 		currentCount = (int) DataTableManger.SettingTable.Get(Settings.moveCount);

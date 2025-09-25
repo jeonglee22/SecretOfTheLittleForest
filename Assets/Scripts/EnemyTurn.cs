@@ -86,7 +86,6 @@ public class EnemyTurn : Turn
 		{
 			if (aiFuncs[i]())
 			{
-				Debug.Log(i);
 				break;
 			}
 
@@ -497,7 +496,6 @@ public class EnemyTurn : Turn
 					continue;
 				}
 
-				Debug.Log(boardManager.allNodes[movePos].State);
 				canMoves.Add((movePos,node));
 			}
 		}
@@ -512,7 +510,6 @@ public class EnemyTurn : Turn
 		var beforeNode = boardManager.allNodes[canMoves[maxCostIndex].Item2];
 
 		toyControl.ToyMove(ref beforeNode);
-		Debug.Log(playLogic.ChoosedNode, beforeNode);
 		playLogic.ClearNodes();
 
 		return true;
