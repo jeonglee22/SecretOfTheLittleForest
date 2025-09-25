@@ -8,6 +8,11 @@ public class Deck
 {
 	[SerializeField] private List<(int count, ToyData data)> toys;
 	public List<(int count,ToyData data)> Toys { get { return toys; } }
+	[SerializeField]private List<int> pos;
+	public List<int> Pos { get { return pos; } }
+	[SerializeField] private int kingId;
+	public int KingId { get { return kingId; } set { kingId = value; } }
+	public int KingPos { get; set; }
 	private int Count { get { return toys.Count; } }
 	//private bool isPlayDeck;
 
@@ -15,6 +20,11 @@ public class Deck
 	{
 		toys = new List<(int, ToyData)>();
 		//isPlayDeck = false;
+	}
+
+	public void AddPosSetting(List<int> posList)
+	{
+		pos = posList;
 	}
 
 	public void LoadDeckData()

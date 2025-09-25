@@ -40,6 +40,10 @@ public static class DataTableManger
         var stageStringTable = new StageStringTable();
         stageStringTable.Load(DataTableIds.Strings);
 		tables.Add(DataTableIds.Strings, stageStringTable);
+
+        var presetTable = new PresetTable();
+		presetTable.Load(DataTableIds.Preset);
+		tables.Add(DataTableIds.Preset, presetTable);
 	}
 
     public static StageStringTable StageStringTable
@@ -95,6 +99,14 @@ public static class DataTableManger
 		get
 		{
 			return Get<RewardTable>(DataTableIds.Reward);
+		}
+	}
+
+	public static PresetTable PresetTable
+	{
+		get
+		{
+			return Get<PresetTable>(DataTableIds.Preset);
 		}
 	}
 

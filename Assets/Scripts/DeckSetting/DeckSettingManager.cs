@@ -1,23 +1,24 @@
 using System;
-using TMPro;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using SaveDataVC = SaveDataV1;
 
-public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
+public class DeckSettingManager : MonoBehaviour
 {
-	public ScrollRect unitRect;
+	public ScrollRect presetNameRect;
+	public ScrollRect presetContentRect;
+
 	private RectTransform unitContent;
+	private RectTransform presetContent;
+
+	public GameObject presetPanel;
+	public GameObject presetContentPanelData;
 
 	private Deck unitDeck;
-	private StatShowManager statShowManager;
 	private ChoosingUnitManager choosingUnitManager;
 
 	public Toy toy;
-
-	private GameObject centerToy;
-
-	public TextMeshProUGUI countText;
 
 	private Vector2 cellSize = new Vector2(110, 110);
 
@@ -29,7 +30,6 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 
 	private void Awake()
 	{
-		statShowManager = GetComponent<StatShowManager>();
 		choosingUnitManager = GetComponent<ChoosingUnitManager>();
 	}
 
@@ -42,162 +42,111 @@ public class DeckSettingManager : MonoBehaviour, IPointerClickHandler
 
 	private void OnDisable()
 	{
+		SaveLoadManager.Data = new SaveDataVC();
 		SaveLoadManager.Data.Deck = unitDeck;
 		SaveLoadManager.Save();
 	}
 
 	private void Start()
 	{
-		unitContent = unitRect.content;
+		unitContent = presetNameRect.content;
+		presetContent = presetContentRect.content;
+
+		SetInitPresetList();
+	}
+
+	private void SetInitPresetList()
+	{
+		var presetTable = DataTableManger.PresetTable;
+		var count = presetTable.Count;
+		for(int i = 0; i < count; i++)
+		{
+			var data = DataTableManger.PresetTable.Get((int)IDOffset.Preset + i);
+			var preset = Instantiate(presetPanel, unitContent);
+			preset.GetComponent<PresetPanelData>().SetData(data.Name);
+			preset.GetComponent<Toggle>().onValueChanged.AddListener((bool b) => { if (b) OpenPreset(data); });
+			preset.GetComponent<Toggle>().group = unitContent.gameObject.GetComponent<ToggleGroup>();
+		}
+	}
+
+	private void OpenPreset(PresetData data)
+	{
+		var pos = data.Pos;
+		unitDeck = new Deck();
+		unitDeck.AddPosSetting(pos.ToList());
+		unitDeck.KingId = pos[data.BossPos];
+		unitDeck.KingPos = data.BossPos;
+		for (int i = 0; i < pos.Length; i++)
+		{
+			if (pos[i] == 0)
+				continue;
+
+			unitDeck.AddDeckData(DataTableManger.ToyTable.Get(pos[i]));
+		}
 
 		SetDeckInfos();
-
-		SetFirstImageOnView();
 	}
 
 	public void SetDeckInfos()
 	{
-		for(int i = 0; i < unitContent.childCount; i++)
-			Destroy(unitContent.GetChild(i).gameObject);
+		var presetContent = presetContentRect.content;
+		for (int i = 0; i < presetContent.childCount; i++)
+			Destroy(presetContent.GetChild(i).gameObject);
 
-		var emptyGo = new GameObject();
-		var emptyImage = emptyGo.AddComponent<Image>();
-		emptyImage.rectTransform.sizeDelta = cellSize;
-		emptyImage.color = new Color(0, 0, 0, 0);
-		Instantiate(emptyGo, unitContent);
-		Instantiate(emptyGo, unitContent);
-
-		foreach (var toyData in unitDeck.Toys)
+		foreach (var toyGroup in unitDeck.Toys)
 		{
-			toy.Data = toyData.data;
-			toy.SetData();
-			var go = new GameObject();
-			var toyComp = go.AddComponent<Toy>();
-			var image = go.AddComponent<Image>();
-			var collider = go.AddComponent<BoxCollider2D>();
-			image.sprite = toy.Toy2D;
-			collider.size = cellSize;
-			collider.isTrigger = true;
+			var count = toyGroup.count;
+			var toyData = toyGroup.data;
 
-			var obj = Instantiate(go, unitContent);
-			obj.GetComponent<Toy>().Data = toyData.data;
-			obj.GetComponent<Toy>().SetData();
-
-			if (toyData.count != 1)
-			{
-				var text = Instantiate(countText, obj.transform);
-				text.alignment = TextAlignmentOptions.BottomRight;
-				text.text = $"x{toyData.count}";
-				text.color = Color.black;
-				text.fontStyle = FontStyles.Bold;
-				text.enableAutoSizing = true;
-				text.rectTransform.anchorMax = new Vector2(1, 0.5f);
-				text.rectTransform.anchorMin = new Vector2(0.5f, 0);
-			}
-
-			Destroy(go);
+			var content = Instantiate(presetContentPanelData, presetContent);
+			content.GetComponent<ContentPresetPanelData>().SetData(toyData, count, toyData.UnitID == unitDeck.KingId);
 		}
-
-		Instantiate(emptyGo, unitContent);
-		Instantiate(emptyGo, unitContent);
-		Destroy(emptyGo);
 	}
 
 	private void Update()
 	{
-		SetCellSize();
+		//SetCellSize();
 
-		if (isValueChange && Time.time - lastChangedTime > clampTimeInterval)
-		{
-			int minIndex = -1;
-			float minDis = float.MaxValue;
+		//if (isValueChange && Time.time - lastChangedTime > clampTimeInterval)
+		//{
+		//	int minIndex = -1;
+		//	float minDis = float.MaxValue;
 
-			var count = unitDeck.Toys.Count;
+		//	var count = unitDeck.Toys.Count;
 
-			if (count == 1)
-			{
-				unitRect.horizontalNormalizedPosition = 0;
-				isValueChange = false;
-				return;
-			}
+		//	if (count == 1)
+		//	{
+		//		presetNameRect.horizontalNormalizedPosition = 0;
+		//		isValueChange = false;
+		//		return;
+		//	}
 
-			for (int i = 0; i < count; i++)
-			{
-				var interval = 1f / (count - 1) * (float)i;
-				if (Mathf.Abs(interval - currentValue) < minDis) 
-				{ 
-					minDis = Mathf.Abs(interval - currentValue);
-					minIndex = i;
-				}
-			}
+		//	for (int i = 0; i < count; i++)
+		//	{
+		//		var interval = 1f / (count - 1) * (float)i;
+		//		if (Mathf.Abs(interval - currentValue) < minDis) 
+		//		{ 
+		//			minDis = Mathf.Abs(interval - currentValue);
+		//			minIndex = i;
+		//		}
+		//	}
 
-			unitRect.horizontalNormalizedPosition = 1f / (count - 1) * (float)minIndex;
-			isValueChange = false;
-		}
+		//	presetNameRect.horizontalNormalizedPosition = 1f / (count - 1) * (float)minIndex;
+		//	isValueChange = false;
+		//}
 	}
 
-	private void SetCellSize()
-	{
-		var content = unitRect.content;
-		var gridgroup = content.GetComponent<GridLayoutGroup>();
-		var cellsize = (unitRect.gameObject.GetComponent<RectTransform>().rect.width - 40f) / 5f;
-		cellSize = new Vector2(cellsize, cellsize);
-		gridgroup.cellSize = cellSize;
+	//private void SetCellSize()
+	//{
+	//	var content = presetNameRect.content;
+	//	var gridgroup = content.GetComponent<GridLayoutGroup>();
+	//	var cellsize = (presetNameRect.gameObject.GetComponent<RectTransform>().rect.width - 40f) / 5f;
+	//	cellSize = new Vector2(cellsize, cellsize);
+	//	gridgroup.cellSize = cellSize;
 
-		foreach (var collider in unitRect.content.GetComponentsInChildren<BoxCollider2D>())
-		{
-			collider.size = cellSize;
-		}
-	}
-
-	private void SetFirstImageOnView()
-	{
-		var firstData = unitDeck.Toys[0].data;
-		toy.Data = firstData;
-		toy.SetData();
-		statShowManager.SetGridImage(toy.Toy2D);
-	}
-
-	public void OnValueChange(Vector2 vec)
-	{
-		lastChangedTime = Time.time;
-		isValueChange = true;
-		currentValue = vec.x;
-	}
-
-	public void AddChoossedToy(ToyData data)
-	{
-		unitDeck.AddDeckData(data);
-		SetDeckInfos();
-	}
-
-	public void ReduceChoosedToy(ToyData data)
-	{
-		unitDeck.RemoveDeckData(data);
-		SetDeckInfos();
-
-		if(unitDeck.Toys.Count == 0)
-		{
-			statShowManager.RemoveGridImage();
-			centerToy = null;
-		}
-	}
-
-	public void OnPointerClick(PointerEventData eventData)
-	{
-		if (centerToy != null && eventData.pointerEnter == centerToy)
-		{
-			choosingUnitManager.AddToyOnChoosedDeck(centerToy);
-		}
-		else if (eventData.pointerEnter != null && eventData.pointerEnter.GetComponent<Toy>() != null &&
-			Input.GetTouch(0).position.x < Screen.width * 0.5f)
-		{
-			choosingUnitManager.AddToyOnChoosedDeck(eventData.pointerEnter);
-		}
-		else if (eventData.pointerEnter != null && eventData.pointerEnter.GetComponent<Toy>() != null &&
-			Input.GetTouch(0).position.x > Screen.width * 0.5f)
-		{
-			choosingUnitManager.RemoveToyInChoosedDeck(eventData.pointerEnter);
-		}
-	}
+	//	foreach (var collider in presetNameRect.content.GetComponentsInChildren<BoxCollider2D>())
+	//	{
+	//		collider.size = cellSize;
+	//	}
+	//}
 }

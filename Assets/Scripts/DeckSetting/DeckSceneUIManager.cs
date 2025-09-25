@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,8 +6,7 @@ using UnityEngine.SceneManagement;
 public class DeckSceneUIManager : MonoBehaviour
 {
 	public ChoosingUnitManager settingManager;
-	public TextMeshProUGUI costText;
-	public TextMeshProUGUI countText;
+
 	public TextMeshProUGUI descriptionText;
 
 	private int costMax;
@@ -28,9 +26,6 @@ public class DeckSceneUIManager : MonoBehaviour
 
 	private void Start()
 	{
-		SetCostLevel(0);
-		SetCostText(0);
-		SetCountText(0);
 		popupPanel.SetActive(false);
 	}
 
@@ -43,47 +38,6 @@ public class DeckSceneUIManager : MonoBehaviour
 		descriptionText.text = "게임을 시작하시겠습니까?";
 		acceptFunc = () => SceneManager.LoadScene((int)Scenes.StageChoosing);
 		popupPanel.SetActive(true);
-	}
-
-	public void OnClickReset()
-	{
-		descriptionText.text = "선택한 목록을\n비우시겠습니까?";
-		acceptFunc = () => settingManager.RemoveAllToysInDeck();
-		popupPanel.SetActive(true);
-	}
-
-	public void SetCostText(int cost)
-	{
-		costText.text = $"{cost}/{costMax}";
-		if (cost > costMax)
-			costText.color = Color.red;
-		else
-			costText.color = Color.white;
-		isNotCorrectCost = cost > costMax;
-	}
-
-	public void SetCostLevel(int level)
-	{
-		var cost = level switch
-		{
-			0 => DataTableManger.SettingTable.Get(Settings.costLimit0),
-			1 => DataTableManger.SettingTable.Get(Settings.costLimit1),
-			2 => DataTableManger.SettingTable.Get(Settings.costLimit2),
-			3 => DataTableManger.SettingTable.Get(Settings.costLimit3),
-			_ => throw new System.Exception("Wrong Input")
-		};
-		costMax = Mathf.FloorToInt(cost);
-	}
-
-	public void SetCountText(int count)
-	{
-		int limitCount = Mathf.FloorToInt(DataTableManger.SettingTable.Get(Settings.unitLimit));
-		countText.text = $"{count}/{limitCount}";
-		if (count > limitCount)
-			countText.color = Color.red;
-		else
-			countText.color = Color.white;
-		isNotCorrectCount = count > limitCount;
 	}
 
 	public void OnClickAccpet()
@@ -100,5 +54,10 @@ public class DeckSceneUIManager : MonoBehaviour
 	public void OnClickDebug()
 	{
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
+	}
+
+	public void OnValueChangeChoosedPreset()
+	{
+
 	}
 }

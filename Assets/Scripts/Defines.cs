@@ -89,6 +89,8 @@ public static class DataTableIds
     public static readonly string Stage = "StageCombinations";
     public static readonly string EliteStage = "EliteStage";
     public static readonly string Reward = "Reward";
+
+    public static readonly string Preset = "PresetTable";
 }
 
 public static class ResourceObjectIds
@@ -119,6 +121,7 @@ public static class Icons
     public const string diamondPath = "Icons/diamond";
     public const string signBoardPath = "Icons/signboard";
     public const string questionPath = "Icons/info-question";
+    public const string crownPath = "Icons/crown";
 
 }
 
@@ -208,4 +211,9 @@ public enum GameWindow
     MainGame,
     DeckSetting,
 
+}
+
+public enum IDOffset
+{
+    Preset = 3000,
 }

@@ -79,7 +79,8 @@ public class PlayManager : MonoBehaviour
 		{
 			BattleType.Normal => Settings.battleTurnCount,
 			BattleType.Elite => Settings.eliteTurnCount,
-			BattleType.Boss => Settings.bossTurnCount
+			BattleType.Boss => Settings.bossTurnCount,
+			_ => throw new SystemException("Wrong Battle")
 		};
 
 		totalTurn = (int) DataTableManger.SettingTable.Get(turnCount);
