@@ -117,6 +117,7 @@ MonoBehaviour:
   toyImage: {fileID: 2160413165787580184}
   multipleText: {fileID: 5734413213619077913}
   costText: {fileID: 1206036238189261974}
+  touchManager: {fileID: 2512835235523512630}
 --- !u!1 &2620101872585583648
 GameObject:
   m_ObjectHideFlags: 0

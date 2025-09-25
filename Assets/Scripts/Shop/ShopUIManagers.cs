@@ -24,7 +24,8 @@ public class ShopUIManagers : MonoBehaviour
 
     public List<Image> buttonImages;
 
-    private Coroutine colorCorout;
+    private Coroutine goldColorCorout;
+    private Coroutine unitColorCorout;
 
     public List<int> ChoosedIds {  get; private set; }
     public List<int> Costs { get; private set; }
@@ -149,14 +150,14 @@ public class ShopUIManagers : MonoBehaviour
     {
         if(isLimit)
         {
-			if (colorCorout != null)
-				StopCoroutine(colorCorout);
-			colorCorout = null;
+			if (goldColorCorout != null)
+				StopCoroutine(goldColorCorout);
+			goldColorCorout = null;
 
 			goldText.color = Color.red;
             goldText2.color = Color.red;
 
-            colorCorout = StartCoroutine(CoGoldTextColorChange());
+			goldColorCorout = StartCoroutine(CoGoldTextColorChange());
         }
         else
         {
@@ -164,6 +165,19 @@ public class ShopUIManagers : MonoBehaviour
             goldText2.color = orangeColor;
 		}
     }
+
+    public void SetGoldColorAtSellLimit()
+    {
+		if (goldColorCorout != null)
+			StopCoroutine(goldColorCorout);
+		goldColorCorout = null;
+
+        if (goldText.color != Color.red)
+		{
+            goldText.color = Color.red;
+            goldText2.color = Color.red;
+        }
+	}
 
     private IEnumerator CoGoldTextColorChange()
     {
@@ -175,14 +189,14 @@ public class ShopUIManagers : MonoBehaviour
     {
         if(isLimit)
         {
-			if (colorCorout != null)
-				StopCoroutine(colorCorout);
-			colorCorout = null;
+			if (unitColorCorout != null)
+				StopCoroutine(unitColorCorout);
+			unitColorCorout = null;
 
 			unitText.color = Color.red;
             unitText2.color = Color.red;
 
-			colorCorout = StartCoroutine(CoUnitTextColorChange());
+			unitColorCorout = StartCoroutine(CoUnitTextColorChange());
 		}
         else
         {
@@ -200,9 +214,13 @@ public class ShopUIManagers : MonoBehaviour
     public void SetRect(Deck deck, bool isuserDeck)
     {
         var scrollRect = isuserDeck ? unitHavingRect : unitRegetRect;
-        var content = scrollRect.content;
+        if (scrollRect == null)
+            return;
 
-        var toys = deck.Toys;
+        var content = scrollRect.content;
+        ClearContent(content);
+
+		var toys = deck.Toys;
         foreach(var toy in toys )
         {
             var count = toy.count;
@@ -210,8 +228,18 @@ public class ShopUIManagers : MonoBehaviour
 
             var obj = Instantiate(contentGO, content);
             var realCost = isuserDeck ? toy.data.Price : GetBuyCost(toy.data.Price);
-            obj.GetComponent<ContentPanelData>().SetData(data, count, Mathf.FloorToInt(realCost));
-            obj.GetComponent<TouchManager>().tapFunc = () => logicManager.ChooosedData = data;
+            var panelData = obj.GetComponent<ContentPanelData>();
+
+			panelData.SetData(data, count, Mathf.FloorToInt(realCost), isuserDeck);
+			panelData.touchManager.tapFunc = () => logicManager.MoveData(isuserDeck, panelData);
+        }
+    }
+
+    private void ClearContent(RectTransform content)
+    {
+        for (int i = 0; i < content.childCount; i++)
+        {
+            Destroy(content.GetChild(i).gameObject);
         }
     }
 }

@@ -47,6 +47,7 @@ public class ShopButtonFunctions : MonoBehaviour
 	{
 		buyPanel.SetActive(false);
 		sellPanel.SetActive(true);
+		logicManager.ReloadDeckInPanel();
 	}
 
 	public void OnClickChangeColor(bool isBuyButton)

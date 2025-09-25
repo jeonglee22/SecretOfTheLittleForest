@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,12 +10,22 @@ public class ShopLogicManager : MonoBehaviour
 	private int stageId;
 	private float unitLimit;
 	private float goldLimit;
-	public float Gold { get; set; }
+	private float gold;
+	public float Gold { get { return gold; } set { gold = value; } }
 
 	private Deck userDeck;
 	private Deck reGetDeck;
 
-	public ToyData ChooosedData { get; set; }
+	private ToyData choosedData;
+	public ToyData ChooosedData 
+	{
+		get { return choosedData; }
+		set
+		{
+			choosedData = value;
+
+		}
+	}
 
 	public List<TouchManager> touchManagers;
 	public List<Image> buyBlockImages;
@@ -34,13 +43,13 @@ public class ShopLogicManager : MonoBehaviour
 		var data = SaveLoadManager.Data;
 		stageId = data.stageId;
 		unitLimit = data.unitLimit;
-		Gold = data.gold;
+		gold = data.gold;
 		userDeck = data.Deck;
 	}
 
 	private void OnDisable()
 	{
-		SaveLoadManager.Data.gold = Gold;
+		SaveLoadManager.Data.gold = gold;
 		SaveLoadManager.Data.Deck = userDeck;
 		SaveLoadManager.Save();
 	}
@@ -48,15 +57,17 @@ public class ShopLogicManager : MonoBehaviour
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
+		goldLimit = DataTableManger.SettingTable.Get(Settings.goldLimit);
+
         uIManagers.SetBuyItems();
-		uIManagers.SetGoldText(Gold);
+		uIManagers.SetGoldText(gold);
 		uIManagers.SetCostText();
 		uIManagers.SetUnitText(userDeck.GetDeckTotalCount());
 
-		uIManagers.SetRect(userDeck, true);
-		uIManagers.SetRect(reGetDeck, false);
+		ReloadDeckInPanel();
 
 		buttonFunctions.OnClickChangeColor(true);
+		buttonFunctions.OnClickBuy();
 
 		for (int i = 0; i < touchManagers.Count; i++)
 		{
@@ -66,18 +77,23 @@ public class ShopLogicManager : MonoBehaviour
 			int index = i;
 			manager.tapFunc = () =>
 			{
-				if (uIManagers.Costs[index] > Gold)
+				var isLimit = false;
+
+				if (uIManagers.Costs[index] > gold)
 				{
 					uIManagers.SetGoldColor(true);
+					isLimit = true;
 				}
-				else if(userDeck.GetDeckTotalCount() == unitLimit)
+				if(userDeck.GetDeckTotalCount() == unitLimit)
 				{
 					uIManagers.SetUnitColor(true);
+					isLimit = true;
 				}
-				else
+
+				if(!isLimit)
 				{
-					Gold -= uIManagers.Costs[index];
-					uIManagers.SetGoldText(Gold);
+					gold -= uIManagers.Costs[index];
+					uIManagers.SetGoldText(gold);
 					userDeck.AddDeckData(DataTableManger.ToyTable.Get(uIManagers.ChoosedIds[index]));
 					uIManagers.SetUnitText(userDeck.GetDeckTotalCount());
 					buyBlockImages[index].gameObject.SetActive(true);
@@ -92,15 +108,42 @@ public class ShopLogicManager : MonoBehaviour
     {
     }
 
-	public void MoveDataTo(bool isuserDeck)
+	public void MoveData(bool isuserDeck, ContentPanelData data)
 	{
+		var toy = data.ToyData;
+
 		if (isuserDeck)
 		{
-
+			gold += data.Cost;
+			if (gold >= goldLimit)
+			{
+				uIManagers.SetGoldColorAtSellLimit();
+				gold = goldLimit;
+			}
+			userDeck.RemoveDeckData(toy);
+			reGetDeck.AddDeckData(toy);
 		}
 		else
 		{
-
+			gold -= data.Cost;
+			if(gold < 0)
+			{
+				uIManagers.SetGoldColor(true);
+				gold += data.Cost;
+				return;
+			}
+			userDeck.AddDeckData(toy);
+			reGetDeck.RemoveDeckData(toy);
 		}
+
+		uIManagers.SetGoldText(gold);
+		uIManagers.SetUnitText(userDeck.GetDeckTotalCount());
+		ReloadDeckInPanel();
+	}
+
+	public void ReloadDeckInPanel()
+	{
+		uIManagers.SetRect(userDeck, true);
+		uIManagers.SetRect(reGetDeck, false);
 	}
 }
