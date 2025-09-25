@@ -13,6 +13,8 @@ public class ToyControl : MonoBehaviour
 	private bool isMove = false;
 	public bool IsMove {  get { return isMove; } }
 
+	public bool IsTeleport { get; set; }
+
 	public Toy Toy 
 	{ 
 		get
@@ -36,7 +38,14 @@ public class ToyControl : MonoBehaviour
 		var currentPos = before.Toy.gameObject.transform.position;
 
 		nextPos.y = currentPos.y;
-		StartCoroutine(CoMove(currentPos, nextPos, isBack));
+		if(IsTeleport)
+		{
+			playLogic.ChoosedNode.Toy.transform.position = isBack ? currentPos : nextPos;
+			isMove = false;
+		}
+		else
+			StartCoroutine(CoMove(currentPos, nextPos, isBack));
+
 		if (!isBack)
 			before.Toy = null;
 		else

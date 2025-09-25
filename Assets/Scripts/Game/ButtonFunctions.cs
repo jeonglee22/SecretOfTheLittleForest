@@ -13,6 +13,7 @@ public class ButtonFunctions : MonoBehaviour
 	public ReadyCanvasManager readyCanvasManager;
 	public BoardManager boardManager;
 	public PlayLogic playLogic;
+	public ToyControl toyControl;
 
 	private bool isElite = false;
 
@@ -100,5 +101,10 @@ public class ButtonFunctions : MonoBehaviour
 	{
 		isElite = !isElite;
 		boardManager.SetBoardColor(isElite);
+	}
+
+	public void OnClickSetTeleportMoving()
+	{
+		toyControl.IsTeleport = !toyControl.IsTeleport;
 	}
 }

@@ -86,6 +86,7 @@ public class EnemyTurn : Turn
 		{
 			if (aiFuncs[i]())
 			{
+				Debug.Log(i);
 				break;
 			}
 
@@ -491,7 +492,9 @@ public class EnemyTurn : Turn
 			var movables = playLogic.ShowMovable(node, 0);
 			foreach (var movePos in movables)
 			{
-				if(boardManager.allNodes[movePos].State == NodeState.Player || CheckAttacked(movePos))
+				if(boardManager.allNodes[movePos].State == NodeState.Player || 
+					boardManager.allNodes[movePos].State == NodeState.Attack || 
+					CheckAttacked(movePos))
 				{
 					continue;
 				}
