@@ -105,7 +105,17 @@ public class ChoosingSceneManager : MonoBehaviour
 				SceneManager.LoadScene((int)Scenes.Game);
 				break;
 			case Room.Shop:
+                SaveLoadManager.Save();
+                SceneManager.LoadScene((int)Scenes.Shop);
+                break;
 			case Room.Unknown:
+                Scenes[] roomList = { Scenes.Game, Scenes.StageChoosing, Scenes.Shop };
+                int index = Random.Range(0, 3);
+                if (roomList[index] == Scenes.Game)
+                    SaveLoadManager.Data.BattleType = BattleType.Normal;
+                SaveLoadManager.Save();
+                SceneManager.LoadScene((int)roomList[index]);
+                break;
 			case Room.Empty:
 				SaveLoadManager.Save();
 				SceneManager.LoadScene((int)Scenes.StageChoosing);
