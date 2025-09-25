@@ -86,6 +86,11 @@ public class BossWinUIManager : MonoBehaviour
 		SetGoldText();
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
 		SaveLoadManager.Data.gold = Gold;
+		int stageId = SaveLoadManager.Data.stageId + 1;
+		if (stageId > 3)
+			stageId = 1;
+		SaveLoadManager.Data.stageId = stageId;
+		SaveLoadManager.Data.StageCount = 0;
 	}
 
 	private void SetGoldText()
@@ -136,6 +141,8 @@ public class BossWinUIManager : MonoBehaviour
 				currentDeck.AddDeckData(DataTableManger.ToyTable.Get(choosedIds[index]));
 				SceneManager.LoadScene((int)Scenes.StageChoosing);
 				SaveLoadManager.Data.Deck = currentDeck;
+				SaveLoadManager.Data.stageId++;
+				SaveLoadManager.Data.StageCount = 1;
 			};
 		}
 	}

@@ -14,10 +14,12 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 	public bool IsDrag { get; private set; } = false;
 	public bool IsFinishDrag { get; private set; } = false;
 	public Node FinishNode { get; private set; }
+	private float unitCount;
 
 	private void Start()
 	{
 		objectControl = transform.root.GetComponentInChildren<SetObjectControl>();
+		unitCount = SaveLoadManager.Data.unitCount;
 	}
 
 	private void Update()
@@ -37,7 +39,7 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 				count++;
 		}
 
-		if (count == DataTableManger.SettingTable.Get(Settings.unitCount))
+		if (count == unitCount)
 		{
 			ResetDrag();
 			return;
