@@ -24,6 +24,10 @@ public class SaveDataV1 : SaveData
 	public Scenes Scenes { get; set; } = Scenes.Game;
 	public List<Room> Rooms { get; set; }
 
+	public float masterPitch;
+	public float bgmPitch;
+	public float sfxPitch;
+
 	public SaveDataV1()
 	{
 		Version = 1;

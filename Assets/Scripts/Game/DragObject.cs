@@ -28,6 +28,9 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		if (Input.touchCount > 1)
+			return;
+
 		if (objectControl.IsMoving && eventData.pointerDrag != objectControl.DragObject)
 			return;
 		int count = 0;

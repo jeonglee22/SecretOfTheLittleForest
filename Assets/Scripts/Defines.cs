@@ -177,6 +177,13 @@ public static class Tags
     public static readonly string BackGround = "BackGround";
 }
 
+public static class SoundGroup
+{
+    public static readonly string Master = "Master";
+    public static readonly string BGM = "BGM";
+    public static readonly string SFX = "SFX";
+}
+
 public enum Room
 {
     Init = -1,

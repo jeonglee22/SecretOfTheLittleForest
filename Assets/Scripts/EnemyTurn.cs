@@ -357,6 +357,7 @@ public class EnemyTurn : Turn
 	{
 		var result = new List<int>();
 		var players = playManager.CurrentPlayers;
+		Debug.Log(players.Count);
 		//for (int i = 0;i < players.Count; i++)
 		foreach (var player in players)
 		{

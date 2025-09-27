@@ -70,11 +70,11 @@ public class Toy : MonoBehaviour
 
 	public void SetActiveInfoCanvas(bool active)
 	{
-		for (int i = 0; i < HP; i++)
+		for (int i = 0; i < data.HP; i++)
 		{
 			hearts[i].gameObject.SetActive(active);
 		}
-		for (int i = 0; i < Attack; i++)
+		for (int i = 0; i < data.Attack; i++)
 		{
 			attacks[i].gameObject.SetActive(active);
 		}

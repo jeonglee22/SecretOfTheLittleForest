@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
             if (turnText.fontSize >= Screen.height * 0.15f)
                 break;
         }
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         turnText.gameObject.SetActive(false);
         turnText.fontSize = initFontSize;
         playManager.IsTurnShown = false;

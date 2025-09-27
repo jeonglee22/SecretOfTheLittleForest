@@ -51,7 +51,8 @@ public class SetObjectControl : MonoBehaviour
 				ShownMovableNodes();
 				beforeNode.State = NodeState.ReadyMove;
 				MakeDragImage();
-				beforeNode.GetComponentInChildren<Toy>().gameObject.SetActive(false);
+				if(beforeNode.GetComponentInChildren<Toy>() !=null)
+					beforeNode.GetComponentInChildren<Toy>().gameObject.SetActive(false);
 			}
 		}
 		else if (touch.phase == TouchPhase.Began)
@@ -61,6 +62,7 @@ public class SetObjectControl : MonoBehaviour
 				ChangePos(touch);
 				return;
 			}
+			beforeNode = null;
 			isMoving = false;
 			touchStartTime = Time.time;
 			TouchBegin(touch);
@@ -104,7 +106,7 @@ public class SetObjectControl : MonoBehaviour
 			eventData.position = Input.mousePosition;
 			ExecuteEvents.Execute(dragObject, eventData, ExecuteEvents.dragHandler);
 		}
-		if (dragObject != null && dragObject.GetComponent<DragObject>().IsFinishDrag)
+		if (dragObject != null && beforeNode != null && dragObject.GetComponent<DragObject>().IsFinishDrag)
 		{
 			var node = dragObject.GetComponent<DragObject>().FinishNode;
 			if (node == null)
@@ -126,7 +128,8 @@ public class SetObjectControl : MonoBehaviour
 			else
 			{
 				node.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
-				Destroy(beforeNode.GetComponentInChildren<Toy>(true).gameObject);
+				if(beforeNode.GetComponentInChildren<Toy>(true)  != null)
+					Destroy(beforeNode.GetComponentInChildren<Toy>(true).gameObject);
 			}
 			Destroy(dragObject.transform.parent.gameObject);
 			dragObject = null;
@@ -137,6 +140,9 @@ public class SetObjectControl : MonoBehaviour
 
 	private void ChangePos(UnityEngine.Touch touch)
 	{
+		if (beforeNode == null)
+			return;
+
 		var touchRay = Camera.main.ScreenPointToRay(touch.position);
 		var rectSize = scrollRect.rect.size;
 		if (Physics.Raycast(touchRay, out var hitInfo, float.MaxValue, LayerId.node))
