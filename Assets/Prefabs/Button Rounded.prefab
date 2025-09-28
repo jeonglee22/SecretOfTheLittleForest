@@ -128,6 +128,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ShopButtonFunctions, Assembly-CSharp
+        m_MethodName: OnClickReloadElements
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8141637755000827121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,9 +164,9 @@ AudioSource:
   m_GameObject: {fileID: 3701782068533723656}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -6946572742497767950, guid: 495d1e878957c5c48981c1b9cd851d07, type: 2}
+  OutputAudioMixerGroup: {fileID: -4029371726624232614, guid: c1ffb64278002f648b19253305393e57, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 9f35106e76c6c40fa9c9e04a7cd7dca6, type: 3}
+  m_Resource: {fileID: 8300000, guid: 91c8b150605f2b34aa4344a7f53ec2f2, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

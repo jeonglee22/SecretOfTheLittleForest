@@ -6,7 +6,7 @@ public class PresetData
 {
 	public int ID { get; set; }
 	public string Name { get; set; }
-	public float Price { get; set; }
+	public int Price { get; set; }
 	public int BossPos { get; set; }
 
 	public int Pos0 { get; set; }

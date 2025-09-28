@@ -1,5 +1,6 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using SaveDataVC = SaveDataV1;
@@ -17,16 +18,18 @@ public class DeckSettingManager : MonoBehaviour
 
 	private Deck unitDeck;
 	private ChoosingUnitManager choosingUnitManager;
+	public DeckSceneUIManager sceneUIManager;
 
 	public Toy toy;
 
-	private Vector2 cellSize = new Vector2(110, 110);
+	private int diamondCount;
+	public GameObject lockedPanel;
+	public GameObject startButton;
 
-	private float lastChangedTime;
-	private bool isValueChange;
-	private float currentValue;
-	private float clampTimeInterval = 0.5f;
-	//private bool isClicking = false;
+	public int ChoosedIndex {  get; private set; }
+	private List<int> lockedInfo;
+
+	private int presetDataIDStart = 3000;
 
 	private void Awake()
 	{
@@ -37,41 +40,58 @@ public class DeckSettingManager : MonoBehaviour
 	{
 		SaveLoadManager.Load();
 		unitDeck = SaveLoadManager.Data.Deck;
+		diamondCount = SaveLoadManager.Data.Crystal;
+		lockedInfo = SaveLoadManager.Data.LockedInfo;
 		unitDeck.LoadDeckData();
-	}
-
-	private void OnDisable()
-	{
-		SaveLoadManager.Data = new SaveDataVC();
-		SaveLoadManager.Data.Deck = unitDeck;
-		SaveLoadManager.Save();
 	}
 
 	private void Start()
 	{
 		unitContent = presetNameRect.content;
 		presetContent = presetContentRect.content;
+		sceneUIManager.SetHaveDiamondText(diamondCount);
 
 		SetInitPresetList();
+
+		startButton.SetActive(true);
+		lockedPanel.SetActive(false);
 	}
 
 	private void SetInitPresetList()
 	{
 		var presetTable = DataTableManger.PresetTable;
 		var count = presetTable.Count;
-		for(int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++)
 		{
+			var index = i;
 			var data = DataTableManger.PresetTable.Get((int)IDOffset.Preset + i);
 			var preset = Instantiate(presetPanel, unitContent);
 			preset.GetComponent<PresetPanelData>().SetData(data.Name);
-			preset.GetComponent<Toggle>().onValueChanged.AddListener((bool b) => { if (b) OpenPreset(data); });
+			preset.GetComponent<Toggle>().onValueChanged.AddListener((bool b) => { if (b) OpenPreset(data); ChoosedIndex = index; });
 			preset.GetComponent<Toggle>().group = unitContent.gameObject.GetComponent<ToggleGroup>();
+
+			if (i == 0)
+			{
+				preset.GetComponent<Toggle>().isOn = true;
+			}
 		}
 	}
 
 	private void OpenPreset(PresetData data)
 	{
 		var pos = data.Pos;
+		if(!lockedInfo.Contains(data.ID % presetDataIDStart))
+		{
+			lockedPanel.SetActive(true);
+			startButton.SetActive(false);
+			sceneUIManager.SetLockedText(data.Price);
+		}
+		else
+		{
+			lockedPanel.SetActive(false);
+			startButton.SetActive(true);
+		}
+
 		unitDeck = new Deck();
 		unitDeck.AddPosSetting(pos.ToList());
 		unitDeck.KingId = pos[data.BossPos];
@@ -85,6 +105,12 @@ public class DeckSettingManager : MonoBehaviour
 		}
 
 		SetDeckInfos();
+	}
+
+	public void ChangeBuyPanel()
+	{
+		lockedPanel.SetActive(false);
+		startButton.SetActive(true);
 	}
 
 	public void SetDeckInfos()
@@ -101,6 +127,15 @@ public class DeckSettingManager : MonoBehaviour
 			var content = Instantiate(presetContentPanelData, presetContent);
 			content.GetComponent<ContentPresetPanelData>().SetData(toyData, count, toyData.UnitID == unitDeck.KingId);
 		}
+	}
+
+	public void SaveData()
+	{
+		SaveLoadManager.Data = new SaveDataVC();
+		SaveLoadManager.Data.Deck = unitDeck;
+		if(!lockedInfo.Contains(0))
+			lockedInfo.Add(0);
+		SaveLoadManager.Data.LockedInfo = lockedInfo;
 	}
 
 	private void Update()

@@ -5,11 +5,9 @@ using UnityEngine.UI;
 
 public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	//private int fingerId = -1;
-
 	private Vector2 fingerTouchStartPosition;
 	private float fingerTouchStartTime;
-
+	private bool isEnter;
 	public float tapTimeLimit = 0.2f;
 
 	public float FingersDelta { get; private set; }
@@ -22,6 +20,8 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	public Action longPressFunc;
 	public Action longPressEnterFunc;
 	private bool longPressEnter = true;
+
+	public AudioClip touchSFX;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -43,7 +43,7 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 					break;
 				case TouchPhase.Stationary:
 					var time = Time.time - fingerTouchStartTime;
-					if (time > tapTimeLimit && longPressEnter && longPressEnterFunc != null &&
+					if (isEnter && time > tapTimeLimit && longPressEnter && longPressEnterFunc != null &&
 						RectTransformUtility.RectangleContainsScreenPoint(GetComponent<Image>().rectTransform, Input.GetTouch(0).position, null))
 					{
 						longPressEnterFunc();
@@ -53,6 +53,7 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 				case TouchPhase.Ended:
 				case TouchPhase.Canceled:
 					longPressEnter = true;
+					isEnter = false;
 					break;
 			}
 		}
@@ -90,8 +91,10 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
+		Debug.Log("Touch");
 		fingerTouchStartPosition = eventData.position;
 		fingerTouchStartTime = Time.time;
+		isEnter = true;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)

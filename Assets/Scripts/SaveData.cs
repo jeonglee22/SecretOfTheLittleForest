@@ -28,6 +28,10 @@ public class SaveDataV1 : SaveData
 	public float bgmPitch;
 	public float sfxPitch;
 
+	public float bgmPos;
+
+	public List<int> LockedInfo = new List<int>(0);
+
 	public SaveDataV1()
 	{
 		Version = 1;

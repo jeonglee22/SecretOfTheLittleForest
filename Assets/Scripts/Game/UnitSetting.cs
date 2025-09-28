@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +30,7 @@ public class UnitSetting : MonoBehaviour
 	public BoardManager boardManager;
 
 	private int count = 0;
+	private GridLayoutGroup layoutGroup;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -47,6 +49,10 @@ public class UnitSetting : MonoBehaviour
 			}
 				
 		}
+
+		float xSize = Mathf.FloorToInt(Mathf.Abs(unitContent.parent.gameObject.GetComponent<RectTransform>().rect.width));
+		unitContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(xSize, xSize);
+
 		UnitSettingOnBoard();
 	}
 
@@ -59,7 +65,7 @@ public class UnitSetting : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-    }
+	}
 
 	private void UnitSettingOnBoard()
 	{
@@ -82,6 +88,8 @@ public class UnitSetting : MonoBehaviour
 			var imageGO = new GameObject();
 			var img = imageGO.AddComponent<Image>();
 			img.sprite = toyComp.Toy2D;
+			var fit = img.AddComponent<AspectRatioFitter>();
+			fit.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
 			var drag = imageGO.AddComponent<DragObject>();
 			drag.playerStartNodes = playerStartNodes;
 			drag.spawnObj = toy;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,13 @@ public class DeckSceneUIManager : MonoBehaviour
 
 	public TextMeshProUGUI descriptionText;
 
+	public SoundManager soundManager;
+	public DeckSettingManager deckSettingManager;
+
+	public TextMeshProUGUI diamondLockedText;
+	public TextMeshProUGUI diamondHaveText;
+	private int presetValue;
+
 	private int costMax;
 	private bool isNotCorrectCost = false;
 	private bool isNotCorrectCount = false;
@@ -16,6 +24,10 @@ public class DeckSceneUIManager : MonoBehaviour
 	public GameObject popupPanel;
 
 	private Action acceptFunc;
+	private int userDiamond;
+	private Color origindiamondColor = new Color(0f, 0.69f, 0.94f, 1f);
+
+	private Coroutine textColorCoroute;
 
 	public void OnClickBack()
 	{
@@ -27,6 +39,11 @@ public class DeckSceneUIManager : MonoBehaviour
 	private void Start()
 	{
 		popupPanel.SetActive(false);
+	}
+
+	private void OnDisable()
+	{
+		SaveData();
 	}
 
 	public void OnClickStart()
@@ -44,6 +61,7 @@ public class DeckSceneUIManager : MonoBehaviour
 	{
 		acceptFunc();
 		popupPanel.SetActive(false);
+		SaveData();
 	}
 
 	public void OnClickReject()
@@ -56,8 +74,64 @@ public class DeckSceneUIManager : MonoBehaviour
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
 	}
 
-	public void OnValueChangeChoosedPreset()
+	public void OnClickBuyPreset()
 	{
+		if (textColorCoroute != null)
+			StopCoroutine(textColorCoroute);
+		textColorCoroute = null;
 
+		if (presetValue > SaveLoadManager.Data.Crystal)
+		{
+			diamondLockedText.color = Color.red;
+			diamondHaveText.color = Color.red;
+			
+			textColorCoroute = StartCoroutine(CoColorChange());
+			return;
+		}
+		else
+		{
+			diamondLockedText.color = origindiamondColor;
+			diamondHaveText.color = origindiamondColor;
+
+			descriptionText.text = "보석을 사용해서 프리셋을\n해금하시겠습니까?";
+			acceptFunc = () =>
+			{
+				userDiamond -= presetValue;
+				if(!SaveLoadManager.Data.LockedInfo.Contains(deckSettingManager.ChoosedIndex))
+					SaveLoadManager.Data.LockedInfo.Add(deckSettingManager.ChoosedIndex);
+				SaveLoadManager.Data.Crystal = userDiamond;
+				SaveLoadManager.Save();
+				deckSettingManager.ChangeBuyPanel();
+			};
+			popupPanel.SetActive(true);
+		}
+	}
+
+	public void SaveData()
+	{
+		deckSettingManager.SaveData();
+		soundManager.SaveData();
+		SaveLoadManager.Data.Crystal = userDiamond;
+		SaveLoadManager.Data.bgmPos = 0f;
+		SaveLoadManager.Save();
+	}
+
+	public void SetLockedText(int value)
+	{
+		diamondLockedText.text = $" {value}";
+		presetValue = value;
+	}
+	
+	public void SetHaveDiamondText(int value)
+	{
+		diamondHaveText.text = $" {value}";
+		userDiamond = value;
+	}
+
+	private IEnumerator CoColorChange()
+	{
+		yield return new WaitForSeconds(0.5f);
+		diamondLockedText.color = origindiamondColor;
+		diamondHaveText.color = origindiamondColor;
 	}
 }

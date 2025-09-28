@@ -1,37 +1,77 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
     public float masterPitch;
     public float bgmPitch;
     public float sfxPitch;
+	private float bgmPos;
+
+    public Slider bgmSlider;
+    public Slider sfxSlider;
 
     [SerializeField] private AudioMixer soundMixer;
+    [SerializeField] private AudioSource backgroundMusic;
 
 	private void OnEnable()
 	{
         var data = SaveLoadManager.Data;
+		bgmPos = data.bgmPos;
+        
         masterPitch = data.masterPitch;
         bgmPitch = data.bgmPitch;
         sfxPitch = data.sfxPitch;
-
-        soundMixer.SetFloat(SoundGroup.Master, Mathf.Log10(masterPitch) * 20);
-        soundMixer.SetFloat(SoundGroup.BGM, bgmPitch);
-        soundMixer.SetFloat(SoundGroup.SFX, sfxPitch);
 	}
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-    {
-        
-    }
+	private void OnDisable()
+	{
+		SaveLoadManager.Data.bgmPos = bgmPos;
+		SaveLoadManager.Data.masterPitch = masterPitch;
+		SaveLoadManager.Data.bgmPitch = bgmPitch;
+		SaveLoadManager.Data.sfxPitch = sfxPitch;
+	}
 
-    // Update is called once per frame
-    void Update()
+	private void Start()
+	{
+		backgroundMusic.Play();
+		backgroundMusic.time = bgmPos;
+
+		bgmSlider.onValueChanged.AddListener(SetBgmValue);
+		bgmSlider.value = bgmPitch;
+		sfxSlider.onValueChanged.AddListener(SetSfxValue);
+		sfxSlider.value = sfxPitch;
+
+		soundMixer.SetFloat(SoundGroup.Master, masterPitch);
+		soundMixer.SetFloat(SoundGroup.BGM, Mathf.Log10(bgmPitch) * 20f);
+		soundMixer.SetFloat(SoundGroup.SFX, Mathf.Log10(sfxPitch) * 20f);
+	}
+
+	private void Update()
+	{
+		bgmPos = backgroundMusic.time;
+	}
+
+    private void SetBgmValue(float value)
     {
-	    soundMixer.SetFloat(SoundGroup.Master, Mathf.Log10(masterPitch) * 20);
-        soundMixer.SetFloat(SoundGroup.BGM, bgmPitch);
-        soundMixer.SetFloat(SoundGroup.SFX, sfxPitch);
-    }
+        value = Mathf.Clamp(value, 0.001f, 1f);
+		soundMixer.SetFloat(SoundGroup.BGM, Mathf.Log10(value) * 20f);
+        bgmPitch = value;
+	}
+
+    private void SetSfxValue(float value)
+    {
+		value = Mathf.Clamp(value, 0.001f, 1f);
+		soundMixer.SetFloat(SoundGroup.SFX, Mathf.Log10(value) * 20f);
+        sfxPitch = value;
+	}
+
+	public void SaveData()
+	{
+		SaveLoadManager.Data.bgmPos = bgmPos;
+		SaveLoadManager.Data.masterPitch = 1f;
+		SaveLoadManager.Data.bgmPitch = bgmPitch;
+		SaveLoadManager.Data.sfxPitch = sfxPitch;
+	}
 }
