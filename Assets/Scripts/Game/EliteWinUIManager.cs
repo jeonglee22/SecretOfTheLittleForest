@@ -44,7 +44,6 @@ public class EliteWinUIManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		SaveLoadManager.Save();
 	}
 
 	public void OnClickGetGold()
@@ -66,6 +65,7 @@ public class EliteWinUIManager : MonoBehaviour
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
 		SaveLoadManager.Data.gold = Gold;
 		SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
+		SaveLoadManager.Save();
 	}
 
 	private void SetGoldText()
@@ -115,6 +115,7 @@ public class EliteWinUIManager : MonoBehaviour
 			SaveLoadManager.Data.unitLimit = unitLimit;
 			SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
 			SceneManager.LoadScene((int)Scenes.StageChoosing);
+			SaveLoadManager.Save();
 		};
 	}
 }

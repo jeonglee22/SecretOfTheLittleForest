@@ -50,7 +50,7 @@ public class NormalWinUIManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		SaveLoadManager.Save();
+		
 	}
 
 	private void SetGoldText()
@@ -83,6 +83,7 @@ public class NormalWinUIManager : MonoBehaviour
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
 		SaveLoadManager.Data.gold = Gold;
 		SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
+		SaveLoadManager.Save();
 	}
 
 	private void SetImageAndInfo(List<int> ids)
@@ -118,6 +119,7 @@ public class NormalWinUIManager : MonoBehaviour
 				SceneManager.LoadScene((int)Scenes.StageChoosing);
 				SaveLoadManager.Data.Deck = currentDeck;
 				SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
+				SaveLoadManager.Save();
 			};
 		}
 	}

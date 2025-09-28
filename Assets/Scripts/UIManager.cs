@@ -59,6 +59,7 @@ public class UIManager : MonoBehaviour
 		for (int i = 0; i < nodeTuples.Count; i++)
 		{
 			toy.Data = nodeTuples[i].data;
+            toy.IsKing = nodeTuples[i].isBoss;
 			boardManager.ToySettingOnNode(nodeTuples[i].node, toy, true, i);
 		}
 	}

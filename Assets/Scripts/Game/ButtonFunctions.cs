@@ -29,7 +29,8 @@ public class ButtonFunctions : MonoBehaviour
 	private void Start()
 	{
 		OnClickResetCamera();
-		toyControl.IsTeleport = isTeleport;
+		if(toyControl != null)
+			toyControl.IsTeleport = isTeleport;
 	}
 
 	private void OnDisable()
@@ -113,9 +114,9 @@ public class ButtonFunctions : MonoBehaviour
 		boardManager.SetBoardColor(isElite);
 	}
 
-	public void OnClickSetTeleportMoving(bool teleport)
+	public void OnClickSetTeleportMoving(float teleport)
 	{
-		toyControl.IsTeleport = teleport;
-		isTeleport = teleport;
+		isTeleport = teleport == 1f;
+		toyControl.IsTeleport = isTeleport;
 	}
 }

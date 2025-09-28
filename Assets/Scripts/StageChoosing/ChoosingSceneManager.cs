@@ -113,6 +113,7 @@ public class ChoosingSceneManager : MonoBehaviour
 			case Room.Elite:
 			case Room.Boss:
 				SaveLoadManager.Data.BattleType = x == Room.Boss ? BattleType.Boss : (BattleType)(int)x;
+                SaveLoadManager.Data.bgmPos = 0f;
 				SaveLoadManager.Save();
 				SceneManager.LoadScene((int)Scenes.Game);
 				break;

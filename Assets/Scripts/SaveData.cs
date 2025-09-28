@@ -27,7 +27,8 @@ public class SaveDataV1 : SaveData
 	public float masterPitch;
 	public float bgmPitch;
 	public float sfxPitch;
-	public bool isTeleport = false;
+	public bool isTeleport = true;
+	public bool isVibrate = true;
 
 	public float bgmPos;
 

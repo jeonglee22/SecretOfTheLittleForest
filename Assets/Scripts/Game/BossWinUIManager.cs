@@ -67,7 +67,6 @@ public class BossWinUIManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		SaveLoadManager.Save();
 	}
 
 	public void OnClickGetGold()
@@ -94,6 +93,7 @@ public class BossWinUIManager : MonoBehaviour
 		SaveLoadManager.Data.stageId = stageId;
 		SaveLoadManager.Data.StageCount = 1;
 		SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
+		SaveLoadManager.Save();
 	}
 
 	private void SetGoldText()
@@ -150,6 +150,7 @@ public class BossWinUIManager : MonoBehaviour
 				SaveLoadManager.Data.stageId = stageId;
 				SaveLoadManager.Data.StageCount = 1;
 				SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
+				SaveLoadManager.Save();
 			};
 		}
 	}

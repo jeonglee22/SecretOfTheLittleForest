@@ -5,22 +5,25 @@ public class SettingButtonFunctions : MonoBehaviour
 {
     public GameObject setting;
     public bool IsTeleport {  get; private set; }
-	public Toggle teleport;
+	public Slider teleport;
+	public bool IsVibrate { get; private set; }
+	public Slider vibration;
 
 	private void OnEnable()
 	{
 		var data = SaveLoadManager.Data;
 		IsTeleport = data.isTeleport;
+		IsVibrate = data.isVibrate;
 	}
 	private void OnDisable()
 	{
-		SaveLoadManager.Data.isTeleport = IsTeleport;
-		SaveLoadManager.Save();
+		
 	}
 
 	private void Start()
 	{
-		teleport.isOn = IsTeleport;
+		teleport.value = IsTeleport ? 1 : 0;
+		vibration.value = IsVibrate ? 1 : 0;
 	}
 
 	public void OnClickOpenSetting()
@@ -33,8 +36,17 @@ public class SettingButtonFunctions : MonoBehaviour
         setting.SetActive(false);
     }
 
-	public void OnValueTeleportChange(bool b)
+	public void OnValueTeleportChange(float value)
 	{
-		IsTeleport = b;
+		IsTeleport = value == 1f;
+		SaveLoadManager.Data.isTeleport = IsTeleport;
+		SaveLoadManager.Save();
+	}
+
+	public void OnValueVibrationChange(float value)
+	{
+		IsVibrate = value == 1f;
+		SaveLoadManager.Data.isVibrate = IsVibrate;
+		SaveLoadManager.Save();
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -101,12 +102,23 @@ public class BoardManager : MonoBehaviour
 		return enemyStartNodes[index];
 	}
 
-	public List<(Node node, ToyData data)> SetEnemyStageData()
+	public List<(Node node, ToyData data, bool isBoss)> SetEnemyStageData()
 	{
 		var enemyIds = GetStageDataIds((int)stageId);
-
+		List<int> bossPos = battleType == BattleType.Elite ?
+			new List<int> { enemyIds[32], enemyIds[33] } : new List<int> { enemyIds[16] }; 
+		if(battleType == BattleType.Elite)
+		{
+			enemyIds.RemoveAt(33);
+			enemyIds.RemoveAt(32);
+		}
+		else
+		{
+			enemyIds.RemoveAt(16);
+		}
+		Debug.Log(enemyIds.Count + ", " + bossPos[0]);
 		eliteEnemy2GroupFirst = 0;
-		var result = new List<(Node node, ToyData data)>();
+		var result = new List<(Node node, ToyData data, bool isBoss)>();
 		for (int i = 0; i < enemyIds.Count; i++)
 		{
 			if (enemyIds[i] == 0)
@@ -116,14 +128,12 @@ public class BoardManager : MonoBehaviour
 
 			GameObjectManager.ToyResource.Load(DataTableManger.ToyTable.Get(enemyIds[i]).ModelCode.ToString());
 			if (battleType == BattleType.Normal)
-				result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
+				result.Add((enemyStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i]), bossPos.Contains(i)));
 			else if(battleType == BattleType.Elite)
-				result.Add((eliteStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
+				result.Add((eliteStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i]), bossPos.Contains(i)));
 			else if(battleType == BattleType.Boss)
-				result.Add((bossStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i])));
+				result.Add((bossStartNodes[i], DataTableManger.ToyTable.Get(enemyIds[i]), bossPos.Contains(i)));
 		}
-
-		//uiManager.SetStageStat(stageData.ID.ToString());
 
 		return result;
 	}
@@ -140,6 +150,7 @@ public class BoardManager : MonoBehaviour
 				stageData = DataTableManger.StageTable.GetRandom();
 			} while (stageData.Stage != stageId);
 			result = stageData.Pos.ToList();
+			result.Add(stageData.Boss_pos);
 		}
 		else if (battleType == BattleType.Elite)
 		{
@@ -149,10 +160,14 @@ public class BoardManager : MonoBehaviour
 				stageData = DataTableManger.EliteStageTable.GetRandom();
 			} while (stageData.Stage != stageId);
 			result = stageData.Pos.ToList();
+			result.Add(stageData.Boss_pos1);
+			result.Add(stageData.Boss_pos2);
 		}
 		else
 		{
-			result = DataTableManger.StageTable.GetBoss(-stageId).Pos.ToList();
+			var stageData = DataTableManger.StageTable.GetBoss(-stageId);
+			result = stageData.Pos.ToList();
+			result.Add(stageData.Boss_pos);
 		}
 
 		return result;
@@ -164,6 +179,12 @@ public class BoardManager : MonoBehaviour
 
 		var childTransform = node.gameObject.transform.GetChild(0);
 		var spawnedToy = Instantiate(toy, childTransform);
+		if(!isEnemy && node.NodeIndex == playerStartNodes[playerDeck.KingPos].NodeIndex)
+			spawnedToy.kingCanvas.SetActive(true);
+		else if(toy.IsKing)
+			spawnedToy.kingCanvas.SetActive(true);
+		//else if(isEnemy && node.NodeIndex == enemyStartNodes[.KingPos].NodeIndex)
+
 		spawnedToy.Data = toy.Data;
 		spawnedToy.Init();
 

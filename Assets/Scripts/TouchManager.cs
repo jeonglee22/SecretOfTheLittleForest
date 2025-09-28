@@ -91,7 +91,6 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		Debug.Log("Touch");
 		fingerTouchStartPosition = eventData.position;
 		fingerTouchStartTime = Time.time;
 		isEnter = true;

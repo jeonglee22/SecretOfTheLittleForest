@@ -37,6 +37,8 @@ public class SoundManager : MonoBehaviour
 	private void Start()
 	{
 		backgroundMusic.Play();
+		if (bgmPos <= 0 || bgmPos >= backgroundMusic.clip.length)
+			bgmPos = 0f;
 		backgroundMusic.time = bgmPos;
 
 		bgmSlider.onValueChanged.AddListener(SetBgmValue);
