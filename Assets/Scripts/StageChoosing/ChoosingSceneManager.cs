@@ -20,6 +20,7 @@ public class ChoosingSceneManager : MonoBehaviour
     public List<GameObject> buttons;
 
     private ChoosingSceneUIManager uIManager;
+    public SettingButtonFunctions settingButtonFunctions;
     private List<float> probList;
 
     public Image background;
@@ -105,6 +106,7 @@ public class ChoosingSceneManager : MonoBehaviour
 
         SaveLoadManager.Data.StageCount = ++stageCount;
         SaveLoadManager.Data.Rooms = null;
+        SaveLoadManager.Data.isTeleport =  settingButtonFunctions.IsTeleport;
 		switch (x)
 		{
 			case Room.Normal:

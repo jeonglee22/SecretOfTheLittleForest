@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,6 +10,8 @@ public class NormalWinUIManager : MonoBehaviour
 	public TextMeshProUGUI unitText;
 	public TextMeshProUGUI winText;
 	public TextMeshProUGUI goldButtonText;
+
+	public ToyControl toyControl;
 
 	public List<Image> images;
 	public List<TextMeshProUGUI> health;
@@ -81,6 +82,7 @@ public class NormalWinUIManager : MonoBehaviour
 		SetGoldText();
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
 		SaveLoadManager.Data.gold = Gold;
+		SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
 	}
 
 	private void SetImageAndInfo(List<int> ids)
@@ -115,6 +117,7 @@ public class NormalWinUIManager : MonoBehaviour
 				currentDeck.AddDeckData(DataTableManger.ToyTable.Get(choosedIds[index]));
 				SceneManager.LoadScene((int)Scenes.StageChoosing);
 				SaveLoadManager.Data.Deck = currentDeck;
+				SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
 			};
 		}
 	}

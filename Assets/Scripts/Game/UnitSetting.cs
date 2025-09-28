@@ -31,6 +31,7 @@ public class UnitSetting : MonoBehaviour
 
 	private int count = 0;
 	private GridLayoutGroup layoutGroup;
+	private float cellSizeOffset = 10f;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -47,11 +48,12 @@ public class UnitSetting : MonoBehaviour
 				unitDeck.RemoveDeckData(DataTableManger.ToyTable.Get(unitPos[i]));
 				count++;
 			}
-				
 		}
 
+		Canvas.ForceUpdateCanvases();
+
 		float xSize = Mathf.FloorToInt(Mathf.Abs(unitContent.parent.gameObject.GetComponent<RectTransform>().rect.width));
-		unitContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(xSize, xSize);
+		unitContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(xSize - cellSizeOffset, xSize - cellSizeOffset);
 
 		UnitSettingOnBoard();
 	}

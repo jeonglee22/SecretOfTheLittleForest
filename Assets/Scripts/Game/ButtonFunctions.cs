@@ -14,18 +14,28 @@ public class ButtonFunctions : MonoBehaviour
 	public BoardManager boardManager;
 	public PlayLogic playLogic;
 	public ToyControl toyControl;
+	private bool isTeleport;
 
 	private bool isElite = false;
 
 	private void OnEnable()
 	{
-		var scene = SaveLoadManager.Data.Scenes;
+		var data = SaveLoadManager.Data;
+		var scene = data.Scenes;
+		isTeleport = data.isTeleport;
 		isFromGameScene = scene == Scenes.Game;
 	}
 
 	private void Start()
 	{
 		OnClickResetCamera();
+		toyControl.IsTeleport = isTeleport;
+	}
+
+	private void OnDisable()
+	{
+		SaveLoadManager.Data.isTeleport = isTeleport;
+		SaveLoadManager.Save();
 	}
 
 	public void OnClickStartGame()
@@ -103,8 +113,9 @@ public class ButtonFunctions : MonoBehaviour
 		boardManager.SetBoardColor(isElite);
 	}
 
-	public void OnClickSetTeleportMoving()
+	public void OnClickSetTeleportMoving(bool teleport)
 	{
-		toyControl.IsTeleport = !toyControl.IsTeleport;
+		toyControl.IsTeleport = teleport;
+		isTeleport = teleport;
 	}
 }

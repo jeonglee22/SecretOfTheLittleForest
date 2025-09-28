@@ -82,6 +82,7 @@ public static class DataTableIds
     public static readonly string Explain = "StageExplain";
     public static readonly string Lose = "LoseText";
     public static readonly string Win = "WinText";
+    public static readonly string PresetExplain = "PresetExplain";
 
 	public static readonly string Toy = "ToyTable";
     public static readonly string AI = "AITable";

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ public class EliteWinUIManager : MonoBehaviour
 	private float unitCount;
 
 	private float blockTouchAlpha = 0.8f;
+	public ToyControl toyControl;
 
 	private void OnEnable()
 	{
@@ -63,6 +65,7 @@ public class EliteWinUIManager : MonoBehaviour
 		SetGoldText();
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
 		SaveLoadManager.Data.gold = Gold;
+		SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
 	}
 
 	private void SetGoldText()
@@ -110,6 +113,7 @@ public class EliteWinUIManager : MonoBehaviour
 
 			unitLimit++;
 			SaveLoadManager.Data.unitLimit = unitLimit;
+			SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
 			SceneManager.LoadScene((int)Scenes.StageChoosing);
 		};
 	}

@@ -30,6 +30,8 @@ public class DeckSettingManager : MonoBehaviour
 	private List<int> lockedInfo;
 
 	private int presetDataIDStart = 3000;
+	private float cellSizeOffset = 20f;
+	private float cellYSize = 100f;
 
 	private void Awake()
 	{
@@ -50,6 +52,11 @@ public class DeckSettingManager : MonoBehaviour
 		unitContent = presetNameRect.content;
 		presetContent = presetContentRect.content;
 		sceneUIManager.SetHaveDiamondText(diamondCount);
+
+		Canvas.ForceUpdateCanvases();
+
+		float xSize = Mathf.FloorToInt(Mathf.Abs(unitContent.parent.gameObject.GetComponent<RectTransform>().rect.width));
+		unitContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(xSize - cellSizeOffset, cellYSize);
 
 		SetInitPresetList();
 
@@ -104,6 +111,7 @@ public class DeckSettingManager : MonoBehaviour
 			unitDeck.AddDeckData(DataTableManger.ToyTable.Get(pos[i]));
 		}
 
+		sceneUIManager.SetExplainText(data.ID % presetDataIDStart);
 		SetDeckInfos();
 	}
 

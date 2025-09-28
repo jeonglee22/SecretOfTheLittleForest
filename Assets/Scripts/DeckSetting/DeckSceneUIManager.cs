@@ -9,6 +9,7 @@ public class DeckSceneUIManager : MonoBehaviour
 	public ChoosingUnitManager settingManager;
 
 	public TextMeshProUGUI descriptionText;
+	public TextMeshProUGUI explainText;
 
 	public SoundManager soundManager;
 	public DeckSettingManager deckSettingManager;
@@ -133,5 +134,11 @@ public class DeckSceneUIManager : MonoBehaviour
 		yield return new WaitForSeconds(0.5f);
 		diamondLockedText.color = origindiamondColor;
 		diamondHaveText.color = origindiamondColor;
+	}
+
+	public void SetExplainText(int index)
+	{
+		string text = DataTableManger.StageStringTable.GetPresetString(index);
+		explainText.text = text;
 	}
 }

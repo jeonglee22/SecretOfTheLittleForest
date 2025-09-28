@@ -9,6 +9,7 @@ public class StageStringTable : DataTable
 	private readonly Dictionary<int, string> stageStringTable = new Dictionary<int, string>();
 	private readonly Dictionary<int, string> stageWinTable = new Dictionary<int, string>();
 	private readonly Dictionary<int, string> stageLoseTable = new Dictionary<int, string>();
+	private readonly Dictionary<int, string> PresetExplainTable = new Dictionary<int, string>();
 	public int StageTableCount { get { return stageExpTable.Count; } }
 	private static readonly string filePath = "GameTexts/{0}";
 
@@ -35,6 +36,11 @@ public class StageStringTable : DataTable
 		textAsset = Resources.Load<TextAsset>(path);
 		text = textAsset.text;
 		GetText(stageLoseTable, text);
+
+		path = string.Format(filePath, DataTableIds.PresetExplain);
+		textAsset = Resources.Load<TextAsset>(path);
+		text = textAsset.text;
+		GetText(PresetExplainTable, text);
 	}
 
 	public string GetStageString(int id)
@@ -68,6 +74,15 @@ public class StageStringTable : DataTable
 			return null;
 		}
 		return stageLoseTable[id];
+	}
+
+	public string GetPresetString(int id)
+	{
+		if (!PresetExplainTable.ContainsKey(id))
+		{
+			return null;
+		}
+		return PresetExplainTable[id];
 	}
 
 	private void GetText(Dictionary<int, string> dict, string text)

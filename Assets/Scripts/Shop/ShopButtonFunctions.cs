@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,10 +10,16 @@ public class ShopButtonFunctions : MonoBehaviour
 	public GameObject buyPanel;
 	public GameObject sellPanel;
 
+	public GameObject decisionPanel;
+	public TextMeshProUGUI decisionText;
+	private Action acceptFunc;
+
 	private int reloadCost;
 
 	private ShopUIManagers shopUIManagers;
 	private ShopLogicManager logicManager;
+	public GameObject reloadButton;
+	public GameObject costText;
 
 	private void Awake()
 	{
@@ -35,18 +43,35 @@ public class ShopButtonFunctions : MonoBehaviour
 	{
 		buyPanel.SetActive(true);
 		sellPanel.SetActive(false);
+		reloadButton.SetActive(true);
+		costText.SetActive(true);
 	}
 
 	public void OnClickExitShop()
 	{
+		decisionText.text = "상점에서 나가시겠습니까?";
+		acceptFunc = () => SceneManager.LoadScene((int)Scenes.StageChoosing);
+		decisionPanel.SetActive(true);
+	}
+
+	public void OnClickAccpet()
+	{
+		decisionPanel.SetActive(false);
 		SaveLoadManager.Save();
-		SceneManager.LoadScene((int)Scenes.StageChoosing);
+		acceptFunc();
+	}
+
+	public void OnClickReject()
+	{
+		decisionPanel.SetActive(false);
 	}
 
 	public void OnClickSell()
 	{
 		buyPanel.SetActive(false);
 		sellPanel.SetActive(true);
+		reloadButton.SetActive(false);
+		costText.SetActive(false);
 		logicManager.ReloadDeckInPanel();
 	}
 

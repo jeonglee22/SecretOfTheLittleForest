@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -28,6 +29,7 @@ public class BossWinUIManager : MonoBehaviour
 	private List<int> choosedIds;
 
 	private float blockTouchAlpha = 0.8f;
+	public ToyControl toyControl;
 
 	private void OnEnable()
 	{
@@ -90,7 +92,8 @@ public class BossWinUIManager : MonoBehaviour
 		if (stageId > 3)
 			stageId = 1;
 		SaveLoadManager.Data.stageId = stageId;
-		SaveLoadManager.Data.StageCount = 0;
+		SaveLoadManager.Data.StageCount = 1;
+		SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
 	}
 
 	private void SetGoldText()
@@ -141,8 +144,12 @@ public class BossWinUIManager : MonoBehaviour
 				currentDeck.AddDeckData(DataTableManger.ToyTable.Get(choosedIds[index]));
 				SceneManager.LoadScene((int)Scenes.StageChoosing);
 				SaveLoadManager.Data.Deck = currentDeck;
-				SaveLoadManager.Data.stageId++;
+				int stageId = SaveLoadManager.Data.stageId + 1;
+				if (stageId > 3)
+					stageId = 1;
+				SaveLoadManager.Data.stageId = stageId;
 				SaveLoadManager.Data.StageCount = 1;
+				SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
 			};
 		}
 	}

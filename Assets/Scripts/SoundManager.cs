@@ -31,6 +31,7 @@ public class SoundManager : MonoBehaviour
 		SaveLoadManager.Data.masterPitch = masterPitch;
 		SaveLoadManager.Data.bgmPitch = bgmPitch;
 		SaveLoadManager.Data.sfxPitch = sfxPitch;
+		SaveLoadManager.Save();
 	}
 
 	private void Start()
