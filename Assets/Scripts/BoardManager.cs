@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,6 +40,8 @@ public class BoardManager : MonoBehaviour
 		playerDeck = data.Deck;
 		playerDeck.Pos = data.Deck.Pos;
 		playerDeck.Toys = data.Deck.Toys;
+		playerDeck.KingId = data.Deck.KingId;
+		playerDeck.KingPos = data.Deck.KingPos;
 	}
 
 	private void Start()
@@ -52,7 +53,7 @@ public class BoardManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		
+		//SaveDeckSetting();
 	}
 
 	public void SaveDeckSetting()
@@ -68,13 +69,14 @@ public class BoardManager : MonoBehaviour
 		playerDeck.Pos = posList;
 		SaveLoadManager.Data.Deck = playerDeck;
 		SaveLoadManager.Data.Deck.Pos = posList;
+		SaveLoadManager.Data.Deck.KingPos = playerDeck.KingPos;
+		SaveLoadManager.Data.Deck.KingId = playerDeck.KingId;
 		SaveLoadManager.Save();
 	}
 
 	public void SetPlayerDeckOnNode()
 	{
 		var posList = playerDeck.Pos;
-		var toys = playerDeck.Toys;
 
 		for (int i = 0; i < posList.Count; i++)
 		{
@@ -82,6 +84,7 @@ public class BoardManager : MonoBehaviour
 			if (id == 0)
 				continue;
 
+			var toy = this.toy;
 			toy.Data = DataTableManger.ToyTable.Get(posList[i]);
 			ToySettingOnNode(playerStartNodes[i], toy, false);
 		}
@@ -179,17 +182,26 @@ public class BoardManager : MonoBehaviour
 
 		var childTransform = node.gameObject.transform.GetChild(0);
 		var spawnedToy = Instantiate(toy, childTransform);
-		if(!isEnemy && node.NodeIndex == playerStartNodes[playerDeck.KingPos].NodeIndex)
+		if (!isEnemy && node.NodeIndex == playerStartNodes[playerDeck.KingPos].NodeIndex)
+		{
 			spawnedToy.kingCanvas.SetActive(true);
-		else if(toy.IsKing)
+			spawnedToy.IsKing = true;
+		}
+		else if (isEnemy && toy.IsKing)
 			spawnedToy.kingCanvas.SetActive(true);
-		//else if(isEnemy && node.NodeIndex == enemyStartNodes[.KingPos].NodeIndex)
+		else
+		{
+			spawnedToy.kingCanvas.SetActive(false);
+			spawnedToy.IsKing = false;
+		}
+			//else if(isEnemy && node.NodeIndex == enemyStartNodes[.KingPos].NodeIndex)
 
 		spawnedToy.Data = toy.Data;
 		spawnedToy.Init();
 
 		var scale = spawnedToy.transform.localScale;
 		spawnedToy.transform.localScale = new Vector3(scale.x / nodeScale.x, scale.y / nodeScale.y, scale.z / nodeScale.z);
+		
 		node.Toy = spawnedToy;
 		node.Toy.IsEnemy = isEnemy ? true : false;
 		if(battleType == BattleType.Elite)
@@ -208,5 +220,23 @@ public class BoardManager : MonoBehaviour
 
 		List<Node> nodes = isElite ? eliteStartNodes : enemyStartNodes;
 		nodes.ForEach(n => n.State = NodeState.Enemy);
+	}
+
+	public void ResetCaptainImage()
+	{
+		foreach (var node in playerStartNodes)
+		{
+			if (node.Toy == null)
+				continue;
+
+			if(node.Toy.IsKing)
+			{
+				node.Toy.kingCanvas.SetActive(true);
+			}
+			else
+			{
+				node.Toy.kingCanvas.SetActive(false);
+			}
+		}
 	}
 }

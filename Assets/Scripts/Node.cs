@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Node : MonoBehaviour, IDropHandler
+public class Node : MonoBehaviour
 {
     private Toy toy;
 
@@ -137,14 +137,14 @@ public class Node : MonoBehaviour, IDropHandler
 		gameObject.GetComponent<MeshRenderer>().material.color = color;
 	}
 
-	public void OnDrop(PointerEventData eventData)
-	{
-		if (State != NodeState.Choose)
-			return;
-		var obj = eventData.pointerDrag;
-		var toy = obj.GetComponent<Toy>();
+	//public void OnDrop(PointerEventData eventData)
+	//{
+	//	if (State != NodeState.Choose)
+	//		return;
+	//	var obj = eventData.pointerDrag;
+	//	var toy = obj.GetComponent<Toy>();
 
-		var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
-		boardManager.ToySettingOnNode(this, toy, false);
-	}
+	//	var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
+	//	boardManager.ToySettingOnNode(this, toy, false);
+	//}
 }

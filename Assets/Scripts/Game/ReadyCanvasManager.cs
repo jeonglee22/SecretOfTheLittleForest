@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -6,6 +7,11 @@ public class ReadyCanvasManager : MonoBehaviour
 {
     public TextMeshProUGUI unitCountText;
     public TextMeshProUGUI cameraText;
+
+    public GameObject NonCaptain;
+    public GameObject finishButton;
+
+    public BoardManager boardManager;
 
     private void OnEnable()
     {
@@ -18,7 +24,39 @@ public class ReadyCanvasManager : MonoBehaviour
         SetCameraText(false);
     }
 
-    private int GetCountInBoard()
+	private void Update()
+	{
+		if (!CheckHaveCaptain())
+        {
+            NonCaptain.SetActive(true);
+            finishButton.SetActive(false);
+        }
+        else
+        {
+            NonCaptain.SetActive(false);
+            finishButton.SetActive(true);
+        }
+	}
+
+	private bool CheckHaveCaptain()
+	{
+        var playerNodes = boardManager.playerStartNodes;
+
+        foreach (var node in playerNodes)
+        {
+            if (node.Toy == null)
+                continue;
+
+            var toy = node.Toy;
+            var isKing = toy.IsKing;
+            if (isKing)
+                return true;
+        }
+
+        return false;
+	}
+
+	private int GetCountInBoard()
     {
         var count = 0;
         var fieldToys = SaveLoadManager.Data.Deck.Pos;

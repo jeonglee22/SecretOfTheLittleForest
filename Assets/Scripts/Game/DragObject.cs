@@ -114,11 +114,19 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 			if (eventData.pointerId == -1)
 			{
 				toy = drag.transform.parent.GetComponent<Toy>();
-			}else
+			}
+			else
+			{
 				toy = drag.GetComponent<Toy>();
+			}
 			var toy3D = spawnObj.GetComponent<Toy>();
 			toy3D.Data = toy.Data;
-
+			toy3D.IsKing = toy.IsKing;
+			if (toy3D.IsKing)
+			{
+				boardManager.PlayerDeck.KingId = toy3D.Data.UnitID;
+				boardManager.PlayerDeck.KingPos = boardManager.playerStartNodes.IndexOf(droppedNode);
+			}
 			boardManager.ToySettingOnNode(droppedNode, toy3D, false);
 			droppedNode.State = NodeState.Player;
 

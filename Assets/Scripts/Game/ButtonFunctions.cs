@@ -29,7 +29,8 @@ public class ButtonFunctions : MonoBehaviour
 	private void Start()
 	{
 		OnClickResetCamera();
-		if(toyControl != null)
+		boardManager.SetBoardColor(isElite);
+		if (toyControl != null)
 			toyControl.IsTeleport = isTeleport;
 	}
 
@@ -37,6 +38,11 @@ public class ButtonFunctions : MonoBehaviour
 	{
 		SaveLoadManager.Data.isTeleport = isTeleport;
 		SaveLoadManager.Save();
+	}
+
+	private void OnApplicationQuit()
+	{
+		OnClickFinishSetting();
 	}
 
 	public void OnClickStartGame()

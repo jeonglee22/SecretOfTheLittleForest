@@ -58,6 +58,7 @@ public class UIManager : MonoBehaviour
 		var nodeTuples = boardManager.SetEnemyStageData();
 		for (int i = 0; i < nodeTuples.Count; i++)
 		{
+            var toy = this.toy;
 			toy.Data = nodeTuples[i].data;
             toy.IsKing = nodeTuples[i].isBoss;
 			boardManager.ToySettingOnNode(nodeTuples[i].node, toy, true, i);

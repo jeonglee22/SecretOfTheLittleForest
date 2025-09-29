@@ -18,7 +18,7 @@ public class Toy : MonoBehaviour
 	public Transform canvas;
 
 	public GameObject kingCanvas;
-	public bool IsKing {  get; set; }
+	public bool IsKing { get; set; } = false;
 
 	private List<Image> hearts;
 	private List<Image> attacks;
