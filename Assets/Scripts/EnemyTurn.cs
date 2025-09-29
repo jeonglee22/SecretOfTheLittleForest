@@ -10,6 +10,10 @@ public class EnemyTurn : Turn
 	protected Dictionary<int, Func<bool>> aiFuncs;
 	public GameCanvasManager canvasManager;
 
+	protected PriorityQueue<(int, int), int> movabledefencePair = new PriorityQueue<(int, int), int>();
+	protected List<(int, int)> movableEmptyPair = new List<(int, int)>();
+	protected PriorityQueue<(int, int), int> movableAttackedPair = new PriorityQueue<(int, int), int>();
+
 	protected void Awake()
 	{
 		aiFuncs = new Dictionary<int, Func<bool>>();
@@ -25,9 +29,7 @@ public class EnemyTurn : Turn
 				AINames.moveSaveAI => MoveSaveAI,
 				AINames.atkAI => AtkAI,
 				AINames.moveAI => MoveAI,
-				AINames.defMove => (() => RemainMove(0)),
-				AINames.randomMove => (() => RemainMove(1)),
-				AINames.hateMove => (() => RemainMove(2)),
+				AINames.defMove => (() => RemainMove()),
 				_ => null,
 			};
 			if (func != null)
@@ -52,13 +54,7 @@ public class EnemyTurn : Turn
 			return;
 
 		playManager.ResetToys();
-		if (playManager.CurrentEnemies.Count == 0)
-		{
-			playManager.IsEndGame = true;
-			playManager.IsEnemyWin = false;
-			return;
-		}
-		else if (playManager.CurrentPlayers.Count == 0)
+		if (playManager.CheckAllPlayersDie())
 		{
 			playManager.IsEndGame = true;
 			playManager.IsEnemyWin = true;
@@ -71,6 +67,10 @@ public class EnemyTurn : Turn
 			return;
 		}
 
+		movableAttackedPair.Clear();
+		movabledefencePair.Clear();
+		movableEmptyPair.Clear();
+
 		EnemyMove();
 	}
 
@@ -82,7 +82,7 @@ public class EnemyTurn : Turn
 
 	protected void EnemyMove()
 	{
-		for(int i = DataTableManger.AITable.Count - 1; i >= 0; i--)
+		for(int i = DataTableManger.AITable.Count - 1; i >= 2; i--)
 		{
 			if (aiFuncs[i]())
 			{
@@ -90,7 +90,7 @@ public class EnemyTurn : Turn
 				break;
 			}
 
-			if (i == 0)
+			if (i == 2)
 			{
 				Debug.Log("No Move");
 				moveCount = 0;
@@ -150,16 +150,16 @@ public class EnemyTurn : Turn
 		}
 		return false;
 	}
-	protected bool RemainMove(int i)
+	protected bool RemainMove()
 	{
-		int moveType = FindRemainAndMoveNode();
-		if (moveType == i)
+		FindRemainMoveNode();
+		if(RemainMoveAtAI() == -1)
 		{
-			moveCount--;
-
-			return true;
+			return false;
 		}
-		return false;
+
+		moveCount--;
+		return true;
 	}
 
 	protected void SetPlayerState()
@@ -171,16 +171,13 @@ public class EnemyTurn : Turn
 		}
 	}
 
-	protected int FindRemainAndMoveNode()
+	protected void FindRemainMoveNode()
 	{
-		var movabledefencePair = new PriorityQueue<(int,int), int>();
-		var movableEmptyPair = new List<(int, int)>();
-		var movableAttackedPair = new PriorityQueue<(int, int), int>();
-
 		var playersAttackNodes = FindAllAttackNodes(playManager.CurrentPlayers);
 
 		foreach (var enemy in playManager.CurrentEnemies)
 		{
+			Debug.Log(enemy.NodeIndexAxis + "," + enemy.NodeIndexNumber);
 			if (enemy.Toy.IsMove)
 			{
 				continue;
@@ -191,6 +188,7 @@ public class EnemyTurn : Turn
 				SetPlayerState();
 
 			var movables = playLogic.ShowMovable(enemy.NodeIndex, 0);
+			Debug.Log(movables.Count);
 			var enemiesAttackNodes = FindAllAttackNodes(playManager.CurrentEnemies, enemy);
 			foreach (var movable in movables)
 			{
@@ -205,12 +203,15 @@ public class EnemyTurn : Turn
 				{
 					movableAttackedPair.Enqueue((movable, enemy.NodeIndex), boardManager.allNodes[enemy.NodeIndex].Toy.Data.Price);
 				}
-				else
+				else if (boardManager.allNodes[movable].State != NodeState.Attack)
 					movableEmptyPair.Add((movable, enemy.NodeIndex));
 			}
 		}
 		playLogic.ClearNodes();
+	}
 
+	protected int RemainMoveAtAI()
+	{ 
 		(int, int) movePair = new();
 		int moveInt = -1;
 
@@ -421,6 +422,14 @@ public class EnemyTurn : Turn
 		isAlive = playLogic.ChoosedNode.Toy.GetDamageAndAlive(beforeNode.Toy.Attack);
 		
 		toyControl.ToyMove(ref beforeNode, isAlive);
+		if (!isAlive)
+		{
+			playLogic.ChoosedNode.State = beforeNode.State;
+			//playLogic.ChoosedNode.Toy = null;
+			beforeNode.State = NodeState.None;
+			playLogic.ChoosedNode = null;
+		}
+
 		playLogic.ClearNodes();
 
 		return true;

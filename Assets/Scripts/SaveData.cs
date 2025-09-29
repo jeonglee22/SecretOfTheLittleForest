@@ -19,7 +19,7 @@ public class SaveDataV1 : SaveData
 	public float unitLimit = 12;
 	public float unitCount = 8;
 	public float gold = 0;
-	public int Crystal = 0;
+	public int Crystal = 30;
 	public int StageCount = 0;
 	public Scenes Scenes { get; set; } = Scenes.Game;
 	public List<Room> Rooms { get; set; }
@@ -33,6 +33,9 @@ public class SaveDataV1 : SaveData
 	public float bgmPos;
 
 	public List<int> LockedInfo = new List<int>(0);
+	public bool isSave;
+	public List<Room> CurrentStageRooms;
+	public int CurrentStageCount;
 
 	public SaveDataV1()
 	{

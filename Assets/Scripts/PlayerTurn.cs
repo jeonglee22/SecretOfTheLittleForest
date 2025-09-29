@@ -11,6 +11,14 @@ public class PlayerTurn : Turn
 
 	protected void Update()
 	{
+		playManager.ResetToys();
+		if (playManager.CheckAllEnemiesDie())
+		{
+			playManager.IsEndGame = true;
+			playManager.IsEnemyWin = false;
+			return;
+		}
+
 		if (Input.touches.Length == 0 || toyControl.IsMove  || playManager.PlayTurn != PlayTurn.Player || !playManager.IsTurnStart)
 			return;
 
@@ -66,6 +74,7 @@ public class PlayerTurn : Turn
 		if(!isAlive)
 		{
 			touchedNode.State = beforeNode.State;
+			//touchedNode.Toy = null;
 			beforeNode.State = NodeState.None;
 			touchedNode = null;
 		}

@@ -98,7 +98,8 @@ public class DeckSceneUIManager : MonoBehaviour
 			acceptFunc = () =>
 			{
 				userDiamond -= presetValue;
-				if(!SaveLoadManager.Data.LockedInfo.Contains(deckSettingManager.ChoosedIndex))
+				SetHaveDiamondText(userDiamond);
+				if (!SaveLoadManager.Data.LockedInfo.Contains(deckSettingManager.ChoosedIndex))
 					SaveLoadManager.Data.LockedInfo.Add(deckSettingManager.ChoosedIndex);
 				SaveLoadManager.Data.Crystal = userDiamond;
 				SaveLoadManager.Save();

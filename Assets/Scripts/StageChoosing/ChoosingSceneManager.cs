@@ -57,6 +57,11 @@ public class ChoosingSceneManager : MonoBehaviour
         if (rooms == null)
             rooms = GetRandomRoom(3);
 
+        SaveLoadManager.Data.CurrentStageRooms = new List<Room>();
+		SaveLoadManager.Data.CurrentStageRooms.AddRange(rooms);
+        SaveLoadManager.Data.CurrentStageCount = stageCount;
+        SaveLoadManager.Save();
+
 		for (int i = 0; i < rooms.Count; i++)
         {
             int index = i;

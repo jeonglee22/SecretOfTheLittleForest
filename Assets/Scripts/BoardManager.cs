@@ -119,7 +119,7 @@ public class BoardManager : MonoBehaviour
 		{
 			enemyIds.RemoveAt(16);
 		}
-		Debug.Log(enemyIds.Count + ", " + bossPos[0]);
+
 		eliteEnemy2GroupFirst = 0;
 		var result = new List<(Node node, ToyData data, bool isBoss)>();
 		for (int i = 0; i < enemyIds.Count; i++)
@@ -182,7 +182,7 @@ public class BoardManager : MonoBehaviour
 
 		var childTransform = node.gameObject.transform.GetChild(0);
 		var spawnedToy = Instantiate(toy, childTransform);
-		if (!isEnemy && node.NodeIndex == playerStartNodes[playerDeck.KingPos].NodeIndex)
+		if (!isEnemy && playerDeck.KingPos != -1 && node.NodeIndex == playerStartNodes[playerDeck.KingPos].NodeIndex)
 		{
 			spawnedToy.kingCanvas.SetActive(true);
 			spawnedToy.IsKing = true;

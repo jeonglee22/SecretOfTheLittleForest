@@ -121,7 +121,9 @@ public class SetObjectControl : MonoBehaviour
 				{
 					unitSetting.AddData(choosingNode.Toy.Data);
 					var beforeToy = choosingNode.GetComponentInChildren<Toy>(true);
+					boardManager.PlayerDeck.KingPos = -1;
 					choosingNode.Toy = null;
+					beforeNode = null;
 					Destroy(beforeToy.gameObject);
 				}
 				else
@@ -194,7 +196,9 @@ public class SetObjectControl : MonoBehaviour
 			unitSetting.AddData(choosingNode.Toy.Data);
 
 			var beforeToy = choosingNode.GetComponentInChildren<Toy>(true);
+			boardManager.PlayerDeck.KingPos = -1;
 			choosingNode.Toy = null;
+			beforeNode = null;
 			choosingNode = null;
 
 			if (dragObject != null)
@@ -291,8 +295,11 @@ public class SetObjectControl : MonoBehaviour
 			else if(beforeNode != null && beforeNode.NodeIndex == node.NodeIndex && !node.Toy.IsKing)
 			{
 				node.Toy.IsKing = true;
-				playerStartNodes[boardManager.PlayerDeck.KingPos].Toy.IsKing = false;
-				playerStartNodes[boardManager.PlayerDeck.KingPos].Toy.kingCanvas.SetActive(false);
+				if(boardManager.PlayerDeck.KingPos != -1)
+				{
+					playerStartNodes[boardManager.PlayerDeck.KingPos].Toy.IsKing = false;
+					playerStartNodes[boardManager.PlayerDeck.KingPos].Toy.kingCanvas.SetActive(false);
+				}
 				boardManager.PlayerDeck.KingId = node.Toy.Data.UnitID;
 				boardManager.PlayerDeck.KingPos = playerStartNodes.IndexOf(node);
 				beforeNode = null;
@@ -323,6 +330,9 @@ public class SetObjectControl : MonoBehaviour
 		{
 			playLogic.ChoosedNode = null;
 			choosingNode = null;
+			if (beforeNode != null && beforeNode.Toy != null)
+				beforeNode.Toy.kingCanvas.SetActive(false);
+			beforeNode = null;
 		}
 	}
 }

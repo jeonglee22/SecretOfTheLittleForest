@@ -73,7 +73,8 @@ public class PlayLogic : MonoBehaviour
 				foreach (var node in nextNodes)
 					if (node != Node.outSide)
 					{
-						movableNodes.AddRange(nextNodes);
+						if (allNodes[node].Toy == null)
+							movableNodes.Add(node);
 						ShowMovable(node, moveCount, false);
 					}
 				moveCount = 0;

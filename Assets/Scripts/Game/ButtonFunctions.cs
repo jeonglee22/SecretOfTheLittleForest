@@ -29,7 +29,6 @@ public class ButtonFunctions : MonoBehaviour
 	private void Start()
 	{
 		OnClickResetCamera();
-		boardManager.SetBoardColor(isElite);
 		if (toyControl != null)
 			toyControl.IsTeleport = isTeleport;
 	}
@@ -82,6 +81,9 @@ public class ButtonFunctions : MonoBehaviour
 
     public void OnClickResetCamera()
     {
+#if UNITY_ANDROID && UNITY_EDITOR
+		Handheld.Vibrate();
+#endif
 		if (readyCanvasManager == null)
 			return;
 
@@ -122,7 +124,7 @@ public class ButtonFunctions : MonoBehaviour
 
 	public void OnClickSetTeleportMoving(float teleport)
 	{
-		isTeleport = teleport == 1f;
+		isTeleport = teleport == 0;
 		toyControl.IsTeleport = isTeleport;
 	}
 }

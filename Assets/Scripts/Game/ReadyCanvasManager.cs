@@ -13,6 +13,8 @@ public class ReadyCanvasManager : MonoBehaviour
 
     public BoardManager boardManager;
 
+    private bool beforeCaptain;
+
     private void OnEnable()
     {
 
@@ -26,8 +28,13 @@ public class ReadyCanvasManager : MonoBehaviour
 
 	private void Update()
 	{
-		if (!CheckHaveCaptain())
+        var captain = CheckHaveCaptain();
+        if (captain == beforeCaptain)
+            return;
+
+		if (!captain)
         {
+            
             NonCaptain.SetActive(true);
             finishButton.SetActive(false);
         }
@@ -36,6 +43,7 @@ public class ReadyCanvasManager : MonoBehaviour
             NonCaptain.SetActive(false);
             finishButton.SetActive(true);
         }
+        beforeCaptain = captain;
 	}
 
 	private bool CheckHaveCaptain()

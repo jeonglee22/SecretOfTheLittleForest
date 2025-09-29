@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public enum JsonFileNum
 {
@@ -130,7 +131,7 @@ public static class AINames
 {
     public static readonly string[] AINameList =
     {
-        runAI, atkSaveAI, moveSaveAI , atkAI, moveAI, defMove, randomMove, hateMove
+        runAI, atkSaveAI, moveSaveAI , atkAI, moveAI, defMove
     };
 
 	public const string runAI = "run_ai";

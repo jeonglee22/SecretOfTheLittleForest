@@ -255,14 +255,14 @@ public class PlayManager : MonoBehaviour
 		players = new List<Node>();
 		foreach (var node in allNodes)
 		{
-			if (node.State == NodeState.Enemy)
+			if (node.Toy != null && node.Toy.IsEnemy)
 			{
 				if (node.Toy.IsElite)
 					eliteEnemies.Add(node);
 				else
 					enemies.Add(node);
 			}
-			else if (node.State == NodeState.Player)
+			else if (node.Toy != null && !node.Toy.IsEnemy)
 				players.Add(node);
 		}
 	}
@@ -290,5 +290,15 @@ public class PlayManager : MonoBehaviour
 		{
 			node.Toy.SetActiveInfoCanvas(b);
 		}
+	}
+
+	public bool CheckAllEnemiesDie()
+	{
+		return enemies.Count + eliteEnemies.Count == 0;
+	}
+
+	public bool CheckAllPlayersDie()
+	{
+		return players.Count == 0;
 	}
 }

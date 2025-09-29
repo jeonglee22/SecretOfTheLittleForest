@@ -14,13 +14,7 @@ public class EliteEnemyTurn : EnemyTurn
 			return;
 
 		playManager.ResetToys();
-		if (playManager.CurrentEnemies.Count == 0)
-		{
-			playManager.IsEndGame = true;
-			playManager.IsEnemyWin = false;
-			return;
-		}
-		else if (playManager.CurrentPlayers.Count == 0)
+		if (playManager.CheckAllPlayersDie())
 		{
 			playManager.IsEndGame = true;
 			playManager.IsEnemyWin = true;
