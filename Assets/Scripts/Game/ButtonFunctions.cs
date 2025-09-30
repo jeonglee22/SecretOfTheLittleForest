@@ -111,7 +111,7 @@ public class ButtonFunctions : MonoBehaviour
 	public void OnValueChangedBattleType()
 	{
 		isElite = !isElite;
-		boardManager.SetBoardColor(isElite);
+		boardManager.IsEliteBoard = isElite;
 	}
 
 	public void OnClickSetTeleportMoving(float teleport)

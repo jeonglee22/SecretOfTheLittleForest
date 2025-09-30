@@ -31,6 +31,8 @@ public class BoardManager : MonoBehaviour
 	public Deck PlayerDeck { get { return playerDeck; } set { playerDeck = value; } }
 	public Toy toy;
 
+	public bool IsEliteBoard { get; set; }
+
 	private void OnEnable()
 	{
 		SaveLoadManager.Load();

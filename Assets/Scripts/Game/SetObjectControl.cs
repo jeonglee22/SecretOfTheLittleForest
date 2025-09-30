@@ -31,11 +31,15 @@ public class SetObjectControl : MonoBehaviour
     {
         playerStartNodes = boardManager.playerStartNodes;
 		imageToggles = scrollRect.gameObject.GetComponent<ScrollRect>().content.gameObject.GetComponent<ToggleGroup>();
+
+		boardManager.SetBoardColor(false);
 	}
 
     void Update()
     {
-        if (Input.touchCount == 0)
+		boardManager.SetBoardColor(boardManager.IsEliteBoard);
+
+		if (Input.touchCount == 0)
             return;
 
 		var touch = Input.GetTouch(0);
