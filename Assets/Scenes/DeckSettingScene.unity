@@ -891,6 +891,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -300.00003
       objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 944631972}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnValueVibrationChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SettingButtonFunctions, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2692780940160190775, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_Value
       value: 1
@@ -3678,6 +3706,7 @@ MonoBehaviour:
   diamondLockedText: {fileID: 1474702471}
   diamondHaveText: {fileID: 1183067575}
   popupPanel: {fileID: 1020032030}
+  buttonFunctions: {fileID: 944631972}
 --- !u!114 &944631972
 MonoBehaviour:
   m_ObjectHideFlags: 0

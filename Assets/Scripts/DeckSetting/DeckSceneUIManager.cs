@@ -30,6 +30,8 @@ public class DeckSceneUIManager : MonoBehaviour
 
 	private Coroutine textColorCoroute;
 
+	public SettingButtonFunctions buttonFunctions;
+
 	public void OnClickBack()
 	{
 		descriptionText.text = "로비로 돌아가시겠습니까?";
@@ -85,7 +87,8 @@ public class DeckSceneUIManager : MonoBehaviour
 		{
 			diamondLockedText.color = Color.red;
 			diamondHaveText.color = Color.red;
-			
+			if (buttonFunctions.IsVibrate) Handheld.Vibrate();
+
 			textColorCoroute = StartCoroutine(CoColorChange());
 			return;
 		}
@@ -115,6 +118,8 @@ public class DeckSceneUIManager : MonoBehaviour
 		soundManager.SaveData();
 		SaveLoadManager.Data.Crystal = userDiamond;
 		SaveLoadManager.Data.bgmPos = 0f;
+		SaveLoadManager.Data.isTeleport = buttonFunctions.IsTeleport;
+		SaveLoadManager.Data.isVibrate = buttonFunctions.IsVibrate;
 		SaveLoadManager.Save();
 	}
 

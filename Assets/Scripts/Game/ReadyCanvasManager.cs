@@ -12,6 +12,7 @@ public class ReadyCanvasManager : MonoBehaviour
     public GameObject finishButton;
 
     public BoardManager boardManager;
+    public SettingButtonFunctions buttonFunctions;
 
     private bool beforeCaptain;
 
@@ -34,7 +35,7 @@ public class ReadyCanvasManager : MonoBehaviour
 
 		if (!captain)
         {
-            
+            if (buttonFunctions.IsVibrate) Handheld.Vibrate();
             NonCaptain.SetActive(true);
             finishButton.SetActive(false);
         }

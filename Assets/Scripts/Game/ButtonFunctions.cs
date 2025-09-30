@@ -81,9 +81,6 @@ public class ButtonFunctions : MonoBehaviour
 
     public void OnClickResetCamera()
     {
-#if UNITY_ANDROID && UNITY_EDITOR
-		Handheld.Vibrate();
-#endif
 		if (readyCanvasManager == null)
 			return;
 

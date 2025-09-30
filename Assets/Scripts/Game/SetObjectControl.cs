@@ -160,11 +160,13 @@ public class SetObjectControl : MonoBehaviour
 
 			if (node.State == NodeState.Player)
 			{
-				//if(beforeNode.Toy != null && beforeNode.Toy.IsKing && node.Toy != null)
+				//playLogic.ChoosedNode = null;
+				//if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
 				//{
-				//	ChangeKing(node);
-				//	boardManager.ResetCaptainImage();
+				//	beforeNode.Toy.kingCanvas.SetActive(false);
 				//}
+				//choosingNode = null;
+				//beforeNode = null;
 				return;
 			}
 
@@ -172,6 +174,7 @@ public class SetObjectControl : MonoBehaviour
 
 			choosingNode.Toy = null;
 			choosingNode = null;
+			beforeNode = null;
 			var toyComp = toy.GetComponent<Toy>();
 			toyComp.Data = beforeToy.Data;
 			toyComp.IsKing = beforeToy.IsKing;
@@ -230,6 +233,7 @@ public class SetObjectControl : MonoBehaviour
 		var baseGo = Instantiate(go, transform.root.GetComponentInChildren<Canvas>().rootCanvas.transform);
 		baseGo.transform.position = screenPos;
 		var toy = baseGo.GetComponent<Toy>();
+		choosingNode.Toy.kingCanvas.SetActive(false);
 		toy.Data = choosingNode.Toy.Data;
 		toy.IsKing = choosingNode.Toy.IsKing;
 		toy.SetData();
@@ -281,10 +285,12 @@ public class SetObjectControl : MonoBehaviour
 
 			if (node.Toy == null)
 			{
-				playLogic.ClearNodes();
-				choosingNode = null;
-				if (beforeNode != null && beforeNode.Toy != null)
+				playLogic.ChoosedNode = null;
+				if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+				{
 					beforeNode.Toy.kingCanvas.SetActive(false);
+				}
+				choosingNode = null;
 				beforeNode = null;
 				return;
 			}
@@ -329,9 +335,11 @@ public class SetObjectControl : MonoBehaviour
 		else if (Physics.Raycast(touchRay, Mathf.Infinity, LayerId.ground))
 		{
 			playLogic.ChoosedNode = null;
-			choosingNode = null;
-			if (beforeNode != null && beforeNode.Toy != null)
+			if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+			{
 				beforeNode.Toy.kingCanvas.SetActive(false);
+			}
+			choosingNode = null;
 			beforeNode = null;
 		}
 	}

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class TouchManager : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
 	private Vector2 fingerTouchStartPosition;
 	private float fingerTouchStartTime;
@@ -89,19 +89,42 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 		IsLongPress = false;
 	}
 
-	public void OnPointerEnter(PointerEventData eventData)
+	//public void OnPointerEnter(PointerEventData eventData)
+	//{
+	//	fingerTouchStartPosition = eventData.position;
+	//	fingerTouchStartTime = Time.time;
+	//	isEnter = true;
+	//}
+
+	//public void OnPointerExit(PointerEventData eventData)
+	//{
+	//	var timeDiff = Time.time - fingerTouchStartTime;
+	//	var disDiff = Vector2.Distance(eventData.position, fingerTouchStartPosition);
+
+	//	if (Input.touchCount == 1)
+	//	{
+	//		if (timeDiff <= tapTimeLimit)
+	//			IsTap = true;
+	//		else
+	//		{
+	//			IsLongPress = true;
+	//			IsTap = false;
+	//		}
+	//	}
+	//	DoFunction();
+	//}
+
+	public void OnPointerClick(PointerEventData eventData)
 	{
-		fingerTouchStartPosition = eventData.position;
-		fingerTouchStartTime = Time.time;
-		isEnter = true;
+
 	}
 
-	public void OnPointerExit(PointerEventData eventData)
+	public void OnPointerUp(PointerEventData eventData)
 	{
 		var timeDiff = Time.time - fingerTouchStartTime;
 		var disDiff = Vector2.Distance(eventData.position, fingerTouchStartPosition);
 
-		if (Input.touchCount == 1)
+		if (Input.touchCount == 1 && isEnter)
 		{
 			if (timeDiff <= tapTimeLimit)
 				IsTap = true;
@@ -112,5 +135,12 @@ public class TouchManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 			}
 		}
 		DoFunction();
+	}
+
+	public void OnPointerDown(PointerEventData eventData)
+	{
+		fingerTouchStartPosition = eventData.position;
+		fingerTouchStartTime = Time.time;
+		isEnter = true;
 	}
 }

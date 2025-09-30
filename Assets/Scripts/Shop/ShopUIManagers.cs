@@ -32,12 +32,14 @@ public class ShopUIManagers : MonoBehaviour
     private int stageId;
 	private float unitLimit;
 	private float goldLimit;
+    private bool vibration;
 
     private Color selectedColor = new Color(0, 0, 0, 0.98f);
     private Color notSelectedColor = new Color(0.462f, 0.462f, 0.462f, 0.165f);
     private Color orangeColor = new Color(1f, 0.7529f, 0f, 1f);
 
     private ShopLogicManager logicManager;
+    public SettingButtonFunctions buttonFunctions;
 
 	public bool IsFree { get; set; } = true;
 
@@ -52,6 +54,7 @@ public class ShopUIManagers : MonoBehaviour
         var data = SaveLoadManager.Data;
         stageId = data.stageId;
         unitLimit = data.unitLimit;
+        vibration = data.isVibrate;
 	}
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -156,6 +159,7 @@ public class ShopUIManagers : MonoBehaviour
 
 			goldText.color = Color.red;
             goldText2.color = Color.red;
+            if (buttonFunctions.IsVibrate) Handheld.Vibrate();
 
 			goldColorCorout = StartCoroutine(CoGoldTextColorChange());
         }
@@ -195,6 +199,7 @@ public class ShopUIManagers : MonoBehaviour
 
 			unitText.color = Color.red;
             unitText2.color = Color.red;
+			if (buttonFunctions.IsVibrate) Handheld.Vibrate();
 
 			unitColorCorout = StartCoroutine(CoUnitTextColorChange());
 		}

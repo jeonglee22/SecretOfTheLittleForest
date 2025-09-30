@@ -2882,6 +2882,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -300.00003
       objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 495656394}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnValueVibrationChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SettingButtonFunctions, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521169173506363415, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2692780940160190775, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -4465,6 +4493,7 @@ MonoBehaviour:
   NonCaptain: {fileID: 567398842}
   finishButton: {fileID: 389262788}
   boardManager: {fileID: 3386968198759226174}
+  buttonFunctions: {fileID: 495656394}
 --- !u!114 &1166843664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7048,7 +7077,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8221774413195918118, guid: 8658ada7c2fb42d42b14a8bba2e83efc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
