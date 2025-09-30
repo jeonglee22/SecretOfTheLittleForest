@@ -37,8 +37,6 @@ public class SetObjectControl : MonoBehaviour
 
     void Update()
     {
-		boardManager.SetBoardColor(boardManager.IsEliteBoard);
-
 		if (Input.touchCount == 0)
             return;
 
@@ -64,6 +62,7 @@ public class SetObjectControl : MonoBehaviour
 			if(isMoving)
 			{
 				ChangePos(touch);
+				boardManager.SetBoardColor(boardManager.IsEliteBoard);
 				return;
 			}
 			choosingNode = null;
@@ -77,6 +76,7 @@ public class SetObjectControl : MonoBehaviour
 
 			if (CheckSameNode(touch))
 			{
+				boardManager.SetBoardColor(boardManager.IsEliteBoard);
 				return;
 			}
 
@@ -88,6 +88,7 @@ public class SetObjectControl : MonoBehaviour
 				DragMoving(touch);
 			}
 		}
+		boardManager.SetBoardColor(boardManager.IsEliteBoard);
 	}
 
 	private bool CheckSameNode(Touch touch)
