@@ -39,11 +39,6 @@ public class ButtonFunctions : MonoBehaviour
 		SaveLoadManager.Save();
 	}
 
-	private void OnApplicationQuit()
-	{
-		OnClickFinishSetting();
-	}
-
 	public void OnClickStartGame()
     {
 		playManager.StartGame();

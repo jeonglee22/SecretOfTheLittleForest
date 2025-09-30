@@ -173,7 +173,13 @@ public class PlayLogic : MonoBehaviour
 
 			var resultNodes = new List<int>();
 			if(node.IsCenterNode && !isAxis)
-				nextNodes.AddRange(node.CenterCrossNode2);
+			{
+				var additionalCenter = node.CenterCrossNode2;
+				if (nextNodes.Contains(additionalCenter[0]))
+					nextNodes.Add(additionalCenter[1]);
+				else
+					nextNodes.Add(additionalCenter[0]);
+			}
 
 			for (int i = 0; i < nextNodes.Count; i++)
 			{

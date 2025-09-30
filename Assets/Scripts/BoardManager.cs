@@ -58,20 +58,23 @@ public class BoardManager : MonoBehaviour
 
 	public void SaveDeckSetting()
 	{
-		var posList = new List<int>();
-		for (int i = 0; i < playerStartNodes.Count; i++)
+		if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex((int)Scenes.NodeSetting))
 		{
-			if (playerStartNodes[i].Toy == null)
-				posList.Add(0);
-			else
-				posList.Add(playerStartNodes[i].Toy.Data.UnitID);
+			var posList = new List<int>();
+			for (int i = 0; i < playerStartNodes.Count; i++)
+			{
+				if (playerStartNodes[i].Toy == null)
+					posList.Add(0);
+				else
+					posList.Add(playerStartNodes[i].Toy.Data.UnitID);
+			}
+			playerDeck.Pos = posList;
+			SaveLoadManager.Data.Deck = playerDeck;
+			SaveLoadManager.Data.Deck.Pos = posList;
+			SaveLoadManager.Data.Deck.KingPos = playerDeck.KingPos;
+			SaveLoadManager.Data.Deck.KingId = playerDeck.KingId;
+			SaveLoadManager.Save();
 		}
-		playerDeck.Pos = posList;
-		SaveLoadManager.Data.Deck = playerDeck;
-		SaveLoadManager.Data.Deck.Pos = posList;
-		SaveLoadManager.Data.Deck.KingPos = playerDeck.KingPos;
-		SaveLoadManager.Data.Deck.KingId = playerDeck.KingId;
-		SaveLoadManager.Save();
 	}
 
 	public void SetPlayerDeckOnNode()

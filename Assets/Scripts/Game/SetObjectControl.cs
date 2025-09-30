@@ -306,6 +306,7 @@ public class SetObjectControl : MonoBehaviour
 				beforeNode = null;
 				return;
 			}
+
 			if(beforeNode == null && !node.Toy.IsKing)
 			{
 				node.Toy.kingCanvas.SetActive(true);
@@ -313,7 +314,7 @@ public class SetObjectControl : MonoBehaviour
 			else if(beforeNode != null && beforeNode.NodeIndex == node.NodeIndex && !node.Toy.IsKing)
 			{
 				node.Toy.IsKing = true;
-				if(boardManager.PlayerDeck.KingPos != -1)
+				if(boardManager.PlayerDeck.KingPos != -1 && playerStartNodes[boardManager.PlayerDeck.KingPos].Toy != null)
 				{
 					playerStartNodes[boardManager.PlayerDeck.KingPos].Toy.IsKing = false;
 					playerStartNodes[boardManager.PlayerDeck.KingPos].Toy.kingCanvas.SetActive(false);
@@ -329,10 +330,13 @@ public class SetObjectControl : MonoBehaviour
 			}
 			else if(beforeNode != null && beforeNode.NodeIndex != node.NodeIndex)
 			{
+				if (beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex &&
+					beforeNode.Toy != null)
+				{
+					beforeNode.Toy.kingCanvas.SetActive(false);
+				}
 				playLogic.ClearNodes();
 				choosingNode = null;
-				if (beforeNode != null && beforeNode.Toy != null)
-					beforeNode.Toy.kingCanvas.SetActive(false);
 				beforeNode = null;
 				return;
 			}
