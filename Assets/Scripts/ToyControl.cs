@@ -11,6 +11,9 @@ public class ToyControl : MonoBehaviour
 	private float corouteTime = 0.001f;
 
 	private bool isMove = false;
+	private float attackSpeed = 7f;
+	private float returnSpeed = 2f;
+
 	public bool IsMove {  get { return isMove; } }
 
 	public bool IsTeleport { get; set; }
@@ -58,12 +61,12 @@ public class ToyControl : MonoBehaviour
 		var pos = Vector3.Lerp(startPos, endPos, movingSpeed * time);
 		var toy = playLogic.ChoosedNode.Toy;
 		toy.gameObject.transform.LookAt(endPos);
-		while (time <= 1 / movingSpeed)
+		while (time <= 1 / ((isBack ? attackSpeed : 1f) * movingSpeed))
 		{
 			toy.transform.position = pos;
 			yield return new WaitForSeconds(corouteTime);
 			time += Time.deltaTime;
-			pos = Vector3.Lerp(startPos, endPos, movingSpeed * time);
+			pos = Vector3.Lerp(startPos, endPos, ((isBack ? attackSpeed : 1f) * movingSpeed) * time);
 		}
 		if (isBack)
 		{
@@ -74,7 +77,7 @@ public class ToyControl : MonoBehaviour
 				toy.transform.position = pos;
 				yield return new WaitForSeconds(corouteTime);
 				time += Time.deltaTime;
-				pos = Vector3.Lerp(endPos, startPos, movingSpeed * time);
+				pos = Vector3.Lerp(endPos, startPos, ((isBack ? returnSpeed : 1f) * movingSpeed) * time);
 			}
 		}
 		isMove = false;

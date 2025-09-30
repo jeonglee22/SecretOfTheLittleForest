@@ -123,22 +123,28 @@ public class SetObjectControl : MonoBehaviour
 					var beforeToy = choosingNode.GetComponentInChildren<Toy>(true);
 					boardManager.PlayerDeck.KingPos = -1;
 					choosingNode.Toy = null;
-					beforeNode = null;
+					
 					Destroy(beforeToy.gameObject);
 				}
 				else
 				{
 					choosingNode.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
+					if(choosingNode.NodeIndex == boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+					{
+						choosingNode.Toy.kingCanvas.SetActive(true);
+					}
 				}
 				playLogic.ClearNodes();
-				choosingNode = null;
+				
 			}
 			else
 			{
 				node.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
-				if(choosingNode.GetComponentInChildren<Toy>(true)  != null)
+				if(choosingNode.GetComponentInChildren<Toy>(true) != null)
 					Destroy(choosingNode.GetComponentInChildren<Toy>(true).gameObject);
 			}
+			beforeNode = null;
+			choosingNode = null;
 			Destroy(dragObject.transform.parent.gameObject);
 			dragObject = null;
 			isMoving = false;
@@ -158,15 +164,21 @@ public class SetObjectControl : MonoBehaviour
 			var go = hitInfo.collider.gameObject;
 			var node = go.GetComponent<Node>();
 
-			if (node.State == NodeState.Player)
+			if (node.State == NodeState.Player || !playerStartNodes.Contains(node))
 			{
-				//playLogic.ChoosedNode = null;
-				//if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
-				//{
-				//	beforeNode.Toy.kingCanvas.SetActive(false);
-				//}
-				//choosingNode = null;
-				//beforeNode = null;
+				playLogic.ChoosedNode = null;
+				if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+				{
+					beforeNode.Toy.kingCanvas.SetActive(false);
+				}
+				choosingNode.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
+				choosingNode = null;
+				beforeNode = null;
+				if (dragObject != null)
+					Destroy(dragObject.transform.parent.gameObject);
+				dragObject = null;
+				playLogic.ClearNodes();
+				isMoving = false;
 				return;
 			}
 

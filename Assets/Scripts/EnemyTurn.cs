@@ -69,7 +69,7 @@ public class EnemyTurn : Turn
 			return;
 		}
 
-		if (moveCount == 0)
+		if (moveCount == 0 || playManager.CheckEnemyKingDead())
 		{
 			EndTurn();
 			return;

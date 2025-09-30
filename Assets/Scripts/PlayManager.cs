@@ -362,4 +362,25 @@ public class PlayManager : MonoBehaviour
 
 		return true;
 	}
+
+	public bool CheckEnemyKingDead()
+	{
+		foreach (var node in enemies)
+		{
+			if (node.Toy.IsKing)
+				return false;
+		}
+
+		return true;
+	}
+	public bool CheckEliteEnemyKingDead()
+	{
+		foreach (var node in eliteEnemies)
+		{
+			if (node.Toy.IsKing)
+				return false;
+		}
+
+		return true;
+	}
 }

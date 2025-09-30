@@ -29,7 +29,7 @@ public class EliteEnemyTurn : EnemyTurn
 			return;
 		}
 
-		if (moveCount == 0)
+		if (moveCount == 0 || playManager.CheckEliteEnemyKingDead())
 		{
 			EndTurn();
 			return;
