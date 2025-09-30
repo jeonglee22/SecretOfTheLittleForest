@@ -7727,6 +7727,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LayoutIgnorePanel
       objectReference: {fileID: 0}
+    - target: {fileID: 1928605765400498920, guid: c46b80af492a2ee4ca88664f6094f018, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3701420438551030446, guid: c46b80af492a2ee4ca88664f6094f018, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -8959,6 +8963,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8499538379241230211, guid: 9915fbfa17186db4a9182cef5e562b86, type: 3}
   m_PrefabInstance: {fileID: 646058937}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &646058939 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3245968389836892216, guid: 9915fbfa17186db4a9182cef5e562b86, type: 3}
+  m_PrefabInstance: {fileID: 646058937}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &649717700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13385,12 +13400,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldText: {fileID: 860675059}
   unitText: {fileID: 220566023}
-  winText: {fileID: 2062425682}
-  goldButtonText: {fileID: 651745457}
+  explainText: {fileID: 2062425682}
   touchManagers:
   - {fileID: 704576141}
   - {fileID: 2072090540}
+  playManager: {fileID: 1174098597}
   toyControl: {fileID: 8033447157172070750}
+  goldButtonText: {fileID: 651745457}
 --- !u!1 &988000557
 GameObject:
   m_ObjectHideFlags: 0
@@ -15277,9 +15293,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldText: {fileID: 1302794980}
   unitText: {fileID: 840197290}
-  winText: {fileID: 2026664744}
-  goldButtonText: {fileID: 1742058902}
+  explainText: {fileID: 2026664744}
+  touchManagers:
+  - {fileID: 349404376}
+  - {fileID: 1375565541}
+  - {fileID: 676175619}
+  playManager: {fileID: 1174098597}
   toyControl: {fileID: 8033447157172070750}
+  goldButtonText: {fileID: 1742058902}
   images:
   - {fileID: 1090845523}
   - {fileID: 355517651}
@@ -15292,10 +15313,6 @@ MonoBehaviour:
   - {fileID: 484599567}
   - {fileID: 2006876673}
   - {fileID: 1687907578}
-  touchManagers:
-  - {fileID: 349404376}
-  - {fileID: 1375565541}
-  - {fileID: 676175619}
 --- !u!1 &1108268202
 GameObject:
   m_ObjectHideFlags: 0
@@ -16165,6 +16182,7 @@ MonoBehaviour:
   manager: {fileID: 495656391}
   boardManager: {fileID: 3386968198759226174}
   gameCanvasManager: {fileID: 72617637}
+  resultWindowManager: {fileID: 0}
   blockPlane: {fileID: 1965263550}
   resultWindows:
   - {fileID: 1106623945}
@@ -18427,6 +18445,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1302692304}
   - component: {fileID: 1302692305}
+  - component: {fileID: 1302692306}
   m_Layer: 5
   m_Name: EndTurnLosePanel
   m_TagString: Untagged
@@ -18483,6 +18502,24 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1302692306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302692303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c03af6f7e3604648abc46106b2192fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldText: {fileID: 0}
+  unitText: {fileID: 0}
+  explainText: {fileID: 646058939}
+  touchManagers: []
+  playManager: {fileID: 1174098597}
+  toyControl: {fileID: 8033447157172070750}
 --- !u!114 &1302794980 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3245968389836892216, guid: 9915fbfa17186db4a9182cef5e562b86, type: 3}
@@ -22081,7 +22118,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldText: {fileID: 1859393969}
   unitText: {fileID: 2085365386}
-  winText: {fileID: 1665476153}
+  explainText: {fileID: 1665476153}
+  touchManagers:
+  - {fileID: 324905365}
+  - {fileID: 1153697518}
+  - {fileID: 1850581012}
+  playManager: {fileID: 1174098597}
+  toyControl: {fileID: 8033447157172070750}
   bossRewardCrystalText: {fileID: 422041368}
   goldButtonText: {fileID: 807471653}
   images:
@@ -22096,13 +22139,8 @@ MonoBehaviour:
   - {fileID: 403004977}
   - {fileID: 1084566475}
   - {fileID: 1201499396}
-  touchManagers:
-  - {fileID: 324905365}
-  - {fileID: 1153697518}
-  - {fileID: 1850581012}
   crystalPanel: {fileID: 2022419056}
   crystalPanelmanager: {fileID: 932376653}
-  toyControl: {fileID: 8033447157172070750}
 --- !u!1 &1684672101
 GameObject:
   m_ObjectHideFlags: 0
@@ -22590,7 +22628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1468135411688818829, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -28.88889
+      value: -28.888916
       objectReference: {fileID: 0}
     - target: {fileID: 1483555366118823929, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_AnchorMax.y
@@ -29596,6 +29634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2145841191}
   - component: {fileID: 2145841192}
+  - component: {fileID: 2145841193}
   m_Layer: 5
   m_Name: EndTurnDrawPanel
   m_TagString: Untagged
@@ -29652,6 +29691,24 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2145841193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145841190}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c03af6f7e3604648abc46106b2192fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldText: {fileID: 0}
+  unitText: {fileID: 0}
+  explainText: {fileID: 0}
+  touchManagers: []
+  playManager: {fileID: 0}
+  toyControl: {fileID: 0}
 --- !u!4 &2453581957110236829
 Transform:
   m_ObjectHideFlags: 0

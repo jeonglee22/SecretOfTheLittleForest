@@ -111,7 +111,7 @@ public class ChoosingSceneManager : MonoBehaviour
 
         SaveLoadManager.Data.StageCount = ++stageCount;
         SaveLoadManager.Data.Rooms = null;
-        SaveLoadManager.Data.isTeleport =  settingButtonFunctions.IsTeleport;
+        //SaveLoadManager.Data.isTeleport =  settingButtonFunctions.IsTeleport;
 		switch (x)
 		{
 			case Room.Normal:

@@ -20,7 +20,8 @@ public class GameCanvasManager : MonoBehaviour
 		{
 			BattleType.Normal => Settings.battleTurnCount,
 			BattleType.Elite => Settings.eliteTurnCount,
-			BattleType.Boss => Settings.bossTurnCount
+			BattleType.Boss => Settings.bossTurnCount,
+			_ => throw new System.Exception("Wrong BattleType"),
 		};
 
 		SetTurnText((int)DataTableManger.SettingTable.Get(turnCount));

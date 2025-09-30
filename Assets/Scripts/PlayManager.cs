@@ -51,6 +51,7 @@ public class PlayManager : MonoBehaviour
 	public UIManager manager;
 	public BoardManager boardManager;
 	public GameCanvasManager gameCanvasManager;
+	public ResultWindowManager resultWindowManager;
 
 	public GameObject blockPlane;
 	public List<GameObject> resultWindows;
@@ -62,6 +63,8 @@ public class PlayManager : MonoBehaviour
 	public bool IsTurnStart {  get; private set; }
 	public bool IsEndGame { get; set; } = false;
 	public bool IsEnemyWin { get; set; }
+	public LoseType LoseType { get; set; } = LoseType.None;
+	public WinType WinType { get; set; } = WinType.None;
 	public bool IsTurnShown { get; set; }
 
 	private int totalTurn;
@@ -126,7 +129,10 @@ public class PlayManager : MonoBehaviour
 			int enemyCost = GetRemainToyCost(enemies);
 			int enemy2Cost = GetRemainToyCost(eliteEnemies);
 			int gameResult = playerCost > enemyCost + enemy2Cost ? 1 : (playerCost < enemyCost + enemy2Cost ? -1 : 0);
-
+			if (gameResult > 0)
+				WinType = WinType.WinTotalCost;
+			else if (gameResult < 0)
+				LoseType = LoseType.LoseTotalCost;
 			OpenResultWindow(gameResult);
 		}
 		else
@@ -134,6 +140,7 @@ public class PlayManager : MonoBehaviour
 			int gameResult = IsEnemyWin ? -1 : 1;
 			OpenResultWindow(gameResult);
 		}
+		IsTurnStart = false;
 	}
 
 	public void ForceEndGame(bool end = true)
@@ -300,5 +307,59 @@ public class PlayManager : MonoBehaviour
 	public bool CheckAllPlayersDie()
 	{
 		return players.Count == 0;
+	}
+
+	public bool CheckPlayerCaptainDie()
+	{
+		foreach (var node in players)
+		{
+			if (node.Toy.IsKing)
+				return false;
+		}
+
+		return true;
+	}
+
+	public bool CheckEnemyCaptainDie()
+	{
+		foreach (var node in enemies)
+		{
+			if (node.Toy.IsKing)
+				return false;
+		}
+		foreach (var node in eliteEnemies)
+		{
+			if (node.Toy.IsKing)
+				return false;
+		}
+
+		return true;
+	}
+
+	public bool CheckPlayerExceptCaptainDie()
+	{
+		foreach (var node in players)
+		{
+			if (!node.Toy.IsKing)
+				return false;
+		}
+
+		return true;
+	}
+
+	public bool CheckEnemyExceptCaptainDie()
+	{
+		foreach (var node in enemies)
+		{
+			if (!node.Toy.IsKing)
+				return false;
+		}
+		foreach (var node in eliteEnemies)
+		{
+			if (!node.Toy.IsKing)
+				return false;
+		}
+
+		return true;
 	}
 }

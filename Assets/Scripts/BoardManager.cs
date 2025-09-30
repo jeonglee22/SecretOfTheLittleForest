@@ -188,7 +188,10 @@ public class BoardManager : MonoBehaviour
 			spawnedToy.IsKing = true;
 		}
 		else if (isEnemy && toy.IsKing)
+		{
 			spawnedToy.kingCanvas.SetActive(true);
+			spawnedToy.IsKing = true;
+		}
 		else
 		{
 			spawnedToy.kingCanvas.SetActive(false);

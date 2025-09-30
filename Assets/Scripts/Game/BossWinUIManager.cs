@@ -6,40 +6,34 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class BossWinUIManager : MonoBehaviour
+public class BossWinUIManager : ResultWindowManager
 {
-	public TextMeshProUGUI goldText;
-	public TextMeshProUGUI unitText;
-	public TextMeshProUGUI winText;
 	public TextMeshProUGUI bossRewardCrystalText;
 	public TextMeshProUGUI goldButtonText;
 
 	public List<Image> images;
 	public List<TextMeshProUGUI> health;
 	public List<TextMeshProUGUI> attack;
-	public List<TouchManager> touchManagers;
 
 	public GameObject crystalPanel;
 	public TouchManager crystalPanelmanager;
 
-	public float Gold { get; set; }
 	private float unitLimit;
 	private int stageId;
 	private Deck currentDeck;
 	private List<int> choosedIds;
 
 	private float blockTouchAlpha = 0.8f;
-	public ToyControl toyControl;
 
-	private void OnEnable()
+	protected override void OnEnable()
 	{
+		base.OnEnable();
 		SaveLoadManager.Load();
 		var data = SaveLoadManager.Data;
 		unitLimit = data.unitLimit;
 		if (unitLimit == 0)
 			unitLimit = DataTableManger.SettingTable.Get(Settings.unitLimit);
 		stageId = data.stageId;
-		Gold = data.gold;
 		currentDeck = data.Deck;
 
 		crystalPanel.SetActive(true);
@@ -69,7 +63,7 @@ public class BossWinUIManager : MonoBehaviour
 	{
 	}
 
-	public void OnClickGetGold()
+	public override void OnClickGetGold()
 	{
 		var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
 
@@ -96,20 +90,10 @@ public class BossWinUIManager : MonoBehaviour
 		SaveLoadManager.Save();
 	}
 
-	private void SetGoldText()
-	{
-		var goldLimit = DataTableManger.SettingTable.Get(Settings.goldLimit);
-		goldText.text = $"({Gold}/{goldLimit})";
-	}
 
 	public void SetUnitText(int unitCount)
 	{
 		unitText.text = $"({unitCount}/{unitLimit})";
-	}
-
-	public void SetWinText(WinType ty)
-	{
-		winText.text = "text";
 	}
 
 	private void SetImageAndInfo(List<int> ids)

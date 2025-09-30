@@ -25,6 +25,7 @@ public enum BattleType
 
 public enum WinType
 {
+    None = -1,
     KillKing,
     KillExceptKing,
     WinTotalCost,
@@ -32,6 +33,7 @@ public enum WinType
 
 public enum LoseType
 {
+    None = -1,
 	KilledKing,
 	KilledExceptKing,
 	LoseTotalCost,
@@ -87,6 +89,7 @@ public static class DataTableIds
 
 	public static readonly string Toy = "ToyTable";
     public static readonly string AI = "AITable";
+    public static readonly string newAI = "NewAITable";
     public static readonly string Setting = "Settings";
     public static readonly string Stage = "StageCombinations";
     public static readonly string EliteStage = "EliteStage";

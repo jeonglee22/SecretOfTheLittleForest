@@ -4,36 +4,29 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class NormalWinUIManager : MonoBehaviour
+public class NormalWinUIManager : ResultWindowManager
 {
-	public TextMeshProUGUI goldText;
-	public TextMeshProUGUI unitText;
-	public TextMeshProUGUI winText;
 	public TextMeshProUGUI goldButtonText;
-
-	public ToyControl toyControl;
 
 	public List<Image> images;
 	public List<TextMeshProUGUI> health;
 	public List<TextMeshProUGUI> attack;
-	public List<TouchManager> touchManagers;
 
-	public float Gold {  get; set; }
 	private float unitLimit;
 	private int stageId;
 	private Deck currentDeck;
 	private List<int> choosedIds;
 	private float blockTouchAlpha = 0.8f;
 
-	private void OnEnable()
+	protected override void OnEnable()
 	{
+		base.OnEnable();
 		SaveLoadManager.Load();
 		var data = SaveLoadManager.Data;
 		unitLimit = data.unitLimit;
 		if (unitLimit == 0)
 			unitLimit = DataTableManger.SettingTable.Get(Settings.unitLimit);
 		stageId = data.stageId;
-		Gold = data.gold;
 		currentDeck = data.Deck;
 
 		goldButtonText.text = string.Format(DataTableManger.StageStringTable.GetWinString(3),
@@ -53,37 +46,9 @@ public class NormalWinUIManager : MonoBehaviour
 		
 	}
 
-	private void SetGoldText()
-	{
-		var goldLimit = DataTableManger.SettingTable.Get(Settings.goldLimit);
-		goldText.text = $"({Gold}/{goldLimit})";
-	}
-
 	public void SetUnitText(int unitCount)
 	{
 		unitText.text = $"({unitCount}/{unitLimit})";
-	}
-
-	public void OnClickGetGold()
-	{
-		var boardManager = GameObject.FindWithTag(Tags.BoardManager).GetComponent<BoardManager>();
-
-		var battleType = boardManager.BattleType;
-		var gold = battleType switch
-		{
-			BattleType.Normal => DataTableManger.SettingTable.Get(Settings.battleGold),
-			BattleType.Elite => DataTableManger.SettingTable.Get(Settings.eliteGold),
-			BattleType.Boss => DataTableManger.SettingTable.Get(Settings.bossGold),
-			_ => throw new System.InvalidOperationException(),
-		};
-		Gold += gold;
-		Gold = Mathf.Clamp(Gold, 0, DataTableManger.SettingTable.Get(Settings.goldLimit));
-
-		SetGoldText();
-		SceneManager.LoadScene((int)Scenes.StageChoosing);
-		SaveLoadManager.Data.gold = Gold;
-		SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
-		SaveLoadManager.Save();
 	}
 
 	private void SetImageAndInfo(List<int> ids)

@@ -44,6 +44,10 @@ public static class DataTableManger
         var presetTable = new PresetTable();
 		presetTable.Load(DataTableIds.Preset);
 		tables.Add(DataTableIds.Preset, presetTable);
+
+		var newAITable = new NewAITable();
+		newAITable.Load(DataTableIds.newAI);
+		tables.Add(DataTableIds.newAI, newAITable);
 	}
 
     public static StageStringTable StageStringTable
@@ -107,6 +111,14 @@ public static class DataTableManger
 		get
 		{
 			return Get<PresetTable>(DataTableIds.Preset);
+		}
+	}
+
+	public static NewAITable NewAITable
+	{
+		get
+		{
+			return Get<NewAITable>(DataTableIds.newAI);
 		}
 	}
 

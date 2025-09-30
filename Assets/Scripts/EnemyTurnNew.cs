@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTurn : Turn
+public class EnemyTurnNew : Turn
 {
 	protected float turnTimeInterval = 2f;
 	protected float turnTime;
@@ -54,18 +54,10 @@ public class EnemyTurn : Turn
 			return;
 
 		playManager.ResetToys();
-		if (playManager.CheckPlayerCaptainDie())
+		if (playManager.CheckAllPlayersDie())
 		{
 			playManager.IsEndGame = true;
 			playManager.IsEnemyWin = true;
-			playManager.LoseType = LoseType.KilledKing;
-			return;
-		}
-		else if (playManager.CheckPlayerExceptCaptainDie())
-		{
-			playManager.IsEndGame = true;
-			playManager.IsEnemyWin = true;
-			playManager.LoseType = LoseType.KilledExceptKing;
 			return;
 		}
 
@@ -94,11 +86,13 @@ public class EnemyTurn : Turn
 		{
 			if (aiFuncs[i]())
 			{
+				Debug.Log(i);
 				break;
 			}
 
 			if (i == 2)
 			{
+				Debug.Log("No Move");
 				moveCount = 0;
 			}
 		}
@@ -183,6 +177,7 @@ public class EnemyTurn : Turn
 
 		foreach (var enemy in playManager.CurrentEnemies)
 		{
+			Debug.Log(enemy.NodeIndexAxis + "," + enemy.NodeIndexNumber);
 			if (enemy.Toy.IsMove)
 			{
 				continue;
@@ -193,6 +188,7 @@ public class EnemyTurn : Turn
 				SetPlayerState();
 
 			var movables = playLogic.ShowMovable(enemy.NodeIndex, 0);
+			Debug.Log(movables.Count);
 			var enemiesAttackNodes = FindAllAttackNodes(playManager.CurrentEnemies, enemy);
 			foreach (var movable in movables)
 			{
@@ -362,6 +358,7 @@ public class EnemyTurn : Turn
 	{
 		var result = new List<int>();
 		var players = playManager.CurrentPlayers;
+		Debug.Log(players.Count);
 		//for (int i = 0;i < players.Count; i++)
 		foreach (var player in players)
 		{
@@ -560,36 +557,17 @@ public class EnemyTurn : Turn
 		maxCostIndex = -1;
 		int maxCost = 0;
 
-		if(!baseFirst)
+		for (int i = 0; i < moveList.Count; i++)
 		{
-			for (int i = 0; i < moveList.Count; i++)
+			if (!baseFirst && boardManager.allNodes[moveList[i].Item2].Toy.Data.Price > maxCost)
 			{
-				var secondPrice = boardManager.allNodes[moveList[i].Item2].Toy.Data.Price;
-				if (boardManager.allNodes[moveList[i].Item2].Toy.IsKing)
-					secondPrice += 1000;
-
-				if (secondPrice >= maxCost)
-				{
-					maxCost = secondPrice;
-					maxCostIndex = i;
-				}
+				maxCost = boardManager.allNodes[moveList[i].Item2].Toy.Data.Price;
+				maxCostIndex = i;
 			}
-		}
-		else
-		{
-			for (int i = 0; i < moveList.Count; i++)
+			else if(baseFirst && boardManager.allNodes[moveList[i].Item1].Toy.Data.Price > maxCost)
 			{
-				var firstPrice = boardManager.allNodes[moveList[i].Item1].Toy.Data.Price;
-
-				if (boardManager.allNodes[moveList[i].Item1].Toy.IsKing)
-					firstPrice += 1000;
-
-				if (firstPrice >= maxCost)
-				{
-					maxCost = firstPrice;
-
-					maxCostIndex = i;
-				}
+				maxCost = boardManager.allNodes[moveList[i].Item1].Toy.Data.Price;
+				maxCostIndex = i;
 			}
 		}
 	}

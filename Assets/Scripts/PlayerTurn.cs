@@ -12,10 +12,18 @@ public class PlayerTurn : Turn
 	protected void Update()
 	{
 		playManager.ResetToys();
-		if (playManager.CheckAllEnemiesDie())
+		if (playManager.CheckEnemyCaptainDie())
 		{
 			playManager.IsEndGame = true;
 			playManager.IsEnemyWin = false;
+			playManager.WinType = WinType.KillKing;
+			return;
+		}
+		else if (playManager.CheckEnemyExceptCaptainDie())
+		{
+			playManager.IsEndGame = true;
+			playManager.IsEnemyWin = false;
+			playManager.WinType = WinType.KillExceptKing;
 			return;
 		}
 

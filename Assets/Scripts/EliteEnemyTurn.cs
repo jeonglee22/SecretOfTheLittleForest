@@ -14,10 +14,18 @@ public class EliteEnemyTurn : EnemyTurn
 			return;
 
 		playManager.ResetToys();
-		if (playManager.CheckAllPlayersDie())
+		if (playManager.CheckPlayerCaptainDie())
 		{
 			playManager.IsEndGame = true;
 			playManager.IsEnemyWin = true;
+			playManager.LoseType = LoseType.KilledKing;
+			return;
+		}
+		else if (playManager.CheckPlayerExceptCaptainDie())
+		{
+			playManager.IsEndGame = true;
+			playManager.IsEnemyWin = true;
+			playManager.LoseType = LoseType.KilledExceptKing;
 			return;
 		}
 
@@ -26,6 +34,10 @@ public class EliteEnemyTurn : EnemyTurn
 			EndTurn();
 			return;
 		}
+
+		movableAttackedPair.Clear();
+		movabledefencePair.Clear();
+		movableEmptyPair.Clear();
 
 		EnemyMove();
 	}

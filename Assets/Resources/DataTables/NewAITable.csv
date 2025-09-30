@@ -1,0 +1,14 @@
+Name,Value
+player_boss,20
+player_unit,1
+player_hp,1
+ai_boss,-20
+ai_unit,1
+ai_hp,1
+player_move,-1
+ai_move,3
+player_Apoint,3
+ai_Apoint,5
+ai_wall,-20
+ai_block,-10
+player_wall,10
