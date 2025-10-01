@@ -20,7 +20,6 @@ public class titleStart : MonoBehaviour
 
 		if(!data.isSave)
 		{
-			SaveLoadManager.Data.Crystal = 30;
 			SaveLoadManager.Save();
 			SceneManager.LoadScene((int)Scenes.DeckSetting);
 		}

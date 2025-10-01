@@ -25,6 +25,12 @@ public class ReadyCanvasManager : MonoBehaviour
     {
         SetUnitCountText(GetCountInBoard());
         SetCameraText(false);
+
+        if (boardManager.PlayerDeck.KingPos == -1)
+        {
+			NonCaptain.SetActive(true);
+			finishButton.SetActive(false);
+		}
     }
 
 	private void Update()

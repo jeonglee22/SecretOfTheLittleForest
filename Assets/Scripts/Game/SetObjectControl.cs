@@ -126,7 +126,10 @@ public class SetObjectControl : MonoBehaviour
 				{
 					unitSetting.AddData(choosingNode.Toy.Data);
 					var beforeToy = choosingNode.GetComponentInChildren<Toy>(true);
-					boardManager.PlayerDeck.KingPos = -1;
+					if (choosingNode.Toy.IsKing)
+					{
+						boardManager.PlayerDeck.KingPos = -1;
+					}
 					choosingNode.Toy = null;
 					
 					Destroy(beforeToy.gameObject);
@@ -134,7 +137,7 @@ public class SetObjectControl : MonoBehaviour
 				else
 				{
 					choosingNode.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
-					if(choosingNode.NodeIndex == boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+					if(boardManager.PlayerDeck.KingPos != -1 && choosingNode.NodeIndex == boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
 					{
 						choosingNode.Toy.kingCanvas.SetActive(true);
 					}
@@ -172,10 +175,15 @@ public class SetObjectControl : MonoBehaviour
 			if (node.State == NodeState.Player || !playerStartNodes.Contains(node))
 			{
 				playLogic.ChoosedNode = null;
-				if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+				if (beforeNode != null && (boardManager.PlayerDeck.KingPos == -1 || beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex))
 				{
 					beforeNode.Toy.kingCanvas.SetActive(false);
 				}
+				else if (beforeNode != null && beforeNode.NodeIndex == boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+				{
+					beforeNode.Toy.kingCanvas.SetActive(true);
+				}
+				
 				choosingNode.GetComponentInChildren<Toy>(true).gameObject.SetActive(true);
 				choosingNode = null;
 				beforeNode = null;
@@ -303,7 +311,7 @@ public class SetObjectControl : MonoBehaviour
 			if (node.Toy == null)
 			{
 				playLogic.ChoosedNode = null;
-				if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+				if (beforeNode != null && (boardManager.PlayerDeck.KingPos == -1 || beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex))
 				{
 					beforeNode.Toy.kingCanvas.SetActive(false);
 				}
@@ -335,7 +343,7 @@ public class SetObjectControl : MonoBehaviour
 			}
 			else if(beforeNode != null && beforeNode.NodeIndex != node.NodeIndex)
 			{
-				if (beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex &&
+				if ((boardManager.PlayerDeck.KingPos == -1 || beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex) &&
 					beforeNode.Toy != null)
 				{
 					beforeNode.Toy.kingCanvas.SetActive(false);
@@ -356,7 +364,7 @@ public class SetObjectControl : MonoBehaviour
 		else if (Physics.Raycast(touchRay, Mathf.Infinity, LayerId.ground))
 		{
 			playLogic.ChoosedNode = null;
-			if (beforeNode != null && beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex)
+			if (beforeNode != null && (boardManager.PlayerDeck.KingPos == -1 || beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex))
 			{
 				beforeNode.Toy.kingCanvas.SetActive(false);
 			}
