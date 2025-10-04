@@ -1073,7 +1073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  m_BlockingObjects: 3
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2700,7 +2700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1468135411688818829, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -28.88889
+      value: -28.888916
       objectReference: {fileID: 0}
     - target: {fileID: 1483555366118823929, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4381,6 +4381,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5747522411822622236, guid: de218084e1090974495e7cd8a470d3cd, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4492,6 +4496,7 @@ MonoBehaviour:
   cameraText: {fileID: 1238639280}
   NonCaptain: {fileID: 567398842}
   finishButton: {fileID: 389262788}
+  changeEliteButton: {fileID: 1333855592}
   boardManager: {fileID: 3386968198759226174}
   buttonFunctions: {fileID: 495656394}
 --- !u!114 &1166843664

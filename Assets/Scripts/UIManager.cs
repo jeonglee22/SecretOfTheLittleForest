@@ -1,5 +1,9 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -33,8 +37,6 @@ public class UIManager : MonoBehaviour
 		turnText.text = string.Empty;
         endText.text = string.Empty;
         initFontSize = turnText.fontSize;
-
-		OnClickSetEnemyToy();
 	}
 
 	private void Update()
@@ -49,21 +51,7 @@ public class UIManager : MonoBehaviour
         fpsreloadTime = 0f;
 	}
 
-	public void OnClickSetEnemyToy()
-	{
-		if (isSetEnemy)
-			return;
-
-		isSetEnemy = true;
-		var nodeTuples = boardManager.SetEnemyStageData();
-		for (int i = 0; i < nodeTuples.Count; i++)
-		{
-            var toy = this.toy;
-			toy.Data = nodeTuples[i].data;
-            toy.IsKing = nodeTuples[i].isBoss;
-			boardManager.ToySettingOnNode(nodeTuples[i].node, toy, true, i);
-		}
-	}
+	
 
 	public void SetTurnText(PlayTurn turn)
     {

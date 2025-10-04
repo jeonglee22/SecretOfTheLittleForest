@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,14 +27,19 @@ public class BoardManager : MonoBehaviour
 
 	public bool IsChoosed { get; set; }
 	private float stageId;
+	public float StageId { get { return stageId; } }
 
 	private Deck playerDeck;
 	public Deck PlayerDeck { get { return playerDeck; } set { playerDeck = value; } }
 	public Toy toy;
 
-	public bool IsEliteBoard { get; set; }
+	public int BoardID { get; set; }
+	private Scenes CommingScene { get { return SaveLoadManager.Data.Scenes; } }
 
-	private void OnEnable()
+    public bool IsEliteBoard { get; set; }
+    private bool isSetEnemy = false;
+
+    private void OnEnable()
 	{
 		SaveLoadManager.Load();
 		var data = SaveLoadManager.Data;
@@ -44,18 +50,71 @@ public class BoardManager : MonoBehaviour
 		playerDeck.Toys = data.Deck.Toys;
 		playerDeck.KingId = data.Deck.KingId;
 		playerDeck.KingPos = data.Deck.KingPos;
+		BoardID = data.EnemyFieldID;
 	}
 
 	private void Start()
 	{
 		SetPlayerDeckOnNode();
-		if(SceneManager.GetActiveScene().buildIndex == (int)Scenes.NodeSetting)
-			SetBoardColor(false);
+        if (SceneManager.GetActiveScene().buildIndex == (int)Scenes.NodeSetting)
+		{
+            SetBoardColor(battleType == BattleType.Elite);
+            if (CommingScene == Scenes.StageChoosing)
+				return;
+
+            if (battleType == BattleType.Elite)
+				SetEliteEnemy();
+			else
+				SetNormalEnemy();
+        }
+		else
+		{
+            SetEnemyToy();
+        }
 	}
 
 	private void OnDisable()
 	{
 		//SaveDeckSetting();
+	}
+
+	public void SetEliteEnemy()
+	{
+		var stageData = DataTableManger.EliteStageTable.Get(BoardID);
+		var result = new List<int>();
+
+		result = stageData.Pos.ToList();
+		result.Add(stageData.Boss_pos1);
+		result.Add(stageData.Boss_pos2);
+
+		var nodeTuples = SetEnemyStageData(result);
+
+		for (int i = 0; i < nodeTuples.Count; i++)
+		{
+			var toy = this.toy;
+			toy.Data = nodeTuples[i].data;
+			toy.IsKing = nodeTuples[i].isBoss;
+			ToySettingOnNode(nodeTuples[i].node, toy, true, i);
+		}
+	}
+
+	public void SetNormalEnemy()
+	{
+		var stageData = DataTableManger.StageTable.Get(BoardID);
+		var result = new List<int>();
+
+		result = stageData.Pos.ToList();
+		result.Add(stageData.Boss_pos);
+
+		var nodeTuples = SetEnemyStageData(result);
+
+		for (int i = 0; i < nodeTuples.Count; i++)
+		{
+			var toy = this.toy;
+			toy.Data = nodeTuples[i].data;
+			toy.IsKing = nodeTuples[i].isBoss;
+			ToySettingOnNode(nodeTuples[i].node, toy, true, i);
+		}
 	}
 
 	public void SaveDeckSetting()
@@ -110,9 +169,8 @@ public class BoardManager : MonoBehaviour
 		return enemyStartNodes[index];
 	}
 
-	public List<(Node node, ToyData data, bool isBoss)> SetEnemyStageData()
+	public List<(Node node, ToyData data, bool isBoss)> SetEnemyStageData(List<int> enemyIds)
 	{
-		var enemyIds = GetStageDataIds((int)stageId);
 		List<int> bossPos = battleType == BattleType.Elite ?
 			new List<int> { enemyIds[32], enemyIds[33] } : new List<int> { enemyIds[16] }; 
 		if(battleType == BattleType.Elite)
@@ -146,7 +204,7 @@ public class BoardManager : MonoBehaviour
 		return result;
 	}
 
-	private List<int> GetStageDataIds(int stageId)
+	public List<int> GetStageDataIds(int stageId)
 	{
 		var result = new List<int>();
 
@@ -157,6 +215,7 @@ public class BoardManager : MonoBehaviour
 			{
 				stageData = DataTableManger.StageTable.GetRandom();
 			} while (stageData.Stage != stageId);
+			BoardID = stageData.ID;
 			result = stageData.Pos.ToList();
 			result.Add(stageData.Boss_pos);
 		}
@@ -167,6 +226,7 @@ public class BoardManager : MonoBehaviour
 			{
 				stageData = DataTableManger.EliteStageTable.GetRandom();
 			} while (stageData.Stage != stageId);
+			BoardID = stageData.ID;
 			result = stageData.Pos.ToList();
 			result.Add(stageData.Boss_pos1);
 			result.Add(stageData.Boss_pos2);
@@ -174,6 +234,7 @@ public class BoardManager : MonoBehaviour
 		else
 		{
 			var stageData = DataTableManger.StageTable.GetBoss(-stageId);
+			BoardID = stageData.ID;
 			result = stageData.Pos.ToList();
 			result.Add(stageData.Boss_pos);
 		}
@@ -227,7 +288,10 @@ public class BoardManager : MonoBehaviour
 		enemyStartNodes.ForEach(n => n.State = NodeState.None);
 
 		List<Node> nodes = isElite ? eliteStartNodes : enemyStartNodes;
-		nodes.ForEach(n => n.State = NodeState.Enemy);
+		nodes.ForEach(n =>
+		{
+			if ((BoardID != -1 && n.Toy != null) || BoardID == -1) n.State = NodeState.Enemy;
+		});
 	}
 
 	public void ResetCaptainImage()
@@ -247,4 +311,40 @@ public class BoardManager : MonoBehaviour
 			}
 		}
 	}
+
+    public void SetEnemyToy()
+    {
+        if (isSetEnemy)
+            return;
+
+        isSetEnemy = true;
+        var enemyIds = new List<int>();
+        if (BoardID == -1)
+            enemyIds = GetStageDataIds((int)StageId);
+        else
+        {
+            if (BattleType == BattleType.Elite)
+            {
+                var stageData = DataTableManger.EliteStageTable.Get(BoardID);
+                enemyIds = stageData.Pos.ToList();
+                enemyIds.Add(stageData.Boss_pos1);
+                enemyIds.Add(stageData.Boss_pos2);
+            }
+            else
+            {
+                var stageData = DataTableManger.StageTable.Get(BoardID);
+                enemyIds = new List<int>();
+                enemyIds = stageData.Pos.ToList();
+                enemyIds.Add(stageData.Boss_pos);
+            }
+        }
+        var nodeTuples = SetEnemyStageData(enemyIds);
+        for (int i = 0; i < nodeTuples.Count; i++)
+        {
+            var toy = this.toy;
+            toy.Data = nodeTuples[i].data;
+            toy.IsKing = nodeTuples[i].isBoss;
+            ToySettingOnNode(nodeTuples[i].node, toy, true, i);
+        }
+    }
 }

@@ -24,7 +24,7 @@ public class SaveDataV1 : SaveData
 	public Scenes Scenes { get; set; } = Scenes.Game;
 	public List<Room> Rooms { get; set; }
 
-	public float masterPitch;
+	public float masterPitch = 1.0f;
 	public float bgmPitch;
 	public float sfxPitch;
 	public bool isTeleport = true;
@@ -36,6 +36,8 @@ public class SaveDataV1 : SaveData
 	public bool isSave;
 	public List<Room> CurrentStageRooms;
 	public int CurrentStageCount;
+
+	public int EnemyFieldID;
 
 	public SaveDataV1()
 	{

@@ -95,7 +95,7 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 		
 		var endPos = eventData.position;
 		var ray = Camera.main.ScreenPointToRay(endPos);
-
+		
 		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerId.node))
 		{
 			var go = hit.collider.gameObject;
@@ -135,10 +135,6 @@ public class DragObject : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 				dragSucessFunc(toy.Data);
 			}
 			FinishNode = droppedNode;
-		}
-		else if(Physics.Raycast(ray, out RaycastHit hit2, Mathf.Infinity, LayerId.ui))
-		{
-
 		}
 
 		IsFinishDrag = true;

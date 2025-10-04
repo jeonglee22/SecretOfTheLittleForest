@@ -22624,11 +22624,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1468135411688818829, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 643.3333
+      value: 643.33325
       objectReference: {fileID: 0}
     - target: {fileID: 1468135411688818829, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -28.88889
+      value: -28.888916
       objectReference: {fileID: 0}
     - target: {fileID: 1483555366118823929, guid: aa8078b79b7be1342abc2dce7dc84400, type: 3}
       propertyPath: m_AnchorMax.y
@@ -29921,6 +29921,7 @@ MonoBehaviour:
   - {fileID: 1334995404}
   - {fileID: 1971025571}
   toy: {fileID: 2228535548387802945, guid: 05ca00f88fc646342a274ac4087f939a, type: 3}
+  BoardID: 0
 --- !u!1001 &5248089905234752743
 PrefabInstance:
   m_ObjectHideFlags: 0

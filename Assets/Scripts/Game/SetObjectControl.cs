@@ -308,7 +308,7 @@ public class SetObjectControl : MonoBehaviour
 			var go = hitInfo.collider.gameObject;
 			var node = go.GetComponent<Node>();
 
-			if (node.Toy == null)
+			if (node.Toy == null || node.Toy.IsEnemy)
 			{
 				playLogic.ChoosedNode = null;
 				if (beforeNode != null && (boardManager.PlayerDeck.KingPos == -1 || beforeNode.NodeIndex != boardManager.playerStartNodes[boardManager.PlayerDeck.KingPos].NodeIndex))

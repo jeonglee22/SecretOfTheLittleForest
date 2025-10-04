@@ -60,6 +60,7 @@ public class ChoosingSceneManager : MonoBehaviour
         SaveLoadManager.Data.CurrentStageRooms = new List<Room>();
 		SaveLoadManager.Data.CurrentStageRooms.AddRange(rooms);
         SaveLoadManager.Data.CurrentStageCount = stageCount;
+        SaveLoadManager.Data.EnemyFieldID = -1;
         SaveLoadManager.Save();
 
 		for (int i = 0; i < rooms.Count; i++)
@@ -98,6 +99,7 @@ public class ChoosingSceneManager : MonoBehaviour
     {
 		SaveLoadManager.Data.Scenes = Scenes.StageChoosing;
         SaveLoadManager.Data.Rooms = rooms;
+        SaveLoadManager.Data.EnemyFieldID = -1;
 		SaveLoadManager.Save();
 		SceneManager.LoadScene((int)Scenes.NodeSetting);
 	}

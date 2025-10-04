@@ -58,14 +58,14 @@ public class SoundManager : MonoBehaviour
 
     private void SetBgmValue(float value)
     {
-        value = Mathf.Clamp(value, 0.001f, 1f);
+        value = Mathf.Clamp(value, 0.0001f, 1f);
 		soundMixer.SetFloat(SoundGroup.BGM, Mathf.Log10(value) * 20f);
         bgmPitch = value;
 	}
 
     private void SetSfxValue(float value)
     {
-		value = Mathf.Clamp(value, 0.001f, 1f);
+		value = Mathf.Clamp(value, 0.0001f, 1f);
 		soundMixer.SetFloat(SoundGroup.SFX, Mathf.Log10(value) * 20f);
         sfxPitch = value;
 	}

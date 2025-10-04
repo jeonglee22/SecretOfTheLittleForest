@@ -10,15 +10,18 @@ public class ReadyCanvasManager : MonoBehaviour
 
     public GameObject NonCaptain;
     public GameObject finishButton;
+    public GameObject changeEliteButton;
 
     public BoardManager boardManager;
     public SettingButtonFunctions buttonFunctions;
+
+    private int BoardID;
 
     private bool beforeCaptain;
 
     private void OnEnable()
     {
-
+        BoardID = SaveLoadManager.Data.EnemyFieldID;
     }
 
     private void Start()
@@ -26,20 +29,23 @@ public class ReadyCanvasManager : MonoBehaviour
         SetUnitCountText(GetCountInBoard());
         SetCameraText(false);
 
+        if (BoardID != -1)
+            changeEliteButton.SetActive(false);
+
         if (boardManager.PlayerDeck.KingPos == -1)
         {
-			NonCaptain.SetActive(true);
-			finishButton.SetActive(false);
-		}
+            NonCaptain.SetActive(true);
+            finishButton.SetActive(false);
+        }
     }
 
-	private void Update()
-	{
+    private void Update()
+    {
         var captain = CheckHaveCaptain();
         if (captain == beforeCaptain)
             return;
 
-		if (!captain)
+        if (!captain)
         {
             if (buttonFunctions.IsVibrate) Handheld.Vibrate();
             NonCaptain.SetActive(true);
@@ -51,10 +57,15 @@ public class ReadyCanvasManager : MonoBehaviour
             finishButton.SetActive(true);
         }
         beforeCaptain = captain;
-	}
+    }
 
-	private bool CheckHaveCaptain()
-	{
+    private void OnDisable()
+    {
+        changeEliteButton.SetActive(true);
+    }
+
+    private bool CheckHaveCaptain()
+    {
         var playerNodes = boardManager.playerStartNodes;
 
         foreach (var node in playerNodes)
@@ -69,9 +80,9 @@ public class ReadyCanvasManager : MonoBehaviour
         }
 
         return false;
-	}
+    }
 
-	private int GetCountInBoard()
+    private int GetCountInBoard()
     {
         var count = 0;
         var fieldToys = SaveLoadManager.Data.Deck.Pos;
@@ -114,3 +125,4 @@ public class ReadyCanvasManager : MonoBehaviour
         }
     }
 }
+

@@ -23,6 +23,7 @@ public class ButtonFunctions : MonoBehaviour
 		var data = SaveLoadManager.Data;
 		var scene = data.Scenes;
 		isTeleport = data.isTeleport;
+		isElite = data.BattleType == BattleType.Elite;
 		isFromGameScene = scene == Scenes.Game;
 	}
 
@@ -31,6 +32,7 @@ public class ButtonFunctions : MonoBehaviour
 		OnClickResetCamera();
 		if (toyControl != null)
 			toyControl.IsTeleport = isTeleport;
+		boardManager.IsEliteBoard = isElite;
 	}
 
 	private void OnDisable()
@@ -56,6 +58,8 @@ public class ButtonFunctions : MonoBehaviour
 	public void OnClickNodeSettingAtGame()
 	{
 		SaveLoadManager.Data.Scenes = Scenes.Game;
+		SaveLoadManager.Data.EnemyFieldID = boardManager.BoardID;
+		SaveLoadManager.Save();
 		SceneManager.LoadScene((int)Scenes.NodeSetting);
 	}
 
