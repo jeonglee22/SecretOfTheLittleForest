@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -39,13 +40,20 @@ public class PlayerTurn : Turn
 			var go = hit.collider.gameObject;
 			beforeNode = touchedNode;
 			touchedNode = go.GetComponent<Node>();
-			if (touchedNode.State == NodeState.None || touchedNode.State == NodeState.Moved)
+			if (touchedNode.State == NodeState.None || touchedNode.State == NodeState.Moved ||
+				touchedNode.State == NodeState.EnemyMove)
 				playLogic.ClearNodes();
 			else if ((beforeNode != null && beforeNode.Toy != null && beforeNode.Toy.IsMove) || 
 				touchedNode.State == NodeState.Enemy || touchedNode.State == NodeState.Player)
 			{
 				playLogic.ChoosedNode = touchedNode;
-				playLogic.ShowMovable(touchedNode.NodeIndex, 0);
+
+				if (boardManager.BattleType == BattleType.Elite)
+					SetPlayerStateForAnotherEnemy();
+
+                playLogic.ShowMovable(touchedNode.NodeIndex, 0);
+
+				SetEnemyOriginColor();
 			}
 			else if (moveCount != 0 && beforeNode != null && beforeNode.State == NodeState.Player &&
 				(touchedNode.State == NodeState.PlayerMove || touchedNode.State == NodeState.Attack))
@@ -62,7 +70,7 @@ public class PlayerTurn : Turn
 		playManager.ResetToys();
 	}
 
-	public override void StartTurn()
+    public override void StartTurn()
 	{
 		base.StartTurn();
 		playManager.ResetToys();
@@ -103,4 +111,27 @@ public class PlayerTurn : Turn
 
 		base.EndTurn();
 	}
+
+    private void SetPlayerStateForAnotherEnemy()
+    {
+		var isElite = touchedNode.Toy.IsElite;
+
+		var changeNode = isElite ? playManager.Enemies : playManager.EliteEnemies;        
+        
+        foreach (var node in changeNode)
+        {
+            node.State = NodeState.Player;
+        }
+    }
+
+    private void SetEnemyOriginColor()
+    {
+		foreach(var node in playManager.CurrentEnemies)
+		{
+			if (node.State == NodeState.Attack)
+				continue;
+
+			node.State = NodeState.Enemy;
+		}
+    }
 }

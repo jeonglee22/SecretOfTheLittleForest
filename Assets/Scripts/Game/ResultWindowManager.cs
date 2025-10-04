@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -32,7 +33,12 @@ public class ResultWindowManager : MonoBehaviour
 
     public void SetExplainText(string text)
     {
-        explainText.text = text;
+		if(playManager.WinType == WinType.WinTotalCost || playManager.LoseType == LoseType.LoseTotalCost)
+		{
+			text = string.Format(text, playManager.PlayerTotalCost, playManager.EnemyTotalCost);
+		}
+
+		explainText.text = text;
     }
 
 	public virtual void OnClickGetGold()

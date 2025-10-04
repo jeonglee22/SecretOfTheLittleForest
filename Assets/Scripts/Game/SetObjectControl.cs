@@ -160,7 +160,7 @@ public class SetObjectControl : MonoBehaviour
 		}
 	}
 
-	private void ChangePos(UnityEngine.Touch touch)
+	private void ChangePos(Touch touch)
 	{
 		if (choosingNode == null)
 			return;
@@ -239,16 +239,6 @@ public class SetObjectControl : MonoBehaviour
 		}
 	}
 
-	private void ChangeKing(Node node)
-	{
-		node.Toy.IsKing = true;
-		choosingNode.Toy.IsKing = false;
-
-		var nodeIndex = boardManager.playerStartNodes.IndexOf(node);
-		boardManager.PlayerDeck.KingPos = nodeIndex;
-		boardManager.PlayerDeck.KingId = node.Toy.Data.UnitID;
-	}
-
 	private void MakeDragImage()
 	{
 		var go = new GameObject();
@@ -302,8 +292,7 @@ public class SetObjectControl : MonoBehaviour
     private void TouchBegin(Touch touch)
     {
 		var touchRay = Camera.main.ScreenPointToRay(touch.position);
-
-		if (Physics.Raycast(touchRay, out var hitInfo, float.MaxValue, LayerId.node))
+        if (Physics.Raycast(touchRay, out var hitInfo, float.MaxValue, LayerId.node))
 		{
 			var go = hitInfo.collider.gameObject;
 			var node = go.GetComponent<Node>();

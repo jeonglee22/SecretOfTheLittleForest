@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayManager : MonoBehaviour
 {
 	private List<Node> enemies;
+	public List<Node> Enemies {  get { return enemies; } }
 	public List<Node> CurrentEnemies 
 	{ 
 		get {
@@ -12,8 +13,14 @@ public class PlayManager : MonoBehaviour
 			{
 				if (playTurn == PlayTurn.Enemy)
 					return enemies;
-				else
+				else if (playTurn == PlayTurn.EliteEnemy)
 					return eliteEnemies;
+				else
+				{
+					var current = new List<Node>(enemies);
+                    current.AddRange(eliteEnemies);
+					return current;
+				}
 			}
 			else
 			{
@@ -22,6 +29,7 @@ public class PlayManager : MonoBehaviour
 		}
 	}
 	private List<Node> eliteEnemies;
+	public List<Node> EliteEnemies { get { return eliteEnemies; } }
 	private List<Node> players;
 	public List<Node> CurrentPlayers 
 	{
@@ -65,6 +73,9 @@ public class PlayManager : MonoBehaviour
 	public bool IsEnemyWin { get; set; }
 	public LoseType LoseType { get; set; } = LoseType.None;
 	public WinType WinType { get; set; } = WinType.None;
+	public int PlayerTotalCost { get; private set; }
+	public int EnemyTotalCost { get; private set; }
+
 	public bool IsTurnShown { get; set; }
 
 	private int totalTurn;
@@ -133,6 +144,8 @@ public class PlayManager : MonoBehaviour
 				WinType = WinType.WinTotalCost;
 			else if (gameResult < 0)
 				LoseType = LoseType.LoseTotalCost;
+			PlayerTotalCost = playerCost;
+			EnemyTotalCost = enemyCost + enemy2Cost;
 			OpenResultWindow(gameResult);
 		}
 		else

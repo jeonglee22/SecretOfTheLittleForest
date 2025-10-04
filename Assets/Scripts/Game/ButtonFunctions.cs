@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ButtonFunctions : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class ButtonFunctions : MonoBehaviour
 	public PlayLogic playLogic;
 	public ToyControl toyControl;
 	private bool isTeleport;
+
+	public Slider eliteSlider;
 
 	private bool isElite = false;
 
@@ -33,6 +36,9 @@ public class ButtonFunctions : MonoBehaviour
 		if (toyControl != null)
 			toyControl.IsTeleport = isTeleport;
 		boardManager.IsEliteBoard = isElite;
+
+		if(eliteSlider != null)
+			eliteSlider.value = isElite ? 1 : 0;
 	}
 
 	private void OnDisable()
@@ -112,9 +118,9 @@ public class ButtonFunctions : MonoBehaviour
 		SceneManager.LoadScene((int)Scenes.StageChoosing);
 	}
 
-	public void OnValueChangedBattleType()
+	public void OnValueChangedBattleType(float value)
 	{
-		isElite = !isElite;
+		isElite = value == 1;
 		boardManager.IsEliteBoard = isElite;
 	}
 
