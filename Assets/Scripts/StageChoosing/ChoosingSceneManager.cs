@@ -56,6 +56,9 @@ public class ChoosingSceneManager : MonoBehaviour
 
         if (rooms == null)
             rooms = GetRandomRoom(3);
+        
+        if(TutorialManager.IsTutorial)
+            rooms = new List<Room> { Room.Normal, Room.Normal, Room.Normal };
 
         SaveLoadManager.Data.CurrentStageRooms = new List<Room>();
 		SaveLoadManager.Data.CurrentStageRooms.AddRange(rooms);
@@ -80,7 +83,7 @@ public class ChoosingSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount == 0)
+        if (Input.touchCount == 0 || TutorialManager.IsTutorial)
             return;
 
         var pos = Input.mousePosition;

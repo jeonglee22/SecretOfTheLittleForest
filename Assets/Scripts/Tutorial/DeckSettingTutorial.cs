@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,9 @@ public class DeckSettingTutorial : TutorialManager
     public GameObject originStartPanel;
 
     public GameObject lockButtonArrow;
+
+    public TextMeshProUGUI crystalText;
+    public TextMeshProUGUI havingCrystalText; 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
@@ -28,6 +32,9 @@ public class DeckSettingTutorial : TutorialManager
         originStartPanel.SetActive(false);
 
         SetTutorialText();
+
+        crystalText.text = "10";
+        havingCrystalText.text = "10";
     }
 
     private void OpenDeterminePanel()
@@ -47,6 +54,7 @@ public class DeckSettingTutorial : TutorialManager
         tutorialIndex++;
         textIndex++;
         SetTutorialText();
+        havingCrystalText.text = "0";
     }
 
     private void OpenStartGamePanel()

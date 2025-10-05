@@ -14,6 +14,8 @@ public class TutorialManager : MonoBehaviour
     public TextMeshProUGUI explainText;
 
     public static bool IsTutorial = true;
+    protected bool isHoldingEvent = false;
+    private bool isShow = false;
 
     protected int touchId = -1;
     protected float touchStartTime;
@@ -57,19 +59,35 @@ public class TutorialManager : MonoBehaviour
                 break;
             case TouchPhase.Moved:
             case TouchPhase.Stationary:
-
+                if (touchId == touch.fingerId && (Time.time - touchStartTime > 0.25f) &&
+                    Vector2.Distance(touch.position, touchStartPos) < 5f && isHoldingEvent && !isShow)
+                {
+                    isShow = true;
+                    TutorialHoldingFunc();
+                }
                 break;
             case TouchPhase.Ended:
             case TouchPhase.Canceled:
-                if(touchId == touch.fingerId)
+                if (isHoldingEvent)
+                    isHoldingEvent = false;
+                else if(touchId == touch.fingerId && !isHoldingEvent)
                 {
                     TutorialDoFunc();
                 }
+                isShow = false;
                 break;
         }
     }
 
     protected void TutorialDoFunc() 
+    {
+        if (RectTransformUtility.RectangleContainsScreenPoint(tutorialRects[tutorialIndex], Input.GetTouch(0).position))
+        {
+            behaveFunc[tutorialIndex]();
+        }
+    }
+
+    protected void TutorialHoldingFunc() 
     {
         if (RectTransformUtility.RectangleContainsScreenPoint(tutorialRects[tutorialIndex], Input.GetTouch(0).position))
         {

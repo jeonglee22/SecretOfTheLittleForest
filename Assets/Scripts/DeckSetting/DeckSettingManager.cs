@@ -51,7 +51,8 @@ public class DeckSettingManager : MonoBehaviour
 	{
 		unitContent = presetNameRect.content;
 		presetContent = presetContentRect.content;
-		sceneUIManager.SetHaveDiamondText(diamondCount);
+        if (!TutorialManager.IsTutorial)
+            sceneUIManager.SetHaveDiamondText(diamondCount);
 
 		Canvas.ForceUpdateCanvases();
 
