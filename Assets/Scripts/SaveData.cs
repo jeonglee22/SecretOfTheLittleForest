@@ -23,8 +23,9 @@ public class SaveDataV1 : SaveData
 	public int StageCount = 0;
 	public Scenes Scenes { get; set; } = Scenes.Game;
 	public List<Room> Rooms { get; set; }
+    public bool IsTutorial { get; set; }
 
-	public float masterPitch = 1.0f;
+    public float masterPitch = 1.0f;
 	public float bgmPitch;
 	public float sfxPitch;
 	public bool isTeleport = true;

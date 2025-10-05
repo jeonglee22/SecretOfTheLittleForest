@@ -30,7 +30,7 @@ public class DeckSettingManager : MonoBehaviour
 	private List<int> lockedInfo;
 
 	private int presetDataIDStart = 3000;
-	private float cellSizeOffset = 20f;
+	private float cellSizeOffset = 0.8f;
 	private float cellYSize = 100f;
 
 	private void Awake()
@@ -56,13 +56,20 @@ public class DeckSettingManager : MonoBehaviour
 		Canvas.ForceUpdateCanvases();
 
 		float xSize = Mathf.FloorToInt(Mathf.Abs(unitContent.parent.gameObject.GetComponent<RectTransform>().rect.width));
-		unitContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(xSize - cellSizeOffset, cellYSize);
+		unitContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(xSize * cellSizeOffset, cellYSize);
 
 		SetInitPresetList();
 
-		startButton.SetActive(true);
-		lockedPanel.SetActive(false);
-	}
+		if(TutorialManager.IsTutorial)
+		{
+            startButton.SetActive(false);
+            lockedPanel.SetActive(false);
+            return;
+		}
+
+        startButton.SetActive(true);
+        lockedPanel.SetActive(false);
+    }
 
 	private void SetInitPresetList()
 	{
