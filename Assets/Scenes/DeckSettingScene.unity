@@ -5348,6 +5348,7 @@ MonoBehaviour:
   startGamePanel: {fileID: 145216802}
   originStartPanel: {fileID: 400981032}
   lockButtonArrow: {fileID: 527126711}
+  startButtonArrow: {fileID: 1641868169}
   crystalText: {fileID: 1943946761}
   havingCrystalText: {fileID: 1183067575}
 --- !u!1001 &828516738
@@ -7654,6 +7655,11 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3779511783677631657, guid: 493cbc9c51a1b4a47b69a10e8753732c, type: 3}
   m_PrefabInstance: {fileID: 1589043127}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1641868169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4513614651015035262, guid: 08a8f0eeb6072344d97ff69e3cf197ad, type: 3}
+  m_PrefabInstance: {fileID: 2132533383}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1644674680
 PrefabInstance:

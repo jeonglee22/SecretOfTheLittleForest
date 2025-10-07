@@ -40,7 +40,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (Input.touchCount != 1)
             return;
@@ -95,7 +95,7 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    protected void SetTutorialText()
+    protected virtual void SetTutorialText()
     {
         explainText.text = DataTableManger.StageStringTable.GetTutorialString(textIndex);
     }

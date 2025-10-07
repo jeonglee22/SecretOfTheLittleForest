@@ -3,6 +3,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 using SaveDataVC = SaveDataV1;
 
 public class DeckSettingManager : MonoBehaviour
@@ -32,6 +33,9 @@ public class DeckSettingManager : MonoBehaviour
 	private int presetDataIDStart = 3000;
 	private float cellSizeOffset = 0.8f;
 	private float cellYSize = 100f;
+
+	private List<int> tutorialPos = new List<int> { 0, 0, 1, 5, 19, 14, 0, 0, 0, 0, 18, 1, 1, 10, 0, 0 };
+	private int tutorialBossPos = 5;
 
 	private void Awake()
 	{
@@ -148,7 +152,28 @@ public class DeckSettingManager : MonoBehaviour
 	public void SaveData()
 	{
 		SaveLoadManager.Data = new SaveDataVC();
-		SaveLoadManager.Data.Deck = unitDeck;
+
+		if (TutorialManager.IsTutorial)
+		{
+			var tutorialDeck = new Deck();
+			var pos = tutorialPos;
+			tutorialDeck.AddPosSetting(pos.ToList());
+            tutorialDeck.KingId = pos[tutorialBossPos];
+            tutorialDeck.KingPos = tutorialBossPos;
+            for (int i = 0; i < pos.Count; i++)
+            {
+                if (pos[i] == 0)
+                    continue;
+
+                tutorialDeck.AddDeckData(DataTableManger.ToyTable.Get(pos[i]));
+            }
+			SaveLoadManager.Data.Deck = tutorialDeck;
+        }
+		else
+		{
+			SaveLoadManager.Data.Deck = unitDeck;
+		}
+
 		if(!lockedInfo.Contains(0))
 			lockedInfo.Add(0);
 		SaveLoadManager.Data.LockedInfo = lockedInfo;

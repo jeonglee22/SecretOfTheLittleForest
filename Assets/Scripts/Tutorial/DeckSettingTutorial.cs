@@ -12,6 +12,7 @@ public class DeckSettingTutorial : TutorialManager
     public GameObject originStartPanel;
 
     public GameObject lockButtonArrow;
+    public GameObject startButtonArrow;
 
     public TextMeshProUGUI crystalText;
     public TextMeshProUGUI havingCrystalText; 
@@ -61,7 +62,7 @@ public class DeckSettingTutorial : TutorialManager
     {
         startGamePanel.SetActive(true);
         startGamePanel.transform.SetAsLastSibling();
-        lockButtonArrow.SetActive(false);
+        startButtonArrow.SetActive(false);
         textIndex++;
         tutorialIndex++;
         SetTutorialText();

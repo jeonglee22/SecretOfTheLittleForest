@@ -319,7 +319,13 @@ public class BoardManager : MonoBehaviour
 
         isSetEnemy = true;
         var enemyIds = new List<int>();
-        if (BoardID == -1)
+		if(TutorialManager.IsTutorial)
+		{
+			var stageData = DataTableManger.StageTable.Get(1999);
+			enemyIds = stageData.Pos.ToList();
+			enemyIds.Add(stageData.Boss_pos);
+		}
+        else if (BoardID == -1)
             enemyIds = GetStageDataIds((int)StageId);
         else
         {

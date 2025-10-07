@@ -54,6 +54,7 @@ public class StageChoosingTutorial : TutorialManager
         explainArrow.SetActive(false);
 
         tutorialIndex++;
+        textIndex++;
         SceneManager.LoadScene((int)Scenes.Game);
     }
 }
