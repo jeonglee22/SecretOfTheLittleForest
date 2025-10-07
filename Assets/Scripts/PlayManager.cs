@@ -105,6 +105,9 @@ public class PlayManager : MonoBehaviour
 
 	private void Update()
 	{
+		if (TutorialManager.IsTutorial)
+			return;
+
 		if (IsEndGame || totalTurn == 0)
 		{
 			EndGame();
