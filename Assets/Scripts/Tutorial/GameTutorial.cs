@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameTutorial : TutorialManager
@@ -11,6 +12,7 @@ public class GameTutorial : TutorialManager
     public GameObject backToGame;
     public GameObject gameCanvas;
     public GameObject readyCanvas;
+    public GameObject winPanel;
 
     [Header("ExplainField")]
     public GameObject upExplainField;
@@ -28,6 +30,7 @@ public class GameTutorial : TutorialManager
     public ToyControl toyControl;
     public ButtonFunctions buttonFunctions;
     public PlayManager playManager;
+    public GameCanvasManager gameCanvasManager;
 
     [Header("Arrows")]
     public GameObject downArrowAtBack;
@@ -37,7 +40,14 @@ public class GameTutorial : TutorialManager
     public GameObject TurnArrow;
     public GameObject finishTurnArrow;
     public GameObject downArrowPrefab;
+    public GameObject totalTurnArrow;
     private GameObject nodeArrow;
+    public GameObject winLeftArrow;
+    public GameObject winMiddleArrow;
+    public GameObject winRightArrow;
+    public GameObject winGoldArrow;
+    public GameObject winUnitArrow;
+    public GameObject winGoldGetArrow;
 
     [Header("Additionals")]
     public GameObject EmptyRect;
@@ -88,10 +98,15 @@ public class GameTutorial : TutorialManager
         behaveFunc.Add(() => ExplainRemainTurn());
         behaveFunc.Add(() => TouchEnemyToy());
         behaveFunc.Add(() => ShowEnemyAttack());
-        behaveFunc.Add(() => ShowEnemyAttack());
-        behaveFunc.Add(() => TouchEndTurn());
+        behaveFunc.Add(() => TouchEndTurnSecond());
+        behaveFunc.Add(() => ExplainCaptainUnit());
         behaveFunc.Add(() => TouchPlayerAttackToy());
         behaveFunc.Add(() => MovePlayerAttackToy());
+        behaveFunc.Add(() => ExplainUnitGet());
+        behaveFunc.Add(() => ExplainGoldLimit());
+        behaveFunc.Add(() => ExplainUnitLimit());
+        behaveFunc.Add(() => ExplainGoldGet());
+        behaveFunc.Add(() => TouchMiddleToy());
 
         learnMovingPanel.SetActive(true);
 
@@ -211,7 +226,7 @@ public class GameTutorial : TutorialManager
 
     private void CenterNodeExplain()
     {
-        foreach( var node in centerNodes)
+        foreach (var node in centerNodes)
         {
             node.State = NodeState.Attack;
         }
@@ -314,9 +329,9 @@ public class GameTutorial : TutorialManager
         backToGame.SetActive(false);
         readyCanvas.SetActive(true);
 
-        foreach(var node in boardManager.allNodes)
+        foreach (var node in boardManager.allNodes)
         {
-            if(node.Toy != null)
+            if (node.Toy != null)
                 Destroy(node.Toy.gameObject);
             node.Toy = null;
             node.State = NodeState.None;
@@ -386,13 +401,13 @@ public class GameTutorial : TutorialManager
         upExplainText.transform.parent.SetAsLastSibling();
     }
 
-    private void SetArrowOnNode(GameObject arrow, int nodeIndex)
+    private void SetArrowOnNode(GameObject arrow, int nodeIndex, bool totalWindow = false)
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(playNodes[nodeIndex].transform.position);
         RectTransform canvasRect = canvas.GetComponent<RectTransform>();
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, null, out Vector2 canvasPos);
         arrow.SetActive(true);
-        tutorialRects.Insert(tutorialIndex,arrow.GetComponent<RectTransform>());
+        tutorialRects.Insert(tutorialIndex, totalWindow ? blockCanvas.GetComponent<RectTransform>() : arrow.GetComponent<RectTransform>());
         canvasPos.y -= canvasRect.rect.height * 0.5f + 10f;
         arrow.GetComponent<RectTransform>().anchoredPosition = canvasPos;
     }
@@ -418,7 +433,6 @@ public class GameTutorial : TutorialManager
         touchedNode.State = beforeNode.State;
         beforeNode.State = NodeState.None;
         touchedNode = null;
-        moveNodeTouch = true;
 
         textIndex++;
         tutorialIndex++;
@@ -468,30 +482,162 @@ public class GameTutorial : TutorialManager
         SetTutorialText();
         finishTurnArrow.SetActive(false);
         turnImage.color = originTurnColor;
-    }
 
-    private void MovePlayerAttackToy()
-    {
-        throw new NotImplementedException();
-    }
+        upExplainText.transform.parent.SetAsFirstSibling();
+        playNodes[1].Toy.IsMove = false;
+        touchedNode = playNodes[3];
+        playLogic.ChoosedNode = touchedNode;
+        playLogic.ClearNodes();
+        beforeNode = playNodes[2];
+        toyControl.ToyMove(ref beforeNode, false, true);
+        touchedNode.State = beforeNode.State;
+        beforeNode.State = NodeState.None;
+        touchedNode = null;
 
-    private void TouchPlayerAttackToy()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void ShowEnemyAttack()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void TouchEnemyToy()
-    {
-        throw new NotImplementedException();
+        gameCanvasManager.SetTurnText(24);
+        totalTurnArrow.SetActive(true);
     }
 
     private void ExplainRemainTurn()
     {
-        throw new NotImplementedException();
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+
+        SetArrowOnNode(nodeArrow, 3);
+        totalTurnArrow.SetActive(false);
+    }
+
+
+    private void TouchEnemyToy()
+    {
+        touchedNode = playNodes[3];
+        playLogic.ChoosedNode = touchedNode;
+        playLogic.ShowMovable(touchedNode.NodeIndex, 0);
+
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+        SetArrowOnNode(nodeArrow, 4, true);
+    }
+
+    private void ShowEnemyAttack()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+        nodeArrow.SetActive(false);
+        finishTurnArrow.SetActive(true);
+    }
+
+    private void TouchEndTurnSecond()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+        finishTurnArrow.SetActive(false);
+
+        touchedNode = playNodes[4];
+        playLogic.ChoosedNode = touchedNode;
+        playLogic.ClearNodes();
+        beforeNode = playNodes[3];
+        touchedNode.Toy.GetDamageAndAlive(beforeNode.Toy.Attack);
+        toyControl.ToyMove(ref beforeNode, false, true);
+        touchedNode.State = beforeNode.State;
+        beforeNode.State = NodeState.None;
+        touchedNode = null;
+
+        gameCanvasManager.SetTurnText(23);
+        SetArrowOnNode(nodeArrow, 4, true);
+    }
+
+    private void ExplainCaptainUnit()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+        SetArrowOnNode(nodeArrow, 1);
+    }
+
+    private void TouchPlayerAttackToy()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+
+        touchedNode = playNodes[1];
+        playLogic.ChoosedNode = touchedNode;
+        playLogic.ShowMovable(touchedNode.NodeIndex, 0);
+        SetArrowOnNode(nodeArrow, 4);
+    }
+
+    private void MovePlayerAttackToy()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+
+        nodeArrow.SetActive(false);
+        winPanel.SetActive(true);
+        winLeftArrow.SetActive(true);
+        winMiddleArrow.SetActive(true);
+        winRightArrow.SetActive(true);
+    }
+
+    private void ExplainUnitGet()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+
+        winLeftArrow.SetActive(false);
+        winMiddleArrow.SetActive(false);
+        winRightArrow.SetActive(false);
+        winGoldArrow.SetActive(true);
+    }
+
+    private void ExplainGoldLimit()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+
+        winGoldArrow.SetActive(false);
+        winUnitArrow.SetActive(true);
+        upExplainText.transform.parent.SetAsLastSibling();
+    }
+
+    private void ExplainUnitLimit()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+
+        winUnitArrow.SetActive(false);
+        winGoldGetArrow.SetActive(true);
+        upExplainText.transform.parent.SetAsFirstSibling();
+    }
+
+    private void ExplainGoldGet()
+    {
+        textIndex++;
+        tutorialIndex++;
+        SetTutorialText();
+
+        winGoldGetArrow.SetActive(false);
+        winMiddleArrow.SetActive(true);
+    }
+
+    private void TouchMiddleToy()
+    {
+        textIndex++;
+        winMiddleArrow.SetActive(false);
+
+        var winUIManager = winPanel.GetComponent<NormalWinUIManager>();
+        boardManager.PlayerDeck.AddDeckData(DataTableManger.ToyTable.Get(winUIManager.centerChoosedIds));
+        SceneManager.LoadScene((int)Scenes.StageChoosing);
+        SaveLoadManager.Data.Deck = boardManager.PlayerDeck;
+        SaveLoadManager.Data.isTeleport = toyControl.IsTeleport;
+        SaveLoadManager.Save();
     }
 }

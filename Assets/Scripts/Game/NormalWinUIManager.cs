@@ -16,6 +16,7 @@ public class NormalWinUIManager : ResultWindowManager
 	private int stageId;
 	private Deck currentDeck;
 	private List<int> choosedIds;
+	public int centerChoosedIds { get { return choosedIds[1]; } }
 	private float blockTouchAlpha = 0.8f;
 
 	protected override void OnEnable()
