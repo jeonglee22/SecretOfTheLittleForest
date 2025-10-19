@@ -80,6 +80,9 @@ public class StageChoosingTutorial : TutorialManager
     {
         textIndex++;
         nodeSettingArrow.SetActive(false);
+        SaveLoadManager.Data.BattleType = BattleType.Normal;
+        SaveLoadManager.Data.Scenes = Scenes.StageChoosing;
+        SaveLoadManager.Save();
         SceneManager.LoadScene((int)Scenes.NodeSetting);
     }
 }

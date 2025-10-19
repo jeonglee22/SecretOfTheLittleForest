@@ -12,6 +12,7 @@ public class SetObjectControl : MonoBehaviour
     private List<Node> playerStartNodes;
     public BoardManager boardManager;
     private Node choosingNode;
+	public Node ChoosingNode { get { return choosingNode; } set { choosingNode = value; } }
     private Node beforeNode;
 	private ToggleGroup imageToggles;
 
@@ -37,7 +38,7 @@ public class SetObjectControl : MonoBehaviour
 
     void Update()
     {
-		if (Input.touchCount == 0)
+		if (Input.touchCount == 0 || TutorialManager.IsTutorial)
             return;
 
 		var touch = Input.GetTouch(0);
@@ -239,7 +240,7 @@ public class SetObjectControl : MonoBehaviour
 		}
 	}
 
-	private void MakeDragImage()
+	public void MakeDragImage()
 	{
 		var go = new GameObject();
 		go.AddComponent<Toy>();

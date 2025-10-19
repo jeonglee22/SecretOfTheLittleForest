@@ -73,6 +73,7 @@ public class TutorialManager : MonoBehaviour
                 else if(touchId == touch.fingerId && !isHoldingEvent)
                 {
                     TutorialDoFunc();
+                    touchId = -1;
                 }
                 isShow = false;
                 break;
