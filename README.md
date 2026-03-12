@@ -59,31 +59,61 @@
 
 ---
 
+## 프로젝트 폴더 구조
+
+```text
+Assets/                             # 프로젝트 전체 에셋 루트
+└─ Scripts/                         # 게임 로직 스크립트 모음
+  ├─ (루트 공용 스크립트)            # 공통 유틸리티 및 전역 설정
+  ├─ DataTable/                     # 데이터 테이블 관련 스크립트
+  ├─ DeckSetting/                   # 덱 편성 및 설정 관련 기능
+  ├─ Game/                          # 실제 인게임 전투/플레이 관련 로직
+  │  ├─ GameCanvas/                 # 인게임 캔버스 처리
+  │  ├─ Node/                       # 맵 노드 및 타일 관련 기능
+  │  ├─ ResultWindow/               # 전투 결과창 UI 및 처리
+  │  ├─ Toy/                        # 유닛/장난감 오브젝트 관련 로직
+  │  └─ Turn/                       # 턴 진행 및 턴 제어 로직
+  ├─ Lobby/                         # 로비 화면 관련 기능
+  ├─ OtherManagers/                 # 매니저 스크립트 모음
+  ├─ Resource/                      # 리소스 로드 기능
+  ├─ Shop/                          # 상점 시스템 관련 기능
+  ├─ StageChoosing/                 # 스테이지 선택 화면 및 로직
+  └─ Tutorial/                      # 튜토리얼 진행 관련 기능
+```
+
+---
+
 ## 주요 기능 및 시스템
 
-###  체스 시스템
+###  체스 기본 시스템
 
-* 체스 전투 시스템
-* 우선순위 기반의 적 기물 움직임
-* 일반 전투 - 1 vs 1
-* 엘리트 전투 - 1 vs 1 vs 1
-* 보스 전투 구현 - 1 vs 보스(더 많은 기물)
+| 구현 기능 | 관련 링크 |
+| --- | --- |
+| 체스 움직임 구현 | [ChessLogic](Assets/Scripts/Game/PlayLogic.cs) |
+| 턴제 기반 시스템 구현 | [Turn](Assets/Scripts/Game/Turn) |
+| 우선순위 기반 적 움직임 구현 | [EnemyTurn](Assets/Scripts/Game/Turn/EnemyTurn.cs) |
 
-###  덱 시스템
+###  덱 세팅 시스템
 
-* 덱의 유닛들을 변경하는 기능
-* 유닛의 배치를 변경하는 기능
+| 구현 기능 | 관련 링크 |
+| --- | --- |
+| 덱 클래스 | [Deck](Assets/Scripts/DeckSetting/Deck.cs) |
+| 덱 배치 조작 구현 | [ObjectControl](Assets/Scripts/Game/SetObjectControl.cs) |
+| 프리셋 덱 세팅 관련 구현 | [DeckPreset](Assets/Scripts/DeckSetting/DeckSettingManager.cs) |
 
 ###  방(스테이지) 시스템
 
-* 상점 방 구현 - 원하는 유닛을 사거나 필요없는 유닛을 팔 수 있음
-* 전투 방 구현 - 일반, 엘리트, 보스 전투 진행
-* 덱 배치 수정할 수 있는 공간 구현
-* 계속해서 이어지는 스테이지 형식 구현
+| 구현 기능 | 관련 링크 |
+| --- | --- |
+| 방 진행 방식 구현 | [StageChoosing](Assets/Scripts/StageChoosing) |
+| 상점 방 구현 | [Shop](Assets/Scripts/Shop) |
 
 ### 그 외 기능
 
-* 프리셋 기능
+| 구현 기능 | 관련 링크 |
+| --- | --- |
+| Resource 폴더 기반 로드 방식 구현 | [Resource](Assets/Scripts/Resource) |
+| CSV Data 로드 구현 | [DataTable](Assets/Scripts/DataTable) |
 
 ---
 
@@ -97,114 +127,3 @@
 | Language        | C#                   |
 | IDE             | Visual Studio        |
 | Version Control | Git / GitHub         |
-
-
----
-
-## Assets/Scripts 폴더 구조
-
-아래는 현재 `Assets/Scripts` 기준의 계층 구조입니다.
-
-```text
-Assets/
-└─ Scripts/
-  ├─ (루트 공용 스크립트)
-  │  ├─ Defines.cs
-  │  ├─ JsonConverters.cs
-  │  ├─ PriorityQueue.cs
-  │  ├─ SafeArea.cs
-  │  ├─ SaveData.cs
-  │  ├─ SettingButtonFunctions.cs
-  │  ├─ StatCanvasController.cs
-  │  └─ TextSetting.cs
-  │
-  ├─ DataTable/
-  │  ├─ AITable.cs
-  │  ├─ DataTable.cs
-  │  ├─ PresetTable.cs
-  │  ├─ RewardTable.cs
-  │  ├─ SettingTable.cs
-  │  ├─ StageStringTable.cs
-  │  ├─ StageTable.cs
-  │  └─ ToyTable.cs
-  │
-  ├─ DeckSetting/
-  │  ├─ ChoosingUnitManager.cs
-  │  ├─ ContentPresetPanelData.cs
-  │  ├─ Deck.cs
-  │  ├─ DeckSceneUIManager.cs
-  │  ├─ DeckSettingManager.cs
-  │  ├─ PresetPanelData.cs
-  │  ├─ StatShowManager.cs
-  │  └─ TriggerChecking.cs
-  │
-  ├─ Game/
-  │  ├─ ButtonFunctions.cs
-  │  ├─ ClickObject.cs
-  │  ├─ DragObject.cs
-  │  ├─ PlayLogic.cs
-  │  ├─ SetObjectControl.cs
-  │  ├─ UnitSetting.cs
-  │  ├─ GameCanvas/
-  │  │  ├─ CanvasManager.cs
-  │  │  ├─ GameCanvasManager.cs
-  │  │  └─ ReadyCanvasManager.cs
-  │  ├─ Node/
-  │  │  ├─ Node.cs
-  │  │  └─ NodeData.cs
-  │  ├─ ResultWindow/
-  │  │  ├─ BossWinUIManager.cs
-  │  │  ├─ EliteWinUIManager.cs
-  │  │  ├─ NormalWinUIManager.cs
-  │  │  └─ ResultWindowManager.cs
-  │  ├─ Toy/
-  │  │  ├─ Toy.cs
-  │  │  └─ ToyControl.cs
-  │  └─ Turn/
-  │     ├─ EliteEnemyTurn.cs
-  │     ├─ EnemyTurn.cs
-  │     ├─ EnemyTurnNew.cs
-  │     ├─ PlayerTurn.cs
-  │     └─ Turn.cs
-  │
-  ├─ Lobby/
-  │  ├─ LobbyWindow.cs
-  │  ├─ LobbyWindowManager.cs
-  │  ├─ MainWindow.cs
-  │  └─ titleStart.cs
-  │
-  ├─ OtherManagers/
-  │  ├─ BoardManager.cs
-  │  ├─ CameraManager.cs
-  │  ├─ DataTableManager.cs
-  │  ├─ GameObjectManager.cs
-  │  ├─ ImageToolManager.cs
-  │  ├─ PlayManager.cs
-  │  ├─ SaveLoadManager.cs
-  │  ├─ SoundManager.cs
-  │  ├─ TouchManager.cs
-  │  └─ UIManager.cs
-  │
-  ├─ Resource/
-  │  ├─ IconResource.cs
-  │  ├─ ObjectResource.cs
-  │  └─ ToyResource.cs
-  │
-  ├─ Shop/
-  │  ├─ ContentPanelData.cs
-  │  ├─ ShopButtonFunctions.cs
-  │  ├─ ShopLogicManager.cs
-  │  └─ ShopUIManagers.cs
-  │
-  ├─ StageChoosing/
-  │  ├─ ChoosingSceneManager.cs
-  │  └─ ChoosingSceneUIManager.cs
-  │
-  └─ Tutorial/
-    └─ TutorialManager.cs
-```
-
-
-
-
-
