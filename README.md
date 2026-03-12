@@ -99,6 +99,112 @@
 | Version Control | Git / GitHub         |
 
 
+---
+
+## Assets/Scripts 폴더 구조
+
+아래는 현재 `Assets/Scripts` 기준의 계층 구조입니다.
+
+```text
+Assets/
+└─ Scripts/
+  ├─ (루트 공용 스크립트)
+  │  ├─ Defines.cs
+  │  ├─ JsonConverters.cs
+  │  ├─ PriorityQueue.cs
+  │  ├─ SafeArea.cs
+  │  ├─ SaveData.cs
+  │  ├─ SettingButtonFunctions.cs
+  │  ├─ StatCanvasController.cs
+  │  └─ TextSetting.cs
+  │
+  ├─ DataTable/
+  │  ├─ AITable.cs
+  │  ├─ DataTable.cs
+  │  ├─ PresetTable.cs
+  │  ├─ RewardTable.cs
+  │  ├─ SettingTable.cs
+  │  ├─ StageStringTable.cs
+  │  ├─ StageTable.cs
+  │  └─ ToyTable.cs
+  │
+  ├─ DeckSetting/
+  │  ├─ ChoosingUnitManager.cs
+  │  ├─ ContentPresetPanelData.cs
+  │  ├─ Deck.cs
+  │  ├─ DeckSceneUIManager.cs
+  │  ├─ DeckSettingManager.cs
+  │  ├─ PresetPanelData.cs
+  │  ├─ StatShowManager.cs
+  │  └─ TriggerChecking.cs
+  │
+  ├─ Game/
+  │  ├─ ButtonFunctions.cs
+  │  ├─ ClickObject.cs
+  │  ├─ DragObject.cs
+  │  ├─ PlayLogic.cs
+  │  ├─ SetObjectControl.cs
+  │  ├─ UnitSetting.cs
+  │  ├─ GameCanvas/
+  │  │  ├─ CanvasManager.cs
+  │  │  ├─ GameCanvasManager.cs
+  │  │  └─ ReadyCanvasManager.cs
+  │  ├─ Node/
+  │  │  ├─ Node.cs
+  │  │  └─ NodeData.cs
+  │  ├─ ResultWindow/
+  │  │  ├─ BossWinUIManager.cs
+  │  │  ├─ EliteWinUIManager.cs
+  │  │  ├─ NormalWinUIManager.cs
+  │  │  └─ ResultWindowManager.cs
+  │  ├─ Toy/
+  │  │  ├─ Toy.cs
+  │  │  └─ ToyControl.cs
+  │  └─ Turn/
+  │     ├─ EliteEnemyTurn.cs
+  │     ├─ EnemyTurn.cs
+  │     ├─ EnemyTurnNew.cs
+  │     ├─ PlayerTurn.cs
+  │     └─ Turn.cs
+  │
+  ├─ Lobby/
+  │  ├─ LobbyWindow.cs
+  │  ├─ LobbyWindowManager.cs
+  │  ├─ MainWindow.cs
+  │  └─ titleStart.cs
+  │
+  ├─ OtherManagers/
+  │  ├─ BoardManager.cs
+  │  ├─ CameraManager.cs
+  │  ├─ DataTableManager.cs
+  │  ├─ GameObjectManager.cs
+  │  ├─ ImageToolManager.cs
+  │  ├─ PlayManager.cs
+  │  ├─ SaveLoadManager.cs
+  │  ├─ SoundManager.cs
+  │  ├─ TouchManager.cs
+  │  └─ UIManager.cs
+  │
+  ├─ Resource/
+  │  ├─ IconResource.cs
+  │  ├─ ObjectResource.cs
+  │  └─ ToyResource.cs
+  │
+  ├─ Shop/
+  │  ├─ ContentPanelData.cs
+  │  ├─ ShopButtonFunctions.cs
+  │  ├─ ShopLogicManager.cs
+  │  └─ ShopUIManagers.cs
+  │
+  ├─ StageChoosing/
+  │  ├─ ChoosingSceneManager.cs
+  │  └─ ChoosingSceneUIManager.cs
+  │
+  └─ Tutorial/
+    └─ TutorialManager.cs
+```
+
+
 
 
 
