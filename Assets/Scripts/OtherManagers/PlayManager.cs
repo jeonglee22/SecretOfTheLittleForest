@@ -103,18 +103,33 @@ public class PlayManager : MonoBehaviour
 		if (IsTurnShown)
 			return;
 
-		if(playTurn == PlayTurn.Player)
+		switch (playTurn)
 		{
-			UpdatePlayer();
+			case PlayTurn.Player:
+				UpdatePlayer();
+				break;
+			case PlayTurn.Enemy:
+				UpdateEnemy();
+				break;
+			case PlayTurn.EliteEnemy when boardManager.BattleType == BattleType.Elite:
+				UpdateEliteEnemy();
+				break;
+			default:
+				throw new SystemException("Wrong Play Turn");
 		}
-		else if(playTurn == PlayTurn.Enemy)
-		{
-			UpdateEnemy();
-		}
-		else if(boardManager.BattleType == BattleType.Elite && playTurn == PlayTurn.EliteEnemy)
-		{
-			UpdateEliteEnemy();
-		}
+
+		// if(playTurn == PlayTurn.Player)
+		// {
+		// 	UpdatePlayer();
+		// }
+		// else if(playTurn == PlayTurn.Enemy)
+		// {
+		// 	UpdateEnemy();
+		// }
+		// else if(boardManager.BattleType == BattleType.Elite && playTurn == PlayTurn.EliteEnemy)
+		// {
+		// 	UpdateEliteEnemy();
+		// }
 	}
 
 	private void EndGame()
