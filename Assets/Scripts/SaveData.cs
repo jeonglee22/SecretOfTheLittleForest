@@ -19,7 +19,7 @@ public class SaveDataV1 : SaveData
 	public float unitLimit = 12;
 	public float unitCount = 8;
 	public float gold = 0;
-	public int Crystal = 30;
+	public int Crystal = 100;
 	public int StageCount = 0;
 	public Scenes Scenes { get; set; } = Scenes.Game;
 	public List<Room> Rooms { get; set; }
