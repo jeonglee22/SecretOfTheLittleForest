@@ -1,5 +1,5 @@
 <p align="center">
-  
+   <img width="1536" height="425" alt="SecretOfTheLittleForest" src="https://github.com/user-attachments/assets/f50c6e99-54ac-408e-ab99-6e3d47e2ebce" />
 </p>
 
 # TheSecretOfTheLittleForest
